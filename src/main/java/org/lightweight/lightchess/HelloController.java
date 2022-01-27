@@ -1,4 +1,4 @@
-package com.lightweight.lightchess;
+package org.lightweight.lightchess;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;

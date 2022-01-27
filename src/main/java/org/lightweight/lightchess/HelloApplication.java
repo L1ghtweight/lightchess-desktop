@@ -1,4 +1,4 @@
-package com.lightweight.lightchess;
+package org.lightweight.lightchess;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

@@ -1,8 +1,8 @@
-module com.lightweight.lightchess {
+module org.lightweight.lightchess {
     requires javafx.controls;
     requires javafx.fxml;
 
 
-    opens com.lightweight.lightchess to javafx.fxml;
-    exports com.lightweight.lightchess;
+    opens org.lightweight.lightchess to javafx.fxml;
+    exports org.lightweight.lightchess;
 }
