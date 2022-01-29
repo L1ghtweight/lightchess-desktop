@@ -1,5 +1,6 @@
 package org.lightweight.lightchess;
 
+import com.github.bhlangonijr.chesslib.Board;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -15,6 +16,8 @@ public class HelloApplication extends Application {
         stage.setTitle("Hello!");
         stage.setScene(scene);
         stage.show();
+        Board b = new Board();
+        System.out.println(b.getFen());
     }
 
     public static void main(String[] args) {
