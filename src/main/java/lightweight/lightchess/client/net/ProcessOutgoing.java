@@ -10,11 +10,11 @@ import lightweight.lightchess.net.NetworkConnection;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public class Writer implements Runnable {
+public class ProcessOutgoing implements Runnable {
     public NetworkConnection netConnection;
     public LinkedBlockingQueue<Data> Q;
 
-    public Writer(NetworkConnection nc, LinkedBlockingQueue<Data> q) {
+    public ProcessOutgoing(NetworkConnection nc, LinkedBlockingQueue<Data> q) {
         netConnection = nc;
         this.Q = q;
     }

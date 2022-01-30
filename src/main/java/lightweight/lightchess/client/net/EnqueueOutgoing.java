@@ -12,10 +12,10 @@ import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
-public class Enqueue implements Runnable{
+public class EnqueueOutgoing implements Runnable{
     public NetworkConnection netConnection;
     public LinkedBlockingQueue<Data> Q;
-    public Enqueue(NetworkConnection nc, LinkedBlockingQueue<Data> Q){
+    public EnqueueOutgoing(NetworkConnection nc, LinkedBlockingQueue<Data> Q){
         netConnection=nc;
         this.Q = Q;
     }

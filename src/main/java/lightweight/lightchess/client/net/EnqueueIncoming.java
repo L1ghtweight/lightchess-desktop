@@ -6,17 +6,20 @@
 package lightweight.lightchess.client.net;
 
 
+import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.NetworkConnection;
 
-public class Reader implements Runnable{
+import java.util.concurrent.LinkedBlockingQueue;
+
+public class EnqueueIncoming implements Runnable{
     public NetworkConnection netConnection;
     String msg="";
     public static boolean check = false;
-    public Reader(NetworkConnection nc){
+    public LinkedBlockingQueue<Data> Q;
+
+    public EnqueueIncoming(NetworkConnection nc, LinkedBlockingQueue<Data> QIn){
         netConnection=nc;
-    }
-    public void setMessage(String msg){
-        this.msg=msg;
+        Q = QIn;
     }
 
 
@@ -24,12 +27,8 @@ public class Reader implements Runnable{
     public void run() {
         while(true){
             String msg;
-            Object obj=netConnection.read();
-            msg = (String) obj;
-            //Data dataObj=(Data)obj;
-            setMessage(msg);
-            System.out.println("Received : "+msg);
-            check = false;
+            Data obj=(Data) netConnection.read();
+            Q.add(obj);
         }
     }
 

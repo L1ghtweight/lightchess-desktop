@@ -25,42 +25,61 @@ public class ReaderWriterServer implements Runnable {
         clientList = cList;
     }
 
+    public void msgFromServer(String msg){
+        Data data = new Data("Server",username,"msg",msg);
+        nc.write(data);
+    }
+
+    public void sendClientList(){
+        System.out.println("List asked By " + username);
+        StringBuilder msgToSend = new StringBuilder("List of Clients...\n");
+        for (Map.Entry<String, Information> entry : clientList.entrySet()) {
+            String key = entry.getKey();
+            msgToSend.append(key).append("\n");
+        }
+        msgFromServer(msgToSend.toString());
+    }
+
+    public void sendIp(){
+        String msgToSend = nc.getSocket().getLocalAddress().getHostAddress();
+        msgFromServer(msgToSend);
+    }
+
+    public void sendToClient(Data data){
+        if(!clientList.containsKey(data.receiver)){
+            msgFromServer(data.receiver + " not connected");
+            return;
+        }
+        Information inf = clientList.get(data.receiver);
+        inf.netConnection.write(data);
+    }
+
     @Override
     public void run() {
         while (true) {
-            Object obj = nc.read();
-            Data dataObj = (Data) obj;
+            Data dataObj = (Data) nc.read();
+            if(dataObj == null){
+                clientList.remove(username);
+                System.out.println(username + " disconnected");
+                break;
+            }
+            dataObj.sender = username;
 
             switch (dataObj.cmd) {
                 case "list" -> {
-                    System.out.println("List asked By" + username);
-                    System.out.println("Client List: \n" + clientList);
-                    StringBuilder msgToSend = new StringBuilder("List of Clients...\n");
-                    for (Map.Entry<String, Information> entry : clientList.entrySet()) {
-                        String key = entry.getKey();
-                        msgToSend.append(key).append("\n");
-                    }
-                    System.out.println("sending.." + msgToSend);
-                    nc.write(msgToSend.toString());
+                    sendClientList();
                     break;
                 }
                 case "ip" -> {
-                    System.out.println("Client List: \n" + clientList);
-                    String msgToSend = nc.getSocket().getLocalAddress().getHostAddress();
-                    System.out.println("sending.." + msgToSend);
-                    nc.write(msgToSend);
+                    sendIp();
                     break;
                 }
-                case "send" -> {
-                    if(!clientList.containsKey(dataObj.receiver)) break;
-                    String msgToSend = username + " says: " + dataObj.message;
-                    System.out.println("sending.." + msgToSend);
-                    Information info = clientList.get(dataObj.receiver);
-                    info.netConnection.write(msgToSend);
+                case "msg" -> {
+                    sendToClient(dataObj);
                     break;
                 }
                 default -> {
-                    nc.write("Invalid command");
+                    msgFromServer("Invalid Command : "+ dataObj.cmd);
                 }
             }
         }

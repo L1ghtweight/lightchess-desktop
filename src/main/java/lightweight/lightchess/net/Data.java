@@ -11,7 +11,7 @@ public class Data implements Serializable,Cloneable{
     
     public String message;
     public String cmd;
-    public String receiver;
+    public String receiver,sender;
 
     public Data(){
         message = cmd = receiver = "";
@@ -19,6 +19,13 @@ public class Data implements Serializable,Cloneable{
 
     public Data(String rec,String cm,String msg){
         receiver = rec;
+        cmd = cm;
+        message = msg;
+    }
+
+    public Data(String sen,String rec,String cm,String msg){
+        receiver = rec;
+        sender = sen;
         cmd = cm;
         message = msg;
     }
