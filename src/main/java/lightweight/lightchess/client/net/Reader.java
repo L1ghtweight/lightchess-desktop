@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.lightweight.lightchess;
+package lightweight.lightchess.client.net;
 
+
+import lightweight.lightchess.net.NetworkConnection;
 
 public class Reader implements Runnable{
     public NetworkConnection netConnection;

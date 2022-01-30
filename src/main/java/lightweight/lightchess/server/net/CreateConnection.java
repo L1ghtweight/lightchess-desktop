@@ -3,8 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.lightweight.lightchess;
+package lightweight.lightchess.server.net;
 
+
+import lightweight.lightchess.net.Information;
+import lightweight.lightchess.net.NetworkConnection;
 
 import java.util.HashMap;
 

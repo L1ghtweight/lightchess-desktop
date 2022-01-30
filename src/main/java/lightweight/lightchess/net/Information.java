@@ -1,4 +1,4 @@
-package org.lightweight.lightchess;
+package lightweight.lightchess.net;
 
 public class Information {
     public String username;

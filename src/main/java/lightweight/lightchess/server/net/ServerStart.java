@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.lightweight.lightchess;
+package lightweight.lightchess.server.net;
+
+import lightweight.lightchess.net.Information;
+import lightweight.lightchess.net.NetworkConnection;
 
 import java.io.IOException;
 import java.net.InetAddress;
@@ -11,7 +14,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
-public class ServerMain {
+public class ServerStart {
 
     public static void main(String[] args) throws IOException {
         ServerSocket serverSocket = new ServerSocket(12345);

@@ -1,4 +1,4 @@
-package org.lightweight.lightchess;
+package lightweight.lightchess.net;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -3,7 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package org.lightweight.lightchess;
+package lightweight.lightchess.client.net;
+
+import lightweight.lightchess.net.Data;
+import lightweight.lightchess.net.NetworkConnection;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -13,7 +16,7 @@ import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 
-public class ClientMain {
+public class ClientStart {
     public static void main(String[] args) throws IOException {
 
         Socket socket = new Socket();

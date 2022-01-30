@@ -74,7 +74,7 @@
                         <!-- Default configuration for running with: mvn clean javafx:run -->
                         <id>default-cli</id>
                         <configuration>
-                            <mainClass>org.lightweight.lightchess/org.lightweight.lightchess.HelloApplication
+                            <mainClass>org.lightweight.lightchess/lightweight.lightchess.ClientMain
                             </mainClass>
                             <launcher>app</launcher>
                             <jlinkZipName>app</jlinkZipName>
