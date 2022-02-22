@@ -9,25 +9,25 @@ import java.io.Serializable;
 
 public class Data implements Serializable,Cloneable{
     
-    public String message;
-    public String cmd;
+    public String content;
+    public CommandTypes cmd;
     public String receiver,sender;
 
     public Data(){
-        message = cmd = receiver = "";
+        content = receiver = ""; cmd = CommandTypes.msg;
     }
 
-    public Data(String rec,String cm,String msg){
+    public Data(String rec, CommandTypes cm, String msg){
         receiver = rec;
         cmd = cm;
-        message = msg;
+        content = msg;
     }
 
-    public Data(String sen,String rec,String cm,String msg){
+    public Data(String sen, String rec, CommandTypes cm, String msg){
         receiver = rec;
         sender = sen;
         cmd = cm;
-        message = msg;
+        content = msg;
     }
 
     public Object clone()throws CloneNotSupportedException{

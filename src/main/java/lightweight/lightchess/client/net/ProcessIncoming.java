@@ -12,7 +12,11 @@ public class ProcessIncoming implements Runnable{
     }
 
     public void handleMessage(Data din){
-        System.out.println(din.sender + " : " + din.message);
+        System.out.println(din.sender + " : " + din.content);
+    }
+
+    public void handleOpponentsMove(Data din){
+
     }
 
     @Override
@@ -32,8 +36,12 @@ public class ProcessIncoming implements Runnable{
             try {
                 data = Q.take();
                 switch (data.cmd) {
-                    case "msg": {
+                    case msg: {
                         handleMessage((Data) data.clone());
+                        break;
+                    }
+                    case move:{
+                        handleOpponentsMove((Data)data.clone());
                         break;
                     }
                     default: {

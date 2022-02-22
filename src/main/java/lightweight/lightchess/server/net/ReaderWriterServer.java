@@ -5,6 +5,7 @@
  */
 package lightweight.lightchess.server.net;
 
+import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
 import lightweight.lightchess.net.NetworkConnection;
@@ -26,7 +27,7 @@ public class ReaderWriterServer implements Runnable {
     }
 
     public void msgFromServer(String msg){
-        Data data = new Data("Server",username,"msg",msg);
+        Data data = new Data("Server",username, CommandTypes.msg,msg);
         nc.write(data);
     }
 
@@ -66,15 +67,15 @@ public class ReaderWriterServer implements Runnable {
             dataObj.sender = username;
 
             switch (dataObj.cmd) {
-                case "list" -> {
+                case list_clients  -> {
                     sendClientList();
                     break;
                 }
-                case "ip" -> {
+                case get_ip -> {
                     sendIp();
                     break;
                 }
-                case "msg" -> {
+                case msg -> {
                     sendToClient(dataObj);
                     break;
                 }
