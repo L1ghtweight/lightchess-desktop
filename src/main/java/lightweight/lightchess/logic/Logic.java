@@ -70,6 +70,5 @@ public class Logic {
         makeMove(b, "e2e4");
 //        makeMove(b, new Move(Square.E1, Square.E2));
         System.out.println(b.toString());
-        System.out.println(">>>" + prevFrom + prevTo);
     }
 }
