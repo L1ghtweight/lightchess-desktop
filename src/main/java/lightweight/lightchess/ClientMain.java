@@ -20,12 +20,10 @@ public class ClientMain extends Application {
         Board gameboard = new Board();
         Logic logic = new Logic();
 
-        UIBoard UIboard = new UIBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameboard);
+        UIBoard UIboard = new UIBoard(1000, Color.web("#f0d9b5"), Color.web("#b58863"), gameboard);
         UIboard.setAlignment(Pos.CENTER);
-        Scene scene = new Scene(UIboard, 500, 500);
+        Scene scene = new Scene(UIboard, 1000, 1000);
         stage.setTitle("LightChess");
-        logic.makeMove(gameboard, "e2e6");
-        UIboard.updateBoard(gameboard);
         stage.setScene(scene);
         stage.show();
 

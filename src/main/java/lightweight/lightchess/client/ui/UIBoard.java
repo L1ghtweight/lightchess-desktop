@@ -74,6 +74,15 @@ public class UIBoard extends GridPane {
 
         transparentImage = new Image(transparentInput);
 
+        updateBoard(gameboard);
+    }
+
+    public void updateBoard(Board gameboard) {
+        this.gameboard = gameboard;
+        String boardString = gameboard.toString();
+
+        this.getChildren().clear();
+
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
                 Rectangle r = new Rectangle(0, 0, length / 8, length / 8);
@@ -81,13 +90,6 @@ public class UIBoard extends GridPane {
                 this.add(r, i, j, 1, 1);
             }
         }
-
-        updateBoard(gameboard);
-    }
-
-    public void updateBoard(Board gameboard) {
-        this.gameboard = gameboard;
-        String boardString = gameboard.toString();
 
         for (int i = 0; i < 72; i++) {
             if (boardString.charAt(i) != '.' && boardString.charAt(i) != '\n') {
@@ -97,6 +99,7 @@ public class UIBoard extends GridPane {
                 this.add(boardImages[i/9][i%9], i%9, i/9, 1, 1);
             }
             else if(i/9 < 8 && i%9 < 8) {
+                System.out.println(boardString);
                 this.getChildren().remove(boardImages[i/9][i%9]);
                 boardImages[i/9][i%9] = new ImageView(transparentImage);
                 boardImages[i/9][i%9].setFitHeight(length/8);
