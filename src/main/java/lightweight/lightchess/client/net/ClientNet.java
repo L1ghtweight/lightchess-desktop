@@ -5,6 +5,8 @@
  */
 package lightweight.lightchess.client.net;
 
+import javafx.scene.input.Clipboard;
+import lightweight.lightchess.logic.Logic;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.NetworkConnection;
@@ -15,46 +17,77 @@ import java.net.Socket;
 
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
-
+import com.github.bhlangonijr.chesslib.Board;
 
 public class ClientNet {
     Socket socket;
     NetworkConnection nc;
+    Scanner scan = new Scanner(System.in);
     LinkedBlockingQueue<Data> QOut, QIn;
-    Thread enqueueIn,processOut,enqueueOut,processInThread;
+    Thread enqueueIn,processOut,enqueueOut,processInThread, matchThread;
     String username,opponentUsername;
     boolean isInMatch = false;
+    boolean isMyTurn = false;
+    Board board;
+    Logic logic;
+    String color;
 
     public void startMatch(String opponentUsername){
         isInMatch = true;
+        board = new Board();
+        logic = new Logic();
         this.opponentUsername =  opponentUsername;
+    }
+
+    public void makeOpponnentsMove(String move){
+        if(isMyTurn){
+            System.out.println("Not opponnents move");
+            sendMsg("Not your move");
+            return;
+        }
+        System.out.println("Opponent made move : "+ move);
+        boolean f = logic.makeMove(board, move);
+        if(!f) System.out.println("Invalid move by opponnent "+move);
+        System.out.println(board.toString());
+        isMyTurn = true;
     }
 
     public void sendData(Data dOut){
         QOut.add(dOut);
     }
 
-    public void sendMove(String move,String opponentUsername){
+    public void sendMove(String move){
         Data d = new Data();
         d.cmd = CommandTypes.move;
         d.content = move;
         d.sender = username;
         d.receiver = opponentUsername;
+        QOut.add(d);
+    }
+
+    public void sendMsg(String msg){
+        Data d = new Data();
+        d.cmd = CommandTypes.msg;
+        d.content = msg;
+        d.sender = username;
+        d.receiver = opponentUsername;
+        QOut.add(d);
     }
 
 
-    public void start(String[] args) throws IOException {
+    public void start() {
 
         Socket socket = null;
         try {
             socket = new Socket("localhost", 12345);
+            System.out.println("Client Started--- ");
+            nc = new NetworkConnection(socket);
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("Cant connect");
             return;
         }
-        System.out.println("Client Started--- ");
-        NetworkConnection nc = new NetworkConnection(socket);
+
 
         System.out.println("Enter your username");
         Scanner in = new Scanner(System.in);
@@ -66,8 +99,8 @@ public class ClientNet {
 
         enqueueIn = new Thread(new EnqueueIncoming(nc, QIn));
         processOut = new Thread(new ProcessOutgoing(nc, QOut));
-        enqueueOut = new Thread(new EnqueueOutgoing(nc, QOut));
-        processInThread = new Thread(new ProcessIncoming(QIn));
+        enqueueOut = new Thread(new EnqueueOutgoing(nc, QOut, this));
+        processInThread = new Thread(new ProcessIncoming(QIn,this));
 
         enqueueIn.start();
         processOut.start();
@@ -79,5 +112,10 @@ public class ClientNet {
         } catch (Exception e) {
             System.out.println("Thread exited");
         }
+    }
+
+    public static void main(String[] args) {
+        ClientNet c = new ClientNet();
+        c.start();
     }
 }

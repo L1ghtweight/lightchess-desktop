@@ -75,9 +75,9 @@ public class ReaderWriterServer implements Runnable {
                     sendIp();
                     break;
                 }
-                case msg -> {
+
+                case msg,requestToPlay,playRequestAccecpted,move ->{
                     sendToClient(dataObj);
-                    break;
                 }
                 default -> {
                     msgFromServer("Invalid Command : "+ dataObj.cmd);

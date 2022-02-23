@@ -1,13 +1,18 @@
 package lightweight.lightchess.client.net;
 
+import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 
+import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ProcessIncoming implements Runnable{
     public LinkedBlockingQueue<Data> Q;
     ClientNet client;
-    public ProcessIncoming(LinkedBlockingQueue QIn){
+    Scanner scan = new Scanner(System.in);
+
+    public ProcessIncoming(LinkedBlockingQueue QIn, ClientNet c){
+        client = c;
         Q = QIn;
     }
 
@@ -16,11 +21,21 @@ public class ProcessIncoming implements Runnable{
     }
 
     public void handleOpponentsMove(Data din){
-
+        String move = din.content;
+        client.makeOpponnentsMove(move);
     }
 
     public void handlePlayRequest(Data din){
+        System.out.println("Do you want to play with "+ din.sender + " ? if yes type accept:"+ din.sender);
+        client.opponentUsername = din.sender;
+    }
+
+    public void handlePlayRequestAccepted(Data din){
+        client.isMyTurn = true;
         client.startMatch(din.sender);
+        System.out.println("Match Started with "+ din.sender);
+        System.out.println("You are playing WHITE");
+        System.out.println(client.board.toString());
     }
 
     @Override
@@ -50,6 +65,10 @@ public class ProcessIncoming implements Runnable{
                     }
                     case requestToPlay:{
                         handlePlayRequest((Data)data.clone());
+                        break;
+                    }
+                    case playRequestAccecpted:{
+                        handlePlayRequestAccepted((Data)data.clone());
                         break;
                     }
                     default: {

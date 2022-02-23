@@ -11,8 +11,8 @@ import java.util.Locale;
 
 
 public class Logic {
-    public static String prevFrom = new String(), prevTo = new String();
-    public static List<Move> getLegalMovesFromSquare(Board b, String pos) {
+    public String prevFrom = new String(), prevTo = new String();
+    public List<Move> getLegalMovesFromSquare(Board b, String pos) {
         List<Move> allLegalMoves = b.legalMoves();
         List<Move> legalFromSquare = new ArrayList<>();
         for(Move move : allLegalMoves) {
@@ -23,7 +23,7 @@ public class Logic {
         return legalFromSquare;
     }
 
-    public static boolean makeMove(Board board, Move move) {
+    public boolean makeMove(Board board, Move move) {
 
         if(isLegal(board, move)) {
             board.doMove(move);
@@ -34,7 +34,7 @@ public class Logic {
         return false;
     }
 
-    public static boolean makeMove(Board board, String move) {
+    public boolean makeMove(Board board, String move) {
         if(isLegal(board, move)) {
             board.doMove(move);
             prevFrom = move.substring(0,2);
@@ -44,7 +44,7 @@ public class Logic {
         return false;
     }
 
-    public static boolean isLegal(Board b, Move m) {
+    public boolean isLegal(Board b, Move m) {
         List<Move> legalMoves = b.legalMoves();
         for(Move move : legalMoves) {
             if(move.toString().equals(m.toString())) {
@@ -54,7 +54,7 @@ public class Logic {
         return false;
     }
 
-    public static boolean isLegal(Board b, String m) {
+    public boolean isLegal(Board b, String m) {
         List<Move> legalMoves = b.legalMoves();
         for(Move move : legalMoves) {
             if(move.toString().equals(m)) {
@@ -64,11 +64,11 @@ public class Logic {
         return false;
     }
 
-    public static boolean isCheckmate(Board board) {
+    public boolean isCheckmate(Board board) {
         return board.isMated();
     }
 
-    public static boolean isCheck(Board board) {
+    public boolean isCheck(Board board) {
         return board.isKingAttacked();
     }
 
@@ -78,7 +78,8 @@ public class Logic {
 
     public static void main(String[] args) {
         Board b = new Board();
-        makeMove(b, "d1d4");
-        System.out.println(b.toString());
+        Logic logic = new Logic();
+        logic.makeMove(b, "d1d4");
+
     }
 }
