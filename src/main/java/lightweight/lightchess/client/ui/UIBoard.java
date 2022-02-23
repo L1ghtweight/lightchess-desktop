@@ -28,6 +28,7 @@ public class UIBoard extends GridPane {
     FileInputStream[] pieceInputs = new FileInputStream[12];
     Image[] pieceImages = new Image[12];
     Image transparentImage = null;
+    boolean isBlack = false;
 
     public UIBoard(int length, Color color1, Color color2, Board gameboard) {
         this.length = length;
@@ -80,6 +81,8 @@ public class UIBoard extends GridPane {
     public void updateBoard(Board gameboard) {
         this.gameboard = gameboard;
         String boardString = gameboard.toString();
+        if(isBlack)
+            boardString = gameboard.toStringFromBlackViewPoint();
 
         this.getChildren().clear();
 
@@ -99,7 +102,6 @@ public class UIBoard extends GridPane {
                 this.add(boardImages[i/9][i%9], i%9, i/9, 1, 1);
             }
             else if(i/9 < 8 && i%9 < 8) {
-                System.out.println(boardString);
                 this.getChildren().remove(boardImages[i/9][i%9]);
                 boardImages[i/9][i%9] = new ImageView(transparentImage);
                 boardImages[i/9][i%9].setFitHeight(length/8);
@@ -107,5 +109,9 @@ public class UIBoard extends GridPane {
                 this.add(boardImages[i/9][i%9], i%9, i/9, 1, 1);
             }
         }
+    }
+
+    public void rotate() {
+        isBlack = true;
     }
 }
