@@ -64,6 +64,7 @@ public class EnqueueOutgoing implements Runnable{
                 }
                 System.out.println("Sending move to "+ data.receiver);
                 System.out.println(client.board.toString());
+                client.updateBoard();
                 client.isMyTurn = false;
             } else if(cmd.equals("getboard")){
                 System.out.println(client.board.toString());

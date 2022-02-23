@@ -2,3 +2,5 @@ target
 *.class
 .idea
 lightchess.iml
+.project
+.settings

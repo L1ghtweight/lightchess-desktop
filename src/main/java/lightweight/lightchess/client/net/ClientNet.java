@@ -5,7 +5,9 @@
  */
 package lightweight.lightchess.client.net;
 
+import javafx.application.Platform;
 import javafx.scene.input.Clipboard;
+import lightweight.lightchess.client.ui.UIBoard;
 import lightweight.lightchess.logic.Logic;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
@@ -31,6 +33,11 @@ public class ClientNet {
     Board board;
     Logic logic;
     String color;
+    UIBoard uiBoard;
+
+    public ClientNet(UIBoard ub){
+        uiBoard = ub;
+    }
 
     public void startMatch(String opponentUsername){
         isInMatch = true;
@@ -47,9 +54,9 @@ public class ClientNet {
         }
         System.out.println("Opponent made move : "+ move);
         boolean f = logic.makeMove(board, move);
-        if(!f) System.out.println("Invalid move by opponnent "+move);
         System.out.println(board.toString());
         isMyTurn = true;
+        updateBoard();
     }
 
     public void sendData(Data dOut){
@@ -74,6 +81,11 @@ public class ClientNet {
         QOut.add(d);
     }
 
+    public void updateBoard(){
+        Platform.runLater(() ->{
+            uiBoard.updateBoard(board);
+        });
+    }
 
     public void start() {
 
@@ -114,8 +126,8 @@ public class ClientNet {
         }
     }
 
-    public static void main(String[] args) {
-        ClientNet c = new ClientNet();
-        c.start();
-    }
+//    public static void main(String[] args) {
+//        ClientNet c = new ClientNet();
+//        c.start();
+//    }
 }
