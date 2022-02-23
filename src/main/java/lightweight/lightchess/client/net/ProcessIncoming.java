@@ -6,7 +6,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 public class ProcessIncoming implements Runnable{
     public LinkedBlockingQueue<Data> Q;
-
+    ClientNet client;
     public ProcessIncoming(LinkedBlockingQueue QIn){
         Q = QIn;
     }
@@ -17,6 +17,10 @@ public class ProcessIncoming implements Runnable{
 
     public void handleOpponentsMove(Data din){
 
+    }
+
+    public void handlePlayRequest(Data din){
+        client.startMatch(din.sender);
     }
 
     @Override
@@ -42,6 +46,10 @@ public class ProcessIncoming implements Runnable{
                     }
                     case move:{
                         handleOpponentsMove((Data)data.clone());
+                        break;
+                    }
+                    case requestToPlay:{
+                        handlePlayRequest((Data)data.clone());
                         break;
                     }
                     default: {

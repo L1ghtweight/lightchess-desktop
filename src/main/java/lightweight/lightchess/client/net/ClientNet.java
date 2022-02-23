@@ -5,6 +5,7 @@
  */
 package lightweight.lightchess.client.net;
 
+import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.NetworkConnection;
 
@@ -17,7 +18,32 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 
 public class ClientNet {
-    public static void main(String[] args) throws IOException {
+    Socket socket;
+    NetworkConnection nc;
+    LinkedBlockingQueue<Data> QOut, QIn;
+    Thread enqueueIn,processOut,enqueueOut,processInThread;
+    String username,opponentUsername;
+    boolean isInMatch = false;
+
+    public void startMatch(String opponentUsername){
+        isInMatch = true;
+        this.opponentUsername =  opponentUsername;
+    }
+
+    public void sendData(Data dOut){
+        QOut.add(dOut);
+    }
+
+    public void sendMove(String move,String opponentUsername){
+        Data d = new Data();
+        d.cmd = CommandTypes.move;
+        d.content = move;
+        d.sender = username;
+        d.receiver = opponentUsername;
+    }
+
+
+    public void start(String[] args) throws IOException {
 
         Socket socket = null;
         try {
@@ -32,16 +58,16 @@ public class ClientNet {
 
         System.out.println("Enter your username");
         Scanner in = new Scanner(System.in);
-        String username = in.next();
+        username = in.next();
         nc.write(username);
 
-        LinkedBlockingQueue<Data> QOut = new LinkedBlockingQueue<>();
-        LinkedBlockingQueue<Data> QIn = new LinkedBlockingQueue<>();
+        QOut = new LinkedBlockingQueue<>();
+        QIn = new LinkedBlockingQueue<>();
 
-        Thread enqueueIn = new Thread(new EnqueueIncoming(nc, QIn));
-        Thread processOut = new Thread(new ProcessOutgoing(nc, QOut));
-        Thread enqueueOut = new Thread(new EnqueueOutgoing(nc, QOut));
-        Thread processInThread = new Thread(new ProcessIncoming(QIn));
+        enqueueIn = new Thread(new EnqueueIncoming(nc, QIn));
+        processOut = new Thread(new ProcessOutgoing(nc, QOut));
+        enqueueOut = new Thread(new EnqueueOutgoing(nc, QOut));
+        processInThread = new Thread(new ProcessIncoming(QIn));
 
         enqueueIn.start();
         processOut.start();
