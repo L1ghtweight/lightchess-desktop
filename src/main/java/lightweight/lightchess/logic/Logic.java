@@ -77,9 +77,11 @@ public class Logic {
 //    }
 
     public static void main(String[] args) {
-        Board b = new Board();
-        Logic logic = new Logic();
-        logic.makeMove(b, "d1d4");
-
+//        Board b = new Board();
+//        String FEN = "rnbqkbnr/1ppppQp1/7p/p7/2B1P3/8/PPPP1PPP/RNB1K1NR b KQkq - 0 4";
+//        b.loadFromFen(FEN);
+//        makeMove(b, "e2e4");
+//        makeMove(b, new Move(Square.E1, Square.E2));
+//        System.out.println(b.toString());
     }
 }

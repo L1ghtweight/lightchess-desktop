@@ -1,7 +1,10 @@
 module org.lightweight.lightchess {
     requires javafx.controls;
+    requires javafx.graphics;
     requires javafx.fxml;
+
     requires chesslib;
+    requires javafxsvg;
 
 //    opens lightweight.lightchess to javafx.fxml;
 //    exports lightweight.lightchess;
