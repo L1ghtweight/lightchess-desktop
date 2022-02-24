@@ -2,7 +2,8 @@ module org.lightweight.lightchess {
     requires javafx.controls;
     requires javafx.graphics;
     requires javafx.fxml;
-
+    requires org.apache.commons.codec;
+    requires org.mariadb.jdbc;
     requires chesslib;
     requires javafxsvg;
 
