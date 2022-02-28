@@ -17,6 +17,7 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Socket;
 
+import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 import com.github.bhlangonijr.chesslib.Board;
@@ -30,13 +31,18 @@ public class ClientNet {
     String username,opponentUsername;
     boolean isInMatch = false;
     boolean isMyTurn = false;
+    boolean hasUI = false;
     Board board;
     Logic logic;
     String color;
     UIBoard uiBoard;
 
     public ClientNet(UIBoard ub){
+        hasUI = true;
         uiBoard = ub;
+    }
+    public ClientNet(){
+
     }
 
     public void startMatch(String opponentUsername){
@@ -44,6 +50,7 @@ public class ClientNet {
         board = new Board();
         logic = new Logic();
         this.opponentUsername =  opponentUsername;
+        System.out.println("Match started with " + opponentUsername);
     }
 
     public void makeOpponnentsMove(String move){
@@ -56,7 +63,8 @@ public class ClientNet {
         boolean f = logic.makeMove(board, move);
         System.out.println(board.toString());
         isMyTurn = true;
-        updateBoard();
+        if(hasUI)
+            updateBoard();
     }
 
     public void sendData(Data dOut){
@@ -78,6 +86,7 @@ public class ClientNet {
         d.content = msg;
         d.sender = username;
         d.receiver = opponentUsername;
+        System.out.println("SUSSSS");
         QOut.add(d);
     }
 
@@ -126,8 +135,8 @@ public class ClientNet {
         }
     }
 
-//    public static void main(String[] args) {
-//        ClientNet c = new ClientNet();
-//        c.start();
-//    }
+    public static void main(String[] args) {
+        ClientNet c = new ClientNet();
+        c.start();
+    }
 }

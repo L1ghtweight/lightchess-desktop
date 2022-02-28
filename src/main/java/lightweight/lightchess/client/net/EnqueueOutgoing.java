@@ -52,8 +52,11 @@ public class EnqueueOutgoing implements Runnable{
                 data.cmd = CommandTypes.playRequestAccecpted;
                 data.receiver = client.opponentUsername;
                 client.startMatch(client.opponentUsername);
-                System.out.println("You are playing BLACK");
             } else if(cmd.equals("move")){
+                if(!client.isMyTurn){
+                    System.out.println("Not your turn, is your head okay?");
+                    continue;
+                }
                 data.cmd = CommandTypes.move;
                 data.receiver = client.opponentUsername;
                 data.content = message[1];
@@ -64,7 +67,9 @@ public class EnqueueOutgoing implements Runnable{
                 }
                 System.out.println("Sending move to "+ data.receiver);
                 System.out.println(client.board.toString());
-                client.updateBoard();
+                if(client.hasUI){
+                    client.updateBoard();
+                }
                 client.isMyTurn = false;
             } else if(cmd.equals("getboard")){
                 System.out.println(client.board.toString());

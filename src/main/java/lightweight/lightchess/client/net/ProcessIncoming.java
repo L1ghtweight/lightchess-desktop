@@ -31,11 +31,16 @@ public class ProcessIncoming implements Runnable{
     }
 
     public void handlePlayRequestAccepted(Data din){
-        client.isMyTurn = true;
         client.startMatch(din.sender);
-        System.out.println("Match Started with "+ din.sender);
-        System.out.println("You are playing WHITE");
-        System.out.println(client.board.toString());
+    }
+
+    public void handleSetColor(Data data){
+        String color = "BLACK";
+        if(data.cmd==CommandTypes.playWhite){
+            color = "WHITE";
+            client.isMyTurn = true;
+        }
+        System.out.println("You are playing " + color);
     }
 
     @Override
@@ -55,23 +60,27 @@ public class ProcessIncoming implements Runnable{
             try {
                 data = Q.take();
                 switch (data.cmd) {
-                    case msg: {
+                    case msg -> {
                         handleMessage((Data) data.clone());
                         break;
                     }
-                    case move:{
+                    case move -> {
                         handleOpponentsMove((Data)data.clone());
                         break;
                     }
-                    case requestToPlay:{
+                    case requestToPlay -> {
                         handlePlayRequest((Data)data.clone());
                         break;
                     }
-                    case playRequestAccecpted:{
+                    case playRequestAccecpted -> {
                         handlePlayRequestAccepted((Data)data.clone());
                         break;
                     }
-                    default: {
+                    case playBlack,playWhite -> {
+                        handleSetColor((Data)data.clone());
+                    }
+
+                    default -> {
                         System.out.println("Invalid incoming command : " + data.cmd);
                     }
                 }

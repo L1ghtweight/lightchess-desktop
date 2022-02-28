@@ -12,6 +12,7 @@ import lightweight.lightchess.net.NetworkConnection;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Random;
 
 
 public class ReaderWriterServer implements Runnable {
@@ -19,6 +20,7 @@ public class ReaderWriterServer implements Runnable {
     String username;
     NetworkConnection nc;
     HashMap<String, Information> clientList;
+    Random rand = new Random();
 
     public ReaderWriterServer(String user, NetworkConnection netConnection, HashMap<String, Information> cList) {
         username = user;
@@ -55,6 +57,27 @@ public class ReaderWriterServer implements Runnable {
         inf.netConnection.write(data);
     }
 
+    public void setColor(Data data){
+        int i = rand.nextInt(2);
+        Data d1 = new Data();
+        Data d2 = new Data();
+        d1.sender = d2.sender = "Server";
+        d1.receiver = data.receiver;
+        if(i==0) d1.cmd = CommandTypes.playBlack;
+        else d1.cmd = CommandTypes.playWhite;
+
+
+        d2.receiver = data.sender;
+        if(d1.cmd == CommandTypes.playBlack)
+            d2.cmd = CommandTypes.playWhite;
+        else
+            d2.cmd = CommandTypes.playBlack;
+
+        sendToClient(d1);
+        sendToClient(d2);
+
+    }
+
     @Override
     public void run() {
         while (true) {
@@ -76,9 +99,15 @@ public class ReaderWriterServer implements Runnable {
                     break;
                 }
 
-                case msg,requestToPlay,playRequestAccecpted,move ->{
+                case msg,requestToPlay,move ->{
                     sendToClient(dataObj);
                 }
+
+                case playRequestAccecpted ->{
+                    setColor(dataObj);
+                    sendToClient(dataObj);
+                }
+
                 default -> {
                     msgFromServer("Invalid Command : "+ dataObj.cmd);
                 }

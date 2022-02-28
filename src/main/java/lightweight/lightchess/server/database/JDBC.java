@@ -1,4 +1,4 @@
-package lightweight.lightchess.database;
+package lightweight.lightchess.server.database;
 
 import org.apache.commons.codec.digest.DigestUtils;
 
