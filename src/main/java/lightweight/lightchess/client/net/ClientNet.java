@@ -6,18 +6,15 @@
 package lightweight.lightchess.client.net;
 
 import javafx.application.Platform;
-import javafx.scene.input.Clipboard;
-import lightweight.lightchess.client.ui.UIBoard;
+import lightweight.lightchess.client.ui.ChessBoard;
 import lightweight.lightchess.logic.Logic;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.NetworkConnection;
 
 import java.io.IOException;
-import java.net.InetSocketAddress;
 import java.net.Socket;
 
-import java.util.Random;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 import com.github.bhlangonijr.chesslib.Board;
@@ -35,11 +32,11 @@ public class ClientNet {
     Board board;
     Logic logic;
     String color;
-    UIBoard uiBoard;
+    ChessBoard chessBoard;
 
-    public ClientNet(UIBoard ub){
+    public ClientNet(ChessBoard ub){
         hasUI = true;
-        uiBoard = ub;
+        chessBoard = ub;
     }
     public ClientNet(){
 
@@ -92,7 +89,7 @@ public class ClientNet {
 
     public void updateBoard(){
         Platform.runLater(() ->{
-            uiBoard.updateBoard(board);
+            chessBoard.updateBoard(board);
         });
     }
 
