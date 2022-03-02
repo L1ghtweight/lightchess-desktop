@@ -15,9 +15,11 @@ import java.util.HashMap;
 public class CreateConnection implements Runnable{
     
     HashMap<String, Information> clientList;
+    HashMap<String, Information> loggedInList;
     NetworkConnection nc;
-    public CreateConnection(HashMap<String,Information> cList, NetworkConnection nConnection){
+    public CreateConnection(HashMap<String,Information> cList,HashMap<String,Information> loggedInList, NetworkConnection nConnection){
         clientList=cList;
+        this.loggedInList = loggedInList;
         nc=nConnection;    
     }
         
@@ -31,7 +33,7 @@ public class CreateConnection implements Runnable{
         
         clientList.put(username,new Information(username,nc));
         System.out.println("HashMap updated"+clientList);
-        new Thread(new ReaderWriterServer(username,nc,clientList)).start();
+        new Thread(new ReaderWriterServer(username,nc,clientList,loggedInList)).start();
         
     }
     

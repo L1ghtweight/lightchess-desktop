@@ -4,3 +4,4 @@ target
 lightchess.iml
 .project
 .settings
+.attach*

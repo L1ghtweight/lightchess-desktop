@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class Data implements Serializable,Cloneable{
     
     public String content;
+    public String content2;
     public CommandTypes cmd;
     public String receiver,sender;
 
