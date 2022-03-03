@@ -60,8 +60,6 @@ public class ClientNet {
         boolean f = logic.makeMove(board, move);
         System.out.println(board.toString());
         isMyTurn = true;
-        if(hasUI)
-            updateBoard();
     }
 
     public void sendData(Data dOut){
@@ -88,6 +86,7 @@ public class ClientNet {
     }
 
     public void updateBoard(){
+        if(!hasUI) return;
         Platform.runLater(() ->{
             chessBoard.updateBoard(board);
         });
@@ -105,12 +104,6 @@ public class ClientNet {
             System.out.println("Cant connect");
             return;
         }
-
-
-        System.out.println("Enter your username");
-        Scanner in = new Scanner(System.in);
-        username = in.next();
-        nc.write(username);
 
         QOut = new LinkedBlockingQueue<>();
         QIn = new LinkedBlockingQueue<>();
@@ -133,6 +126,11 @@ public class ClientNet {
     }
 
     public static void main(String[] args) {
+        try {
+            Thread.sleep(2000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         ClientNet c = new ClientNet();
         c.start();
     }

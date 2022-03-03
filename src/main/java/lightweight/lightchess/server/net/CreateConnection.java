@@ -8,6 +8,7 @@ package lightweight.lightchess.server.net;
 
 import lightweight.lightchess.net.Information;
 import lightweight.lightchess.net.NetworkConnection;
+import lightweight.lightchess.server.tournament.Tournament;
 
 import java.util.HashMap;
 
@@ -17,24 +18,25 @@ public class CreateConnection implements Runnable{
     HashMap<String, Information> clientList;
     HashMap<String, Information> loggedInList;
     NetworkConnection nc;
-    public CreateConnection(HashMap<String,Information> cList,HashMap<String,Information> loggedInList, NetworkConnection nConnection){
+    Tournament t;
+    public String ids = "1";
+    public CreateConnection(HashMap<String, Information> cList, HashMap<String, Information> loggedInList, NetworkConnection nConnection, Tournament tournament){
         clientList=cList;
         this.loggedInList = loggedInList;
-        nc=nConnection;    
+        nc=nConnection;
+        t = tournament;
     }
         
     
     @Override
     public void run() {
-        Object userObj=nc.read();
-        String username=(String)userObj;
-        
-        System.out.println("User : "+username+" connected");
-        
-        clientList.put(username,new Information(username,nc));
+        clientList.put(ids,new Information(ids,nc));
         System.out.println("HashMap updated"+clientList);
-        new Thread(new ReaderWriterServer(username,nc,clientList,loggedInList)).start();
-        
+        new Thread(new ReaderWriterServer(ids,nc,clientList,loggedInList,t)).start();
+
+        int id = Integer.parseInt(ids);
+        id++;
+        ids = Integer.toString(id);
     }
     
 }

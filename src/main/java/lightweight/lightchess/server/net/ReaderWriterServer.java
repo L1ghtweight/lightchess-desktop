@@ -10,6 +10,7 @@ import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
 import lightweight.lightchess.net.NetworkConnection;
 import lightweight.lightchess.server.database.JDBC;
+import lightweight.lightchess.server.tournament.Tournament;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,22 +19,25 @@ import java.util.Random;
 
 public class ReaderWriterServer implements Runnable {
 
-    String username;
+    String username="",id;
     NetworkConnection nc;
     HashMap<String, Information> clientList;
     HashMap<String, Information> loggedInList;
     Random rand = new Random();
     JDBC jdbc = new JDBC();
+    boolean isLoggedIn = false;
+    Tournament tournament;
 
-    public ReaderWriterServer(String user, NetworkConnection netConnection, HashMap<String, Information> cList,HashMap<String, Information> loggedInLIst) {
-        username = user;
+    public ReaderWriterServer(String userID, NetworkConnection netConnection, HashMap<String, Information> cList, HashMap<String, Information> loggedInLIst, Tournament t) {
+        tournament = t;
+        id = userID;
         nc = netConnection;
         clientList = cList;
         this.loggedInList = loggedInLIst;
     }
 
     public void msgFromServer(String msg){
-        Data data = new Data("Server",username, CommandTypes.msg,msg);
+        Data data = new Data("Server",id, CommandTypes.msg,msg);
         nc.write(data);
     }
 
@@ -93,6 +97,10 @@ public class ReaderWriterServer implements Runnable {
     }
 
     public void signupClient(Data dObj){
+        if(isLoggedIn){
+            msgFromServer("You are already logged in");
+            return;
+        }
         String msg;
         if(jdbc.createUser(dObj.content,dObj.content2)){
             msg = "Signup successfull";
@@ -104,11 +112,16 @@ public class ReaderWriterServer implements Runnable {
     }
 
     public void loginClient(Data dObj){
+        if(isLoggedIn){
+            msgFromServer("You are already logged in");
+            return;
+        }
         String msg;
-        String username = dObj.content;
+        username = dObj.content;
         if(jdbc.checkPassword(dObj.content,dObj.content2)){
             msg = "Login successfull";
             loggedInList.put(username,new Information(username,nc));
+            isLoggedIn = true;
         } else {
             msg = "Login Error";
         }
@@ -116,9 +129,9 @@ public class ReaderWriterServer implements Runnable {
     }
 
     public void logOut(Data dObj){
-        String username = dObj.content;
         loggedInList.remove(username);
         msgFromServer("Logged out "+username);
+        isLoggedIn = false;
     }
 
     @Override
@@ -126,11 +139,26 @@ public class ReaderWriterServer implements Runnable {
         while (true) {
             Data dataObj = (Data) nc.read();
             if(dataObj == null){
-                clientList.remove(username);
+                clientList.remove(id);
+                if(username.equals("")) break;
+                loggedInList.remove(username);
                 System.out.println(username + " disconnected");
                 break;
             }
+
+            if(dataObj.cmd == CommandTypes.signup){
+                signupClient(dataObj);
+            } else if(dataObj.cmd == CommandTypes.login){
+                loginClient(dataObj);
+            }
+
+            if(!isLoggedIn){
+                msgFromServer("You are not logged in, login/signup:username:password");
+                continue;
+            }
+
             dataObj.sender = username;
+
 
             switch (dataObj.cmd) {
                 case list_clients  -> {
@@ -154,18 +182,15 @@ public class ReaderWriterServer implements Runnable {
                     sendToClient(dataObj);
                 }
 
-                case signup -> {
-                    signupClient(dataObj);
-                }
-
-                case login -> {
-                    loginClient(dataObj);
-                }
-
                 case logout -> {
                     logOut(dataObj);
                 }
 
+                case login,signup -> {}
+
+                case get_tournament_details -> {
+                    msgFromServer(tournament.get_tournament_details());
+                }
 
                 default -> {
                     msgFromServer("Invalid Command : "+ dataObj.cmd);

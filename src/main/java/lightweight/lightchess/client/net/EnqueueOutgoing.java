@@ -97,6 +97,8 @@ public class EnqueueOutgoing implements Runnable{
                 }
                 data.content = message[1];
                 data.content2 = message[2];
+            } else if(cmd.equals("get_tournament")){
+                data.cmd = CommandTypes.get_tournament_details;
             }
 
 
