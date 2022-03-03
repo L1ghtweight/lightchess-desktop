@@ -29,7 +29,7 @@ public class ChessBoard extends GridPane {
         for(Character c:pieceNotations) {
             String path = "/lightweight/lightchess/png_pieces/" + c + ".png";
             System.out.println(path + " " + getClass().getResourceAsStream(path));
-            pieceMap.put(c, new Image(getClass().getResourceAsStream("/lightweight/lightchess/png_pieces/bN.png")));
+            pieceMap.put(c, new Image(getClass().getResourceAsStream(path)));
         }
 
         updateBoard(gameBoard);
@@ -54,7 +54,7 @@ public class ChessBoard extends GridPane {
         for (int i = 0; i < 72; i++) {
             int x = i%9, y = i/9;
             if (boardString.charAt(i) != '.' && boardString.charAt(i) != '\n') {
-                ImageView newPiece = new ImageView(pieceMap.get(boardString.charAt(i)));
+                ImageView newPiece = new Piece(pieceMap.get(boardString.charAt(i)));
                 newPiece.setFitHeight(length/8);
                 newPiece.setFitWidth(length/8);
                 this.add(newPiece, x, y, 1, 1);

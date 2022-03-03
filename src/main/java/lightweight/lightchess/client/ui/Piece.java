@@ -13,6 +13,7 @@ public class Piece extends ImageView {
         setOnMousePressed(event -> {
             mouseX = event.getSceneX();
             mouseY = event.getSceneY();
+            System.out.println("clicked");
         });
 
         setOnMouseDragged(event -> {
