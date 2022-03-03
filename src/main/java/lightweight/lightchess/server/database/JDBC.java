@@ -34,7 +34,7 @@ public class JDBC {
     }
 
     public Connection getConnection(){
-        return getConnection("jdbc:mariadb://localhost:3306/lightchess","spike","spiegel");
+        return getConnection("jdbc:mariadb://localhost:3306/lightchess",System.getenv("DB_USER"),System.getenv("DB_PASS"));
     }
 
     public HashSet<String> getUserSet(){

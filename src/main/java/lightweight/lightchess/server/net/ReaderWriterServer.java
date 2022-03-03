@@ -9,6 +9,7 @@ import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
 import lightweight.lightchess.net.NetworkConnection;
+import lightweight.lightchess.server.database.JDBC;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,12 +21,15 @@ public class ReaderWriterServer implements Runnable {
     String username;
     NetworkConnection nc;
     HashMap<String, Information> clientList;
+    HashMap<String, Information> loggedInList;
     Random rand = new Random();
+    JDBC jdbc = new JDBC();
 
-    public ReaderWriterServer(String user, NetworkConnection netConnection, HashMap<String, Information> cList) {
+    public ReaderWriterServer(String user, NetworkConnection netConnection, HashMap<String, Information> cList,HashMap<String, Information> loggedInLIst) {
         username = user;
         nc = netConnection;
         clientList = cList;
+        this.loggedInList = loggedInLIst;
     }
 
     public void msgFromServer(String msg){
@@ -37,6 +41,16 @@ public class ReaderWriterServer implements Runnable {
         System.out.println("List asked By " + username);
         StringBuilder msgToSend = new StringBuilder("List of Clients...\n");
         for (Map.Entry<String, Information> entry : clientList.entrySet()) {
+            String key = entry.getKey();
+            msgToSend.append(key).append("\n");
+        }
+        msgFromServer(msgToSend.toString());
+    }
+
+    public void sendLoggedInClientList(){
+        System.out.println("List asked By " + username);
+        StringBuilder msgToSend = new StringBuilder("List of Logged In Clients...\n");
+        for (Map.Entry<String, Information> entry : loggedInList.entrySet()) {
             String key = entry.getKey();
             msgToSend.append(key).append("\n");
         }
@@ -78,6 +92,35 @@ public class ReaderWriterServer implements Runnable {
 
     }
 
+    public void signupClient(Data dObj){
+        String msg;
+        if(jdbc.createUser(dObj.content,dObj.content2)){
+            msg = "Signup successfull";
+            String username = dObj.content;
+        } else {
+            msg = "Signup Error";
+        }
+        msgFromServer(msg);
+    }
+
+    public void loginClient(Data dObj){
+        String msg;
+        String username = dObj.content;
+        if(jdbc.checkPassword(dObj.content,dObj.content2)){
+            msg = "Login successfull";
+            loggedInList.put(username,new Information(username,nc));
+        } else {
+            msg = "Login Error";
+        }
+        msgFromServer(msg);
+    }
+
+    public void logOut(Data dObj){
+        String username = dObj.content;
+        loggedInList.remove(username);
+        msgFromServer("Logged out "+username);
+    }
+
     @Override
     public void run() {
         while (true) {
@@ -92,11 +135,14 @@ public class ReaderWriterServer implements Runnable {
             switch (dataObj.cmd) {
                 case list_clients  -> {
                     sendClientList();
-                    break;
                 }
+
+                case list_loggedInClients -> {
+                    sendLoggedInClientList();
+                }
+
                 case get_ip -> {
                     sendIp();
-                    break;
                 }
 
                 case msg,requestToPlay,move ->{
@@ -107,6 +153,19 @@ public class ReaderWriterServer implements Runnable {
                     setColor(dataObj);
                     sendToClient(dataObj);
                 }
+
+                case signup -> {
+                    signupClient(dataObj);
+                }
+
+                case login -> {
+                    loginClient(dataObj);
+                }
+
+                case logout -> {
+                    logOut(dataObj);
+                }
+
 
                 default -> {
                     msgFromServer("Invalid Command : "+ dataObj.cmd);

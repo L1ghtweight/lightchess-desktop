@@ -21,12 +21,13 @@ public class ServerNet {
         System.out.println("Server Started...");
         System.out.println(InetAddress.getLocalHost());
         HashMap<String, Information> clientList = new HashMap<>();
+        HashMap<String, Information> loggedInClientList = new HashMap<>();
 
         while (true) {
             Socket socket = serverSocket.accept();
             NetworkConnection nc = new NetworkConnection(socket);
 
-            new Thread(new CreateConnection(clientList, nc)).start();
+            new Thread(new CreateConnection(clientList,loggedInClientList, nc)).start();
 
         }
 

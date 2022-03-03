@@ -41,9 +41,24 @@ public class EnqueueOutgoing implements Runnable{
 
             if(cmd.equals("msg")){
                 data.cmd = CommandTypes.msg;
-            } else if(cmd.equals("list")){
+            } else if(cmd.equals("logout")){
+                data.cmd = CommandTypes.logout;
+            }
+            else if(cmd.equals("login")){
+                if(message.length<3){
+                    System.out.println("Provide username and passowrd");
+                    continue;
+                }
+                data.cmd = CommandTypes.login;
+                data.content = message[1];
+                data.content2 = message[2];
+            }
+            else if(cmd.equals("list")){
                 data.cmd = CommandTypes.list_clients;
-            } else if(cmd.equals("ip")){
+            } else if(cmd.equals("listLogged")){
+                data.cmd = CommandTypes.list_loggedInClients;
+            }
+            else if(cmd.equals("ip")){
                 data.cmd = CommandTypes.get_ip;
             } else if(cmd.equals("play")){
                 data.cmd = CommandTypes.requestToPlay;
@@ -74,6 +89,14 @@ public class EnqueueOutgoing implements Runnable{
             } else if(cmd.equals("getboard")){
                 System.out.println(client.board.toString());
                 continue;
+            } else if(cmd.equals("signup")){
+                data.cmd = CommandTypes.signup;
+                if(message.length<3){
+                    System.out.println("Provide username:password");
+                    continue;
+                }
+                data.content = message[1];
+                data.content2 = message[2];
             }
 
 
