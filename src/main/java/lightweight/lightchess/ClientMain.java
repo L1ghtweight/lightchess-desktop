@@ -18,7 +18,7 @@ public class ClientMain extends Application {
         Board gameBoard = new Board();
         Logic logic = new Logic();
 
-        ChessBoard chessBoard = new ChessBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard);
+        ChessBoard chessBoard = new ChessBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard, logic);
         Scene scene = new Scene(chessBoard, 500, 500);
         stage.setTitle("LightChess");
         stage.setScene(scene);

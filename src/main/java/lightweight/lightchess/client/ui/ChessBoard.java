@@ -9,6 +9,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lightweight.lightchess.logic.Logic;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -23,18 +24,20 @@ public class ChessBoard extends Group {
     private int length;
     private Color color1, color2;
     private Board gameBoard;
+    private Logic logic;
     Character[] pieceNotations = new Character[] {'p', 'r', 'n', 'b', 'k', 'q', 'P', 'R', 'N', 'B', 'K', 'Q'};
     GridPane Grid = new GridPane();
     ArrayList<Piece> Pieces = new ArrayList<Piece>();
     HashMap<Character, Image> pieceMap = new HashMap<>();
     public boolean isBlack = false;
 
-    public ChessBoard(int length, Color color1, Color color2, Board gameBoard) {
+    public ChessBoard(int length, Color color1, Color color2, Board gameBoard, Logic logic) {
         super();
         this.length = length;
         this.color1 = color1;
         this.color2 = color2;
         this.gameBoard = gameBoard;
+        this.logic = logic;
 
         for(Character c:pieceNotations) {
             String fileName;
@@ -64,6 +67,10 @@ public class ChessBoard extends Group {
         if(isBlack)
             boardString = gameboard.toStringFromBlackViewPoint();
 
+        for(Piece p:Pieces) {
+            this.getChildren().remove(p);
+        }
+
         for (int i = 0; i < 72; i++) {
             int x = i%9, y = i/9;
             if (boardString.charAt(i) != '.' && boardString.charAt(i) != '\n') {
@@ -89,8 +96,27 @@ public class ChessBoard extends Group {
         isBlack = true;
     }
 
+    public String moveFromPos(int oldX, int oldY, int newX, int newY) {
+        if(!isBlack) {
+            oldY = (8 - oldY - 1);
+            newY = (8 - newY - 1);
+        }
+        else {
+            oldX = (8 - oldX - 1);
+            newX = (8 - newX - 1);
+        }
+
+        char m1 = (char) (oldX + 'a');
+        char m2 = (char) (oldY + '1');
+        char m3 = (char) (newX + 'a');
+        char m4 = (char) (newY + '1');
+
+        String move = "";
+        move += m1; move += m2; move += m3; move += m4;
+        return move;
+    }
+
     public void pressed(MouseEvent event, Piece p) {
-        System.out.println("Pressed");;
     }
 
     public void dragged(MouseEvent event, Piece p) {
@@ -101,9 +127,18 @@ public class ChessBoard extends Group {
     public void released(MouseEvent event, Piece p) {
         double nx = p.getX(), ny = p.getY();
         int snapX = (int) ((length/8) * (round(nx/(length/8)))), snapY = (int) ((length/8) * (round(ny/(length/8))));
-        p.posX = (int) round(nx/(length/8));
-        p.posY = (int) round(ny/(length/8));
-        p.setX(snapX);
-        p.setY(snapY);
+        int newX = (int) round(nx/(length/8));
+        int newY = (int) round(ny/(length/8));
+        String move = moveFromPos(p.posX, p.posY, newX, newY);
+        System.out.println(move);
+        if(logic.isLegal(gameBoard, move)) {
+            p.posX = newX; p.posY = newY;
+            this.gameBoard.doMove(move);
+            updateBoard(this.gameBoard);
+        }
+        else {
+            p.setX(p.posX * length/8);
+            p.setY(p.posY * length/8);
+        }
     }
 }
