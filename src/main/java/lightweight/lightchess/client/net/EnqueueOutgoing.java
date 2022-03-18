@@ -53,9 +53,9 @@ public class EnqueueOutgoing implements Runnable{
                 data.content = message[1];
                 data.content2 = message[2];
             }
-            else if(cmd.equals("list")){
+            else if(cmd.equals("list_connected")){
                 data.cmd = CommandTypes.list_clients;
-            } else if(cmd.equals("listLogged")){
+            } else if(cmd.equals("list")){
                 data.cmd = CommandTypes.list_loggedInClients;
             }
             else if(cmd.equals("ip")){

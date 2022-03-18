@@ -67,11 +67,11 @@ public class ReaderWriterServer implements Runnable {
     }
 
     public void sendToClient(Data data){
-        if(!clientList.containsKey(data.receiver)){
+        if(!loggedInList.containsKey(data.receiver)){
             msgFromServer(data.receiver + " not connected");
             return;
         }
-        Information inf = clientList.get(data.receiver);
+        Information inf = loggedInList.get(data.receiver);
         inf.netConnection.write(data);
     }
 

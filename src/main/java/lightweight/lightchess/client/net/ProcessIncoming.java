@@ -35,6 +35,7 @@ public class ProcessIncoming implements Runnable{
     }
 
     public void handleSetColor(Data data){
+        if(!client.hasUI) return;
         String color = "BLACK";
         client.chessBoard.isBlack = true;
         if(data.cmd==CommandTypes.playWhite){
