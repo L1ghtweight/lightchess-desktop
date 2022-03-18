@@ -3,27 +3,37 @@ package lightweight.lightchess.client.ui;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 
-public class Piece extends ImageView {
-    private double mouseX;
-    private double mouseY;
+import static java.lang.Math.round;
 
-    public Piece(Image image) {
+public class Piece extends ImageView {
+    private int posX;
+    private int posY;
+
+    public Piece(Image image, double boardLength, int x, int y) {
         super(image);
+        posX = x;
+        posY = y;
+        this.setX(x * boardLength/8);
+        this.setY(y * boardLength/8);
+        this.setFitHeight(boardLength/8);
+        this.setFitWidth(boardLength/8);
 
         setOnMousePressed(event -> {
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
-            System.out.println("clicked");
+
         });
 
         setOnMouseDragged(event -> {
-            double deltaX = event.getSceneX() - mouseX;
-            double deltaY = event.getSceneY() - mouseY;
+            this.setX(event.getX() - this.getFitWidth()/2);
+            this.setY(event.getY() - this.getFitHeight()/2);
+        });
 
-            relocate(getLayoutX() + deltaX, getLayoutY() + deltaY);
-
-            mouseX = event.getSceneX();
-            mouseY = event.getSceneY();
+        setOnMouseReleased(event -> {
+            double nx = this.getX(), ny = this.getY();
+            int snapX = (int) ((boardLength/8) * (round(nx/(boardLength/8)))), snapY = (int) ((boardLength/8) * (round(ny/(boardLength/8))));
+            this.posX = (int) round(nx/(boardLength/8));
+            this.posY = (int) round(ny/(boardLength/8));
+            this.setX(snapX);
+            this.setY(snapY);
         });
     }
 }
