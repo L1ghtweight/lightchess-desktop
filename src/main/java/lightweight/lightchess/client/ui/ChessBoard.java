@@ -5,6 +5,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -14,8 +15,8 @@ import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import static java.lang.Character.isUpperCase;
-import static java.lang.Character.toLowerCase;
+import static java.lang.Character.*;
+import static java.lang.Math.round;
 
 
 public class ChessBoard extends Group {
@@ -40,7 +41,6 @@ public class ChessBoard extends Group {
             fileName = (isUpperCase(c) ? "w" + toLowerCase(c) : "b" + toLowerCase(c));
 
             String path = "/lightweight/lightchess/png_pieces/" + fileName + ".png";
-            System.out.println(path + " " + getClass().getResourceAsStream(path));
             pieceMap.put(c, new Image(getClass().getResourceAsStream(path)));
         }
 
@@ -54,21 +54,7 @@ public class ChessBoard extends Group {
         }
 
         this.getChildren().add(Grid);
-
-        String boardString = gameBoard.toString();
-        if(isBlack)
-            boardString = gameBoard.toStringFromBlackViewPoint();
-
-        for (int i = 0; i < 72; i++) {
-            int x = i%9, y = i/9;
-            if (boardString.charAt(i) != '.' && boardString.charAt(i) != '\n') {
-                Piece newPiece = new Piece(pieceMap.get(boardString.charAt(i)), length, x, y);
-                Pieces.add(newPiece);
-                this.getChildren().add(newPiece);
-            }
-        }
-
-        //updateBoard(gameBoard);
+        updateBoard(gameBoard);
     }
 
     public void updateBoard(Board gameboard) {
@@ -78,9 +64,46 @@ public class ChessBoard extends Group {
         if(isBlack)
             boardString = gameboard.toStringFromBlackViewPoint();
 
+        for (int i = 0; i < 72; i++) {
+            int x = i%9, y = i/9;
+            if (boardString.charAt(i) != '.' && boardString.charAt(i) != '\n') {
+                Piece newPiece = new Piece(pieceMap.get(boardString.charAt(i)), length, x, y);
+                Pieces.add(newPiece);
+                this.getChildren().add(newPiece);
+                if(isBlack && isLowerCase(boardString.charAt(i))) {
+                    newPiece.setOnMousePressed(event -> pressed(event, newPiece));
+                    newPiece.setOnMouseDragged(event -> dragged(event, newPiece));
+                    newPiece.setOnMouseReleased(event -> released(event, newPiece));
+                }
+                else if(!isBlack && isUpperCase(boardString.charAt(i))) {
+                    newPiece.setOnMousePressed(event -> pressed(event, newPiece));
+                    newPiece.setOnMouseDragged(event -> dragged(event, newPiece));
+                    newPiece.setOnMouseReleased(event -> released(event, newPiece));
+                }
+            }
+        }
+
     }
 
     public void rotate() {
         isBlack = true;
+    }
+
+    public void pressed(MouseEvent event, Piece p) {
+        System.out.println("Pressed");;
+    }
+
+    public void dragged(MouseEvent event, Piece p) {
+        p.setX(event.getX() - p.getFitWidth()/2);
+        p.setY(event.getY() - p.getFitHeight()/2);
+    }
+
+    public void released(MouseEvent event, Piece p) {
+        double nx = p.getX(), ny = p.getY();
+        int snapX = (int) ((length/8) * (round(nx/(length/8)))), snapY = (int) ((length/8) * (round(ny/(length/8))));
+        p.posX = (int) round(nx/(length/8));
+        p.posY = (int) round(ny/(length/8));
+        p.setX(snapX);
+        p.setY(snapY);
     }
 }
