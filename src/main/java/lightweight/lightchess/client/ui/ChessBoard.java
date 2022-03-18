@@ -9,7 +9,10 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import lightweight.lightchess.client.net.ClientNet;
 import lightweight.lightchess.logic.Logic;
+import lightweight.lightchess.net.CommandTypes;
+import lightweight.lightchess.net.Data;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -21,9 +24,10 @@ import static java.lang.Math.round;
 
 
 public class ChessBoard extends Group {
+    public ClientNet clientnet;
     private int length;
     private Color color1, color2;
-    private Board gameBoard;
+    public Board gameBoard;
     private Logic logic;
     Character[] pieceNotations = new Character[] {'p', 'r', 'n', 'b', 'k', 'q', 'P', 'R', 'N', 'B', 'K', 'Q'};
     GridPane Grid = new GridPane();
@@ -94,6 +98,7 @@ public class ChessBoard extends Group {
 
     public void rotate() {
         isBlack = true;
+        updateBoard(gameBoard);
     }
 
     public String moveFromPos(int oldX, int oldY, int newX, int newY) {
@@ -130,11 +135,15 @@ public class ChessBoard extends Group {
         int newX = (int) round(nx/(length/8));
         int newY = (int) round(ny/(length/8));
         String move = moveFromPos(p.posX, p.posY, newX, newY);
+
+
         System.out.println(move);
         if(logic.isLegal(gameBoard, move)) {
             p.posX = newX; p.posY = newY;
             this.gameBoard.doMove(move);
             updateBoard(this.gameBoard);
+            clientnet.sendGameBoard(this.gameBoard);
+            String boardString = gameBoard.toString();
         }
         else {
             p.setX(p.posX * length/8);

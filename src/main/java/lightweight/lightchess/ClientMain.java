@@ -28,6 +28,7 @@ public class ClientMain extends Application {
             @Override
             public void run() {
                 ClientNet clientNet = new ClientNet(chessBoard);
+                chessBoard.clientnet = clientNet;
                 clientNet.start();
             }
         }).start();

@@ -5,6 +5,8 @@
  */
 package lightweight.lightchess.net;
 
+import com.github.bhlangonijr.chesslib.Board;
+
 import java.io.Serializable;
 
 public class Data implements Serializable,Cloneable{

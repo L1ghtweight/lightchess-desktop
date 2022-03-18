@@ -173,7 +173,7 @@ public class ReaderWriterServer implements Runnable {
                     sendIp();
                 }
 
-                case msg,requestToPlay,move ->{
+                case msg,requestToPlay,move,updateGameBoard ->{
                     sendToClient(dataObj);
                 }
 

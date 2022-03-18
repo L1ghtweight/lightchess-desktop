@@ -67,28 +67,6 @@ public class EnqueueOutgoing implements Runnable{
                 data.cmd = CommandTypes.playRequestAccecpted;
                 data.receiver = client.opponentUsername;
                 client.startMatch(client.opponentUsername);
-            } else if(cmd.equals("move")){
-                if(!client.isMyTurn){
-                    System.out.println("Not your turn, is your head okay?");
-                    continue;
-                }
-                data.cmd = CommandTypes.move;
-                data.receiver = client.opponentUsername;
-                data.content = message[1];
-                String move = message[1];
-                if(!client.logic.makeMove(client.board,move)){
-                        System.out.println("Invalid move");
-                        continue;
-                }
-                System.out.println("Sending move to "+ data.receiver);
-                System.out.println(client.board.toString());
-                if(client.hasUI){
-                    client.updateBoard();
-                }
-                client.isMyTurn = false;
-            } else if(cmd.equals("getboard")){
-                System.out.println(client.board.toString());
-                continue;
             } else if(cmd.equals("signup")){
                 data.cmd = CommandTypes.signup;
                 if(message.length<3){

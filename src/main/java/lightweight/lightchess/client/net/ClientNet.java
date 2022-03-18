@@ -23,14 +23,11 @@ public class ClientNet {
     Socket socket;
     NetworkConnection nc;
     Scanner scan = new Scanner(System.in);
-    LinkedBlockingQueue<Data> QOut, QIn;
+    public  LinkedBlockingQueue<Data> QOut, QIn;
     Thread enqueueIn,processOut,enqueueOut,processInThread, matchThread;
-    String username,opponentUsername;
+    public String username,opponentUsername;
     boolean isInMatch = false;
-    boolean isMyTurn = false;
     boolean hasUI = false;
-    Board board;
-    Logic logic;
     String color;
     ChessBoard chessBoard;
 
@@ -44,34 +41,23 @@ public class ClientNet {
 
     public void startMatch(String opponentUsername){
         isInMatch = true;
-        board = new Board();
-        logic = new Logic();
         this.opponentUsername =  opponentUsername;
         System.out.println("Match started with " + opponentUsername);
     }
 
-    public void makeOpponnentsMove(String move){
-        if(isMyTurn){
-            System.out.println("Not opponnents move");
-            sendMsg("Not your move");
-            return;
-        }
-        System.out.println("Opponent made move : "+ move);
-        boolean f = logic.makeMove(board, move);
-        System.out.println(board.toString());
-        isMyTurn = true;
-    }
 
     public void sendData(Data dOut){
         QOut.add(dOut);
     }
 
-    public void sendMove(String move){
+
+
+    public void sendGameBoard(Board gameboard){
         Data d = new Data();
-        d.cmd = CommandTypes.move;
-        d.content = move;
+        d.cmd = CommandTypes.updateGameBoard;
         d.sender = username;
         d.receiver = opponentUsername;
+        d.content = gameboard.getFen();
         QOut.add(d);
     }
 
@@ -81,14 +67,13 @@ public class ClientNet {
         d.content = msg;
         d.sender = username;
         d.receiver = opponentUsername;
-        System.out.println("SUSSSS");
         QOut.add(d);
     }
 
-    public void updateBoard(){
+    public void updateBoard(Board gameboard){
         if(!hasUI) return;
         Platform.runLater(() ->{
-            chessBoard.updateBoard(board);
+            chessBoard.updateBoard(gameboard);
         });
     }
 

@@ -1,5 +1,7 @@
 package lightweight.lightchess.client.net;
 
+import com.github.bhlangonijr.chesslib.Board;
+import javafx.application.Platform;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 
@@ -20,14 +22,16 @@ public class ProcessIncoming implements Runnable{
         System.out.println(din.sender + " : " + din.content);
     }
 
-    public void handleOpponentsMove(Data din){
-        String move = din.content;
-        client.makeOpponnentsMove(move);
-    }
 
     public void handlePlayRequest(Data din){
         System.out.println("Do you want to play with "+ din.sender + " ? if yes type accept:"+ din.sender);
         client.opponentUsername = din.sender;
+    }
+
+    public void handleGameBoardUpdate(Data din){
+        Board board = new Board();
+        board.loadFromFen(din.content);
+        client.updateBoard(board);
     }
 
     public void handlePlayRequestAccepted(Data din){
@@ -41,7 +45,10 @@ public class ProcessIncoming implements Runnable{
         if(data.cmd==CommandTypes.playWhite){
             color = "WHITE";
             client.chessBoard.isBlack = false;
-            client.isMyTurn = true;
+        } else {
+            Platform.runLater(()->{
+                client.chessBoard.rotate();
+            });
         }
         System.out.println("You are playing " + color);
     }
@@ -67,10 +74,7 @@ public class ProcessIncoming implements Runnable{
                         handleMessage((Data) data.clone());
                         break;
                     }
-                    case move -> {
-                        handleOpponentsMove((Data)data.clone());
-                        break;
-                    }
+
                     case requestToPlay -> {
                         handlePlayRequest((Data)data.clone());
                         break;
@@ -81,6 +85,10 @@ public class ProcessIncoming implements Runnable{
                     }
                     case playBlack,playWhite -> {
                         handleSetColor((Data)data.clone());
+                    }
+
+                    case updateGameBoard -> {
+                        handleGameBoardUpdate((Data) data.clone());
                     }
 
                     default -> {
