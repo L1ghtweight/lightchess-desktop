@@ -1,6 +1,8 @@
 package lightweight.lightchess.client.ui;
 
 import com.github.bhlangonijr.chesslib.Board;
+import com.github.bhlangonijr.chesslib.move.Move;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.image.Image;
@@ -8,6 +10,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import lightweight.lightchess.client.net.ClientNet;
 import lightweight.lightchess.logic.Logic;
@@ -18,6 +21,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import static java.lang.Character.*;
 import static java.lang.Math.log;
@@ -33,7 +37,10 @@ public class ChessBoard extends Group {
     Character[] pieceNotations = new Character[] {'p', 'r', 'n', 'b', 'k', 'q', 'P', 'R', 'N', 'B', 'K', 'Q'};
     GridPane Grid = new GridPane();
     ArrayList<Piece> Pieces = new ArrayList<Piece>();
+    ArrayList<Circle> highlightedSquares = new ArrayList<Circle>();
     HashMap<Character, Image> pieceMap = new HashMap<>();
+    Boolean selected = false;
+    Rectangle selectedSquare = new Rectangle(0, 0, length/8, length/8);
     public boolean isBlack = false;
 
     public ChessBoard(int length, Color color1, Color color2, Board gameBoard, Logic logic) {
@@ -63,10 +70,54 @@ public class ChessBoard extends Group {
 
         this.getChildren().add(Grid);
         updateBoard(gameBoard);
+
+        this.setOnMousePressed(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                Boolean highlighted = false;
+                Boolean squareContainsPiece = false;
+                int newX = getCoordinate(event.getX()), newY = getCoordinate(event.getY());
+                removeMoveHighlights();
+                for(Piece p: Pieces) {
+                    if(newX == p.posX && newY == p.posY && p.isSelected == true) {
+                        p.isSelected = false;
+                        break;
+                    }
+                    else if(newX == p.posX && newY == p.posY && p.isSelected == false) {
+                        p.isSelected = true;
+                        addMoveHighlights(p);
+                        break;
+                    }
+                }
+            }
+        });
+    }
+
+
+    public void removeMoveHighlights() {
+        for(Circle c: highlightedSquares) {
+            this.getChildren().remove(c);
+        }
+        highlightedSquares.clear();
+    }
+
+    public void addMoveHighlights(Piece p) {
+        List<Move> possibleMoves = logic.getLegalMovesFromSquare(gameBoard, getSquare(p.posX, p.posY));
+        for(Move m: possibleMoves) {
+            String move = m.toString();
+            int nx = coordFromMoveX(move), ny = coordFromMoveY(move);
+            Circle c = new Circle(nx * length/8 + length/16, ny * length/ 8 + length/16, length/48);
+            c.setFill(new Color(0.5, 1, 0.5, 0.5));
+            highlightedSquares.add(c);
+            this.getChildren().add(c);
+        }
+    }
+
+    public int getCoordinate(double X) {
+        return (int) (X/(length/8));
     }
 
     public void updateBoard(Board gameboard) {
-
         this.gameBoard = gameboard;
         String boardString = gameboard.toString();
         if(isBlack)
@@ -94,14 +145,41 @@ public class ChessBoard extends Group {
                 }
             }
         }
-
-
-
     }
 
     public void rotate() {
         isBlack = true;
         updateBoard(gameBoard);
+    }
+
+    public String getSquare(int x, int y) {
+        int nx = x, ny = y;
+
+        if(!isBlack)
+            ny = (8 - y - 1);
+        else
+            nx = (8 - x - 1);
+
+        char m1 = (char) (nx + 'a');
+        char m2 = (char) (ny + '1');
+
+        String square = "";
+        square += m1; square += m2;
+        return square;
+    }
+
+    public int coordFromMoveX(String move) {
+        int x = move.charAt(2) - 'a';
+        if(isBlack)
+            x = (8 - x - 1);
+        return x;
+    }
+
+    public int coordFromMoveY(String move) {
+        int y =  move.charAt(3) - '1';
+        if(!isBlack)
+            y = (8 - y - 1);
+        return y;
     }
 
     public String moveFromPos(int oldX, int oldY, int newX, int newY) {
@@ -125,6 +203,10 @@ public class ChessBoard extends Group {
     }
 
     public void pressed(MouseEvent event, Piece p) {
+        for(Circle c: highlightedSquares) {
+            this.getChildren().remove(c);
+            highlightedSquares.remove(c);
+        }
     }
 
     public void dragged(MouseEvent event, Piece p) {
@@ -132,15 +214,7 @@ public class ChessBoard extends Group {
         p.setY(event.getY() - p.getFitHeight()/2);
     }
 
-    public void released(MouseEvent event, Piece p) {
-        double nx = p.getX(), ny = p.getY();
-        int snapX = (int) ((length/8) * (round(nx/(length/8)))), snapY = (int) ((length/8) * (round(ny/(length/8))));
-        int newX = (int) round(nx/(length/8));
-        int newY = (int) round(ny/(length/8));
-        String move = moveFromPos(p.posX, p.posY, newX, newY);
-
-
-        System.out.println(move);
+    public void movePiece(Board gameBoard, String move, Piece p, int newX, int newY) {
         if(logic.isLegal(gameBoard, move)) {
             p.posX = newX; p.posY = newY;
             this.gameBoard.doMove(move);
@@ -150,11 +224,16 @@ public class ChessBoard extends Group {
                 clientnet.sendMsg("You Lose");
             }
             clientnet.sendGameBoard(this.gameBoard);
-            String boardString = gameBoard.toString();
         }
         else {
             p.setX(p.posX * length/8);
             p.setY(p.posY * length/8);
         }
+    }
+
+    public void released(MouseEvent event, Piece p) {
+        int newX = getCoordinate(event.getX()), newY = getCoordinate(event.getY());
+        String move = moveFromPos(p.posX, p.posY, newX, newY);
+        movePiece(gameBoard, move, p, newX, newY);
     }
 }

@@ -8,6 +8,7 @@ import static java.lang.Math.round;
 public class Piece extends ImageView {
     public int posX;
     public int posY;
+    public Boolean isSelected = false;
 
     public Piece(Image image, double boardLength, int x, int y) {
         super(image);
