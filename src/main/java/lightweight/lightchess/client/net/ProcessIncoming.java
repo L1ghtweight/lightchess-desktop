@@ -9,6 +9,9 @@ import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ProcessIncoming implements Runnable{
+    boolean DEBUG_MODE = true;
+
+
     public LinkedBlockingQueue<Data> Q;
     ClientNet client;
     Scanner scan = new Scanner(System.in);
@@ -26,6 +29,10 @@ public class ProcessIncoming implements Runnable{
     public void handlePlayRequest(Data din){
         System.out.println("Do you want to play with "+ din.sender + " ? if yes type accept:"+ din.sender);
         client.opponentUsername = din.sender;
+
+        if(client.DEBUG_MODE){
+            client.sendPlayRequestAccepted();
+        }
     }
 
     public void handleGameBoardUpdate(Data din){

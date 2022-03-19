@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import static java.lang.Character.*;
+import static java.lang.Math.log;
 import static java.lang.Math.round;
 
 
@@ -94,6 +95,8 @@ public class ChessBoard extends Group {
             }
         }
 
+
+
     }
 
     public void rotate() {
@@ -142,6 +145,10 @@ public class ChessBoard extends Group {
             p.posX = newX; p.posY = newY;
             this.gameBoard.doMove(move);
             updateBoard(this.gameBoard);
+            if(logic.isCheckmate(gameBoard)){
+                System.out.println("You win");
+                clientnet.sendMsg("You Lose");
+            }
             clientnet.sendGameBoard(this.gameBoard);
             String boardString = gameBoard.toString();
         }

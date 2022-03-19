@@ -15,11 +15,14 @@ import lightweight.lightchess.net.NetworkConnection;
 import java.io.IOException;
 import java.net.Socket;
 
+import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 import com.github.bhlangonijr.chesslib.Board;
 
 public class ClientNet {
+    public boolean DEBUG_MODE=true;
+
     Socket socket;
     NetworkConnection nc;
     Scanner scan = new Scanner(System.in);
@@ -61,6 +64,38 @@ public class ClientNet {
         QOut.add(d);
     }
 
+    public void sendLoginRequest(String username,String password){
+        this.username = username;
+
+        Data  d = new Data();
+        d.cmd = CommandTypes.login;
+        d.sender = username;
+        d.content = username;
+        d.content2 = password;
+
+        QOut.add(d);
+    }
+
+    public void sendPlayRequest(String opponentUsername){
+        Data d=new Data();
+        d.cmd = CommandTypes.requestToPlay;
+        d.sender = username;
+        d.receiver = opponentUsername;
+
+        QOut.add(d);
+    }
+
+    public void sendPlayRequestAccepted(){
+        System.out.println("Accepting match with + "+ opponentUsername);
+        Data data = new Data();
+        data.cmd = CommandTypes.playRequestAccecpted;
+        data.sender = username;
+        data.receiver = opponentUsername;
+        startMatch(opponentUsername);
+
+        QOut.add(data);
+    }
+
     public void sendMsg(String msg){
         Data d = new Data();
         d.cmd = CommandTypes.msg;
@@ -70,6 +105,7 @@ public class ClientNet {
         QOut.add(d);
     }
 
+
     public void updateBoard(Board gameboard){
         if(!hasUI) return;
         Platform.runLater(() ->{
@@ -77,7 +113,8 @@ public class ClientNet {
         });
     }
 
-    public void start() {
+    public void start(List<String> args) {
+
 
         Socket socket = null;
         try {
@@ -103,6 +140,22 @@ public class ClientNet {
         enqueueOut.start();
         processInThread.start();
 
+        if(DEBUG_MODE && args != null){
+            String uname = args.get(0);
+            String pass = args.get(1);
+            sendLoginRequest(uname,pass);
+
+            if(args.size() > 2){
+                try {
+                    Thread.sleep(3000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+                System.out.println("Requesting "+ args.get(2));
+                sendPlayRequest(args.get(2));
+            }
+        }
+
         try {
             enqueueIn.join();
         } catch (Exception e) {
@@ -117,6 +170,6 @@ public class ClientNet {
             e.printStackTrace();
         }
         ClientNet c = new ClientNet();
-        c.start();
+        c.start(null);
     }
 }

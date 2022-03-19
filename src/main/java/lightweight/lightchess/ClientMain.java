@@ -11,6 +11,7 @@ import lightweight.lightchess.logic.Logic;
 import lightweight.lightchess.client.net.ClientNet;
 
 import java.io.IOException;
+import java.util.List;
 
 public class ClientMain extends Application {
     @Override
@@ -24,15 +25,25 @@ public class ClientMain extends Application {
         stage.setScene(scene);
         stage.show();
 
+
+        final Parameters params = getParameters();
+        final List<String> args = params.getRaw();
+
+
         new Thread(new Runnable() {
             @Override
             public void run() {
                 ClientNet clientNet = new ClientNet(chessBoard);
                 chessBoard.clientnet = clientNet;
-                clientNet.start();
+                clientNet.start(args);
+
             }
         }).start();
 
 
+    }
+
+    public static void main(String[] args) {
+        launch(args);
     }
 }

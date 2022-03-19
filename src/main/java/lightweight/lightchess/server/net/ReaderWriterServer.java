@@ -18,6 +18,7 @@ import java.util.Random;
 
 
 public class ReaderWriterServer implements Runnable {
+    boolean DEBUG_MODE=true;
 
     String username="",id;
     NetworkConnection nc;
@@ -119,7 +120,7 @@ public class ReaderWriterServer implements Runnable {
         String msg;
         username = dObj.content;
         if(jdbc.checkPassword(dObj.content,dObj.content2)){
-            msg = "Login successfull";
+            msg = "Login successfull as " + username;
             loggedInList.put(username,new Information(username,nc));
             isLoggedIn = true;
         } else {
@@ -145,6 +146,7 @@ public class ReaderWriterServer implements Runnable {
                 System.out.println(username + " disconnected");
                 break;
             }
+            dataObj.sender = username;
 
             if(dataObj.cmd == CommandTypes.signup){
                 signupClient(dataObj);
@@ -156,8 +158,6 @@ public class ReaderWriterServer implements Runnable {
                 msgFromServer("You are not logged in, login/signup:username:password");
                 continue;
             }
-
-            dataObj.sender = username;
 
 
             switch (dataObj.cmd) {
