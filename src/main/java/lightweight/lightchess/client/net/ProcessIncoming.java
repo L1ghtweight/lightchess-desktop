@@ -9,7 +9,7 @@ import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
 public class ProcessIncoming implements Runnable{
-    boolean DEBUG_MODE = true;
+    boolean DEBUG_MODE = false;
 
 
     public LinkedBlockingQueue<Data> Q;
@@ -49,7 +49,7 @@ public class ProcessIncoming implements Runnable{
         if(!client.hasUI) return;
         String color = "BLACK";
         client.chessBoard.isBlack = true;
-        if(data.cmd==CommandTypes.playWhite){
+        if(data.cmd==CommandTypes.play_white){
             color = "WHITE";
             client.chessBoard.isBlack = false;
         } else {
@@ -58,6 +58,10 @@ public class ProcessIncoming implements Runnable{
             });
         }
         System.out.println("You are playing " + color);
+    }
+
+    public void handleStartTournamentMatch(Data dObj){
+        System.out.println("Starting tournament match with " + dObj.content);
     }
 
     @Override
@@ -82,20 +86,24 @@ public class ProcessIncoming implements Runnable{
                         break;
                     }
 
-                    case requestToPlay -> {
+                    case request_to_play -> {
                         handlePlayRequest((Data)data.clone());
                         break;
                     }
-                    case playRequestAccecpted -> {
+                    case playrequest_accepted -> {
                         handlePlayRequestAccepted((Data)data.clone());
                         break;
                     }
-                    case playBlack,playWhite -> {
+                    case play_black, play_white -> {
                         handleSetColor((Data)data.clone());
                     }
 
-                    case updateGameBoard -> {
+                    case update_gameboard -> {
                         handleGameBoardUpdate((Data) data.clone());
+                    }
+
+                    case start_tournament_match -> {
+                        handleStartTournamentMatch((Data) data.clone());
                     }
 
                     default -> {

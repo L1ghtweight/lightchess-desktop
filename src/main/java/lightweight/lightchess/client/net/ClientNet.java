@@ -7,7 +7,6 @@ package lightweight.lightchess.client.net;
 
 import javafx.application.Platform;
 import lightweight.lightchess.client.ui.ChessBoard;
-import lightweight.lightchess.logic.Logic;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.NetworkConnection;
@@ -15,13 +14,16 @@ import lightweight.lightchess.net.NetworkConnection;
 import java.io.IOException;
 import java.net.Socket;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 import com.github.bhlangonijr.chesslib.Board;
 
 public class ClientNet {
-    public boolean DEBUG_MODE=true;
+    public boolean DEBUG_MODE=false;
+    public boolean autologin = true;
+    public boolean tournament_DEBUG_MODE = true;
 
     Socket socket;
     NetworkConnection nc;
@@ -57,7 +59,7 @@ public class ClientNet {
 
     public void sendGameBoard(Board gameboard){
         Data d = new Data();
-        d.cmd = CommandTypes.updateGameBoard;
+        d.cmd = CommandTypes.update_gameboard;
         d.sender = username;
         d.receiver = opponentUsername;
         d.content = gameboard.getFen();
@@ -78,7 +80,7 @@ public class ClientNet {
 
     public void sendPlayRequest(String opponentUsername){
         Data d=new Data();
-        d.cmd = CommandTypes.requestToPlay;
+        d.cmd = CommandTypes.request_to_play;
         d.sender = username;
         d.receiver = opponentUsername;
 
@@ -88,7 +90,7 @@ public class ClientNet {
     public void sendPlayRequestAccepted(){
         System.out.println("Accepting match with + "+ opponentUsername);
         Data data = new Data();
-        data.cmd = CommandTypes.playRequestAccecpted;
+        data.cmd = CommandTypes.playrequest_accepted;
         data.sender = username;
         data.receiver = opponentUsername;
         startMatch(opponentUsername);
@@ -105,12 +107,30 @@ public class ClientNet {
         QOut.add(d);
     }
 
+    public void sendRegisterRequest(){
+        Data d = new Data();
+        d.cmd = CommandTypes.register_for_tournament;
+        sendData(d);
+    }
+
+    public void sendReadyToPlayConfirmation(){
+        Data d = new Data();
+        d.cmd = CommandTypes.ready_to_play;
+        sendData(d);
+    }
 
     public void updateBoard(Board gameboard){
         if(!hasUI) return;
         Platform.runLater(() ->{
             chessBoard.updateBoard(gameboard);
         });
+    }
+
+    public void sendTournamentMatchFinishedMsg(String points){
+        Data d = new Data();
+        d.cmd = CommandTypes.tournament_match_end;
+        d.content = points;
+        sendData(d);
     }
 
     public void start(List<String> args) {
@@ -140,6 +160,19 @@ public class ClientNet {
         enqueueOut.start();
         processInThread.start();
 
+        if(autologin && args!=null){
+            String uname = args.get(0);
+            String pass = args.get(1);
+            sendLoginRequest(uname,pass);
+
+
+            if(tournament_DEBUG_MODE){
+                sendRegisterRequest();
+                sendReadyToPlayConfirmation();
+            }
+        }
+
+
         if(DEBUG_MODE && args != null){
             String uname = args.get(0);
             String pass = args.get(1);
@@ -164,12 +197,8 @@ public class ClientNet {
     }
 
     public static void main(String[] args) {
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
         ClientNet c = new ClientNet();
-        c.start(null);
+        List<String> arguments = Arrays.asList(args);
+        c.start(arguments);
     }
 }
