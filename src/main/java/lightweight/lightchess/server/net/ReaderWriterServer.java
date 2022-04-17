@@ -18,23 +18,25 @@ import java.util.Random;
 
 
 public class ReaderWriterServer implements Runnable {
-    boolean DEBUG_MODE=true;
+    boolean DEBUG_MODE=false;
 
     String username="",id;
     NetworkConnection nc;
     HashMap<String, Information> clientList;
     HashMap<String, Information> loggedInList;
     Random rand = new Random();
-    JDBC jdbc = new JDBC();
+    JDBC jdbc;
     boolean isLoggedIn = false;
     Tournament tournament;
 
-    public ReaderWriterServer(String userID, NetworkConnection netConnection, HashMap<String, Information> cList, HashMap<String, Information> loggedInLIst, Tournament t) {
+    public ReaderWriterServer(String userID, NetworkConnection netConnection, HashMap<String, Information> cList, HashMap<String, Information> loggedInLIst, JDBC jdbc, Tournament t) {
         tournament = t;
         id = userID;
         nc = netConnection;
         clientList = cList;
         this.loggedInList = loggedInLIst;
+        this.jdbc = jdbc;
+
     }
 
     public void msgFromServer(String msg){
@@ -82,49 +84,113 @@ public class ReaderWriterServer implements Runnable {
         Data d2 = new Data();
         d1.sender = d2.sender = "Server";
         d1.receiver = data.receiver;
-        if(i==0) d1.cmd = CommandTypes.playBlack;
-        else d1.cmd = CommandTypes.playWhite;
+        if(i==0) d1.cmd = CommandTypes.play_black;
+        else d1.cmd = CommandTypes.play_white;
 
 
         d2.receiver = data.sender;
-        if(d1.cmd == CommandTypes.playBlack)
-            d2.cmd = CommandTypes.playWhite;
+        if(d1.cmd == CommandTypes.play_black)
+            d2.cmd = CommandTypes.play_white;
         else
-            d2.cmd = CommandTypes.playBlack;
+            d2.cmd = CommandTypes.play_black;
 
         sendToClient(d1);
         sendToClient(d2);
 
     }
 
+    public void setColor(String player1, String player2){
+        int i = rand.nextInt(2);
+        Data d1 = new Data();
+        Data d2 = new Data();
+        d1.sender = d2.sender = "Server";
+        d1.receiver = player1;
+        if(i==0) d1.cmd = CommandTypes.play_black;
+        else d1.cmd = CommandTypes.play_white;
+
+
+        d2.receiver = player2;
+        if(d1.cmd == CommandTypes.play_black)
+            d2.cmd = CommandTypes.play_white;
+        else
+            d2.cmd = CommandTypes.play_black;
+
+        sendToClient(d1);
+        sendToClient(d2);
+
+    }
+
+
+    public void sendSignupSuccess(){
+        Data d = new Data();
+        d.receiver = username;
+        d.cmd = CommandTypes.signup_success;
+        sendToClient(d);
+    }
+
+    public void sendSignupFailure(){
+        Data d = new Data();
+        d.receiver = username;
+        d.cmd = CommandTypes.signup_failure;
+        sendToClient(d);
+    }
+
+
     public void signupClient(Data dObj){
         if(isLoggedIn){
             msgFromServer("You are already logged in");
             return;
         }
+
         String msg;
         if(jdbc.createUser(dObj.content,dObj.content2)){
             msg = "Signup successfull";
             String username = dObj.content;
+            sendSignupSuccess();
         } else {
             msg = "Signup Error";
+            sendSignupFailure();
         }
         msgFromServer(msg);
     }
+
+    public void sendLoginSuccess(){
+        Data d = new Data();
+        d.receiver = username;
+        d.cmd = CommandTypes.login_success;
+        sendToClient(d);
+    }
+
+    public void sendLoginFailure(){
+        Data d = new Data();
+        d.receiver = username;
+        d.cmd = CommandTypes.login_failure;
+        sendToClient(d);
+    }
+
 
     public void loginClient(Data dObj){
         if(isLoggedIn){
             msgFromServer("You are already logged in");
             return;
         }
+
         String msg;
         username = dObj.content;
+
+        if(loggedInList.containsKey(username)){
+            msgFromServer("You are already logged in some other device, logout first");
+            return;
+        }
+
         if(jdbc.checkPassword(dObj.content,dObj.content2)){
             msg = "Login successfull as " + username;
             loggedInList.put(username,new Information(username,nc));
             isLoggedIn = true;
+            sendLoginSuccess();
         } else {
             msg = "Login Error";
+            sendLoginFailure();
         }
         msgFromServer(msg);
     }
@@ -133,7 +199,9 @@ public class ReaderWriterServer implements Runnable {
         loggedInList.remove(username);
         msgFromServer("Logged out "+username);
         isLoggedIn = false;
+        tournament.readyList.remove(username);
     }
+
 
     @Override
     public void run() {
@@ -173,11 +241,11 @@ public class ReaderWriterServer implements Runnable {
                     sendIp();
                 }
 
-                case msg,requestToPlay,move,updateGameBoard ->{
+                case msg, request_to_play,move, update_gameboard ->{
                     sendToClient(dataObj);
                 }
 
-                case playRequestAccecpted ->{
+                case playrequest_accepted ->{
                     setColor(dataObj);
                     sendToClient(dataObj);
                 }
@@ -190,6 +258,22 @@ public class ReaderWriterServer implements Runnable {
 
                 case get_tournament_details -> {
                     msgFromServer(tournament.get_tournament_details());
+                }
+
+                case register_for_tournament -> {
+                    tournament.register(username);
+                }
+
+                case ready_to_play -> {
+                    tournament.addToreadyList(username);
+                }
+
+                case tournament_match_end -> {
+                    tournament.updateScore(username, Integer.parseInt(dataObj.content));
+                }
+
+                case get_score_board -> {
+                    msgFromServer(tournament.scoreBoard());
                 }
 
                 default -> {

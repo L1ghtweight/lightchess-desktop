@@ -79,8 +79,8 @@ public class JDBC {
             return true;
         } catch (SQLException e) {
             e.printStackTrace();
+            return false;
         }
-        return false;
     }
 
     public boolean checkPassword(String username, String password){

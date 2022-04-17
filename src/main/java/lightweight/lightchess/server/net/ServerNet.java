@@ -5,8 +5,12 @@
  */
 package lightweight.lightchess.server.net;
 
+import lightweight.lightchess.net.CommandTypes;
+import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
 import lightweight.lightchess.net.NetworkConnection;
+import lightweight.lightchess.server.database.JDBC;
+import lightweight.lightchess.server.tournament.PairUp;
 import lightweight.lightchess.server.tournament.Tournament;
 
 import java.io.IOException;
@@ -25,21 +29,26 @@ public class ServerNet {
         HashMap<String, Information> clientList = new HashMap<>();
         HashMap<String, Information> loggedInClientList = new HashMap<>();
 
-        Tournament tournament = new Tournament(loggedInClientList);
+        JDBC jdbc = new JDBC();
+
+        ReaderWriterServer tournament_readerwriterserver = new ReaderWriterServer("1",null,clientList,loggedInClientList, jdbc,null);
+        Tournament tournament = new Tournament(loggedInClientList,tournament_readerwriterserver);
+
 // Init a default tournament
         tournament.name = "NICE";
-        tournament.startTime = LocalDateTime.now().plusMinutes(20);
+        tournament.startTime = LocalDateTime.now().plusMinutes(2);
         tournament.endTime = tournament.startTime.plusMinutes(30);
 
         System.out.println(tournament.get_tournament_details());
 
         new Thread(new ProcessCommands(tournament)).start();
+        new Thread(new PairUp(tournament)).start();
 
         while (true) {
             Socket socket = serverSocket.accept();
             NetworkConnection nc = new NetworkConnection(socket);
 
-            new Thread(new CreateConnection(clientList,loggedInClientList, nc, tournament)).start();
+            new Thread(new CreateConnection(clientList,loggedInClientList, nc, jdbc, tournament)).start();
 
         }
 

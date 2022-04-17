@@ -61,10 +61,10 @@ public class EnqueueOutgoing implements Runnable{
             else if(cmd.equals("ip")){
                 data.cmd = CommandTypes.get_ip;
             } else if(cmd.equals("play")){
-                data.cmd = CommandTypes.requestToPlay;
+                data.cmd = CommandTypes.request_to_play;
                 data.receiver = message[1];
             } else if(cmd.equals("accept")){
-                data.cmd = CommandTypes.playRequestAccecpted;
+                data.cmd = CommandTypes.playrequest_accepted;
                 data.receiver = client.opponentUsername;
                 client.startMatch(client.opponentUsername);
             } else if(cmd.equals("signup")){
@@ -77,6 +77,20 @@ public class EnqueueOutgoing implements Runnable{
                 data.content2 = message[2];
             } else if(cmd.equals("get_tournament")){
                 data.cmd = CommandTypes.get_tournament_details;
+            }
+            else if(cmd.equals("register")){
+                data.cmd = CommandTypes.register_for_tournament;
+            } else  if(cmd.equals("ready")){
+                data.cmd = CommandTypes.ready_to_play;
+            }
+
+            else if(cmd.equals("score")){
+                data.cmd = CommandTypes.get_score_board;
+            }
+
+            else if(cmd.equals("finish")){
+                data.cmd = CommandTypes.tournament_match_end;
+                data.content = message[1];
             }
 
 
