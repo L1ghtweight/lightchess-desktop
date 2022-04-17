@@ -105,10 +105,6 @@ public class ChessBoard extends Group {
             }
         }
 
-        for(String str:moveList){
-            System.out.print(str);
-        }
-        System.out.println();
     }
 
     public void rotate() {
@@ -145,14 +141,16 @@ public class ChessBoard extends Group {
     public void handleOpponnentsMove(String gameboard_fen, String move){
         Board board_new = new Board();
         board_new.loadFromFen(gameboard_fen);
-
-        updateBoard(board_new);
         moveList.add(move);
+        updateBoard(board_new);
+        System.out.println(move);
     }
 
     public void movePiece(Board gameBoard, String move, Piece p, int newX, int newY) {
 
         if(logic.isLegal(gameBoard, move)) {
+            moveList.add(move);
+            System.out.println(move);
             p.posX = newX; p.posY = newY;
             this.gameBoard.doMove(move);
             updateBoard(this.gameBoard);
@@ -161,7 +159,6 @@ public class ChessBoard extends Group {
                 clientnet.sendMsg("You Lose");
             }
             clientnet.sendGameBoard(this.gameBoard.getFen(), move);
-            moveList.add(move);
         }
         else {
             p.setX(p.posX * length/8);
