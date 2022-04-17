@@ -2,7 +2,9 @@ package lightweight.lightchess;
 
 import com.github.bhlangonijr.chesslib.Board;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -16,6 +18,7 @@ import java.util.List;
 public class ClientMain extends Application {
     @Override
     public void start(Stage stage) throws IOException {
+
         Board gameBoard = new Board();
         Logic logic = new Logic();
 
@@ -30,18 +33,17 @@ public class ClientMain extends Application {
         final List<String> args = params.getRaw();
 
 
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                ClientNet clientNet = new ClientNet(chessBoard);
-                chessBoard.clientnet = clientNet;
-                clientNet.start(args);
-
-            }
-        }).start();
-
-
+//        new Thread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ClientNet clientNet = new ClientNet(chessBoard);
+//                chessBoard.clientnet = clientNet;
+//                clientNet.start(args);
+//
+//            }
+//        }).start();
     }
+
 
     public static void main(String[] args) {
         launch(args);

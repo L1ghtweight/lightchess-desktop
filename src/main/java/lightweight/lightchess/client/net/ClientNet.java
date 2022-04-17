@@ -6,6 +6,7 @@
 package lightweight.lightchess.client.net;
 
 import javafx.application.Platform;
+import lightweight.lightchess.Main;
 import lightweight.lightchess.client.ui.ChessBoard;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
@@ -35,7 +36,8 @@ public class ClientNet {
     boolean isInMatch = false;
     boolean hasUI = false;
     String color;
-    ChessBoard chessBoard;
+    public ChessBoard chessBoard;
+    public Main main;
 
     public ClientNet(ChessBoard ub){
         hasUI = true;
@@ -53,6 +55,10 @@ public class ClientNet {
 
 
     public void sendData(Data dOut){
+        if(QOut == null){
+            System.out.println("Qout is null");
+            return;
+        }
         QOut.add(dOut);
     }
 
@@ -65,7 +71,8 @@ public class ClientNet {
         d.receiver = opponentUsername;
         d.content = gameboard_fen;
         d.content2 = move;
-        QOut.add(d);
+
+        sendData(d);
     }
 
     public void sendLoginRequest(String username,String password){
@@ -77,7 +84,19 @@ public class ClientNet {
         d.content = username;
         d.content2 = password;
 
-        QOut.add(d);
+        sendData(d);
+    }
+
+    public void sendSignupRequest(String username,String password){
+        this.username = username;
+
+        Data  d = new Data();
+        d.cmd = CommandTypes.signup;
+        d.sender = username;
+        d.content = username;
+        d.content2 = password;
+
+        sendData(d);
     }
 
     public void sendPlayRequest(String opponentUsername){
@@ -88,6 +107,8 @@ public class ClientNet {
 
         QOut.add(d);
     }
+
+
 
     public void sendPlayRequestAccepted(){
         System.out.println("Accepting match with + "+ opponentUsername);
@@ -136,8 +157,6 @@ public class ClientNet {
     }
 
     public void start(List<String> args) {
-
-
         Socket socket = null;
         try {
             socket = new Socket("localhost", 12345);
@@ -151,6 +170,12 @@ public class ClientNet {
 
         QOut = new LinkedBlockingQueue<>();
         QIn = new LinkedBlockingQueue<>();
+
+        if(QOut == null) {
+            System.out.println("is null here");
+        } else {
+            System.out.println("Value " + QOut);
+        }
 
         enqueueIn = new Thread(new EnqueueIncoming(nc, QIn));
         processOut = new Thread(new ProcessOutgoing(nc, QOut));
@@ -197,6 +222,7 @@ public class ClientNet {
             System.out.println("Thread exited");
         }
     }
+
 
     public static void main(String[] args) {
         ClientNet c = new ClientNet();

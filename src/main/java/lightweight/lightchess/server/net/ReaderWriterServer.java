@@ -5,6 +5,7 @@
  */
 package lightweight.lightchess.server.net;
 
+import lightweight.lightchess.client.ui.Dashboard;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
@@ -78,6 +79,10 @@ public class ReaderWriterServer implements Runnable {
         inf.netConnection.write(data);
     }
 
+    public void responseFromServer(Data data){
+        nc.write(data);
+    }
+
     public void setColor(Data data){
         int i = rand.nextInt(2);
         Data d1 = new Data();
@@ -124,15 +129,17 @@ public class ReaderWriterServer implements Runnable {
     public void sendSignupSuccess(){
         Data d = new Data();
         d.receiver = username;
-        d.cmd = CommandTypes.signup_success;
-        sendToClient(d);
+        d.content = "success";
+        d.cmd = CommandTypes.signup_response;
+        responseFromServer(d);
     }
 
     public void sendSignupFailure(){
         Data d = new Data();
         d.receiver = username;
-        d.cmd = CommandTypes.signup_failure;
-        sendToClient(d);
+        d.content = "failure";
+        d.cmd = CommandTypes.signup_response;
+        responseFromServer(d);
     }
 
 
@@ -145,7 +152,8 @@ public class ReaderWriterServer implements Runnable {
         String msg;
         if(jdbc.createUser(dObj.content,dObj.content2)){
             msg = "Signup successfull";
-            String username = dObj.content;
+            username = dObj.content;
+            System.out.println("Signed up " + username);
             sendSignupSuccess();
         } else {
             msg = "Signup Error";
@@ -157,14 +165,16 @@ public class ReaderWriterServer implements Runnable {
     public void sendLoginSuccess(){
         Data d = new Data();
         d.receiver = username;
-        d.cmd = CommandTypes.login_success;
+        d.cmd = CommandTypes.login_response;
+        d.content = "success";
         sendToClient(d);
     }
 
     public void sendLoginFailure(){
         Data d = new Data();
         d.receiver = username;
-        d.cmd = CommandTypes.login_failure;
+        d.cmd = CommandTypes.login_response;
+        d.content = "failure";
         sendToClient(d);
     }
 

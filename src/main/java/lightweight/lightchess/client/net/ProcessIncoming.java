@@ -1,10 +1,11 @@
 package lightweight.lightchess.client.net;
 
-import com.github.bhlangonijr.chesslib.Board;
 import javafx.application.Platform;
+import lightweight.lightchess.Main;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 
+import java.io.IOException;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -67,6 +68,31 @@ public class ProcessIncoming implements Runnable{
         System.out.println("Starting tournament match with " + dObj.content);
     }
 
+    public void handleLoginResponse(Data din) throws IOException {
+        String isOk = din.content;
+        boolean ok = isOk.equals("success");
+        Platform.runLater(()-> {
+            try {
+                client.main.loginResponse(ok);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void handleSignUpResponse(Data din) throws IOException {
+        String isOk = din.content;
+        boolean ok = isOk.equals("success");
+        Platform.runLater(()-> {
+            try {
+                System.out.println("Ok here " + ok);
+                client.main.signUpResponse(ok);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     @Override
     public void run() {
         Data data;
@@ -109,17 +135,14 @@ public class ProcessIncoming implements Runnable{
                         handleStartTournamentMatch((Data) data.clone());
                     }
 
-                    case login_success -> {
-                        client.isLoggedIn = true;
+                    case login_response -> {
+                        handleLoginResponse(data);
                     }
 
-                    case login_failure,signup_failure -> {
-                        client.isLoggedIn = false;
+                    case signup_response -> {
+                        handleSignUpResponse(data);
                     }
 
-                    case signup_success -> {
-
-                    }
 
                     default -> {
                         System.out.println("Invalid incoming command : " + data.cmd);
@@ -130,6 +153,8 @@ public class ProcessIncoming implements Runnable{
                 e.printStackTrace();
                 continue;
             } catch (CloneNotSupportedException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
 

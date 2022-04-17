@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.shape.Line?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="500.0" style="-fx-background-color: linear-gradient(to top, #292d3e, #000000);" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lightweight.lightchess.client.ui.Login">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <ImageView fitHeight="598.0" fitWidth="542.0" layoutY="101.0" opacity="0.025">
+               <image>
+                  <Image url="@lightchess_logo_grey.png" />
+               </image>
+            </ImageView>
+            <Label layoutX="175.0" layoutY="282.0" prefHeight="65.0" prefWidth="192.0" text="LIGHTCHESS" textFill="#cdcdcd">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="30.0" />
+               </font>
+            </Label>
+            <ImageView fitHeight="206.0" fitWidth="206.0" layoutX="169.0" layoutY="63.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@lightchess_logo_sttrooke.png" />
+               </image>
+            </ImageView>
+            <TextField fx:id="username" layoutX="186.0" layoutY="512.0" opacity="0.6" promptText="Username" style="-fx-text-fill: black" />
+            <PasswordField fx:id="password" layoutX="186.0" layoutY="568.0" opacity="0.6" promptText="Password" style="-fx-text-fill: black" />
+            <Button layoutX="184.0" layoutY="625.0" mnemonicParsing="false" onAction="#login" prefHeight="38.0" prefWidth="175.0" style="-fx-background-color: linear-gradient(to top left, #3b97f2, #8ec7ff); fx-background-radius: 15px; -fx-border-radius: 15px;" text="Sign In" textFill="WHITE" />
+            <Button layoutX="156.0" layoutY="400.0" mnemonicParsing="false" prefHeight="54.0" prefWidth="112.0" style="-fx-background-color: transparent; -fx-text-fill: #3b97f2;" text="LOGIN">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="20.0" />
+               </font>
+            </Button>
+            <Button layoutX="242.0" layoutY="400.0" mnemonicParsing="false" onAction="#goToSignUp" prefHeight="54.0" prefWidth="146.0" style="-fx-background-color: transparent; -fx-text-fill: white;" text="REGISTER">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="20.0" />
+               </font>
+            </Button>
+            <Line endX="-38.0" layoutX="281.0" layoutY="454.0" startX="-100.0" stroke="#3b97f2" strokeWidth="4.0" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
