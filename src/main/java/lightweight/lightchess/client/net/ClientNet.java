@@ -58,12 +58,13 @@ public class ClientNet {
 
 
 
-    public void sendGameBoard(Board gameboard){
+    public void sendGameBoard(String gameboard_fen, String move){
         Data d = new Data();
         d.cmd = CommandTypes.update_gameboard;
         d.sender = username;
         d.receiver = opponentUsername;
-        d.content = gameboard.getFen();
+        d.content = gameboard_fen;
+        d.content2 = move;
         QOut.add(d);
     }
 

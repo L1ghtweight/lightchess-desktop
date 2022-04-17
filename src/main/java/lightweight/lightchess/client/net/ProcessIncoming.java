@@ -36,9 +36,12 @@ public class ProcessIncoming implements Runnable{
     }
 
     public void handleGameBoardUpdate(Data din){
-        Board board = new Board();
-        board.loadFromFen(din.content);
-        client.updateBoard(board);
+        String gameboard_fen = din.content;
+        String move = din.content2;
+
+        Platform.runLater(()->{
+            client.chessBoard.handleOpponnentsMove(gameboard_fen, move);
+        });
     }
 
     public void handlePlayRequestAccepted(Data din){

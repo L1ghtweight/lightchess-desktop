@@ -36,8 +36,8 @@ public class ServerNet {
 
 // Init a default tournament
         tournament.name = "NICE";
-        tournament.startTime = LocalDateTime.now().plusMinutes(2);
-        tournament.endTime = tournament.startTime.plusMinutes(30);
+        tournament.startTime = LocalDateTime.now().plusMinutes(20);
+        tournament.endTime = tournament.startTime.plusMinutes(10);
 
         System.out.println(tournament.get_tournament_details());
 

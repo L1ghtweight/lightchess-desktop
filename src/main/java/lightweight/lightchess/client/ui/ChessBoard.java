@@ -38,6 +38,7 @@ public class ChessBoard extends Group {
     Character[] pieceNotations = new Character[] {'p', 'r', 'n', 'b', 'k', 'q', 'P', 'R', 'N', 'B', 'K', 'Q'};
     GridPane Grid = new GridPane();
     ArrayList<Piece> Pieces = new ArrayList<Piece>();
+    ArrayList<String> moveList = new ArrayList<>();
     HashMap<Character, Image> pieceMap = new HashMap<>();
     public boolean isBlack = false;
 
@@ -103,6 +104,11 @@ public class ChessBoard extends Group {
                 }
             }
         }
+
+        for(String str:moveList){
+            System.out.print(str);
+        }
+        System.out.println();
     }
 
     public void rotate() {
@@ -135,6 +141,15 @@ public class ChessBoard extends Group {
         p.setY(event.getY() - p.getFitHeight()/2);
     }
 
+
+    public void handleOpponnentsMove(String gameboard_fen, String move){
+        Board board_new = new Board();
+        board_new.loadFromFen(gameboard_fen);
+
+        updateBoard(board_new);
+        moveList.add(move);
+    }
+
     public void movePiece(Board gameBoard, String move, Piece p, int newX, int newY) {
 
         if(logic.isLegal(gameBoard, move)) {
@@ -145,7 +160,8 @@ public class ChessBoard extends Group {
                 System.out.println("You win");
                 clientnet.sendMsg("You Lose");
             }
-            clientnet.sendGameBoard(this.gameBoard);
+            clientnet.sendGameBoard(this.gameBoard.getFen(), move);
+            moveList.add(move);
         }
         else {
             p.setX(p.posX * length/8);
