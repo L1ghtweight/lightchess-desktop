@@ -9,6 +9,7 @@ public class Piece extends ImageView {
     public int posX;
     public int posY;
     public Boolean isSelected = false;
+    public boolean color = true;
 
     public Piece(Image image, double boardLength, int x, int y) {
         super(image);
@@ -19,4 +20,6 @@ public class Piece extends ImageView {
         this.setFitHeight(boardLength/8);
         this.setFitWidth(boardLength/8);
     }
+    public Piece()
+    {}
 }

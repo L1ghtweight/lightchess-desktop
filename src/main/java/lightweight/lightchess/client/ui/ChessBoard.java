@@ -19,6 +19,7 @@ import lightweight.lightchess.net.Data;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -37,10 +38,7 @@ public class ChessBoard extends Group {
     Character[] pieceNotations = new Character[] {'p', 'r', 'n', 'b', 'k', 'q', 'P', 'R', 'N', 'B', 'K', 'Q'};
     GridPane Grid = new GridPane();
     ArrayList<Piece> Pieces = new ArrayList<Piece>();
-    ArrayList<Circle> highlightedSquares = new ArrayList<Circle>();
     HashMap<Character, Image> pieceMap = new HashMap<>();
-    Boolean selected = false;
-    Rectangle selectedSquare = new Rectangle(0, 0, length/8, length/8);
     public boolean isBlack = false;
 
     public ChessBoard(int length, Color color1, Color color2, Board gameBoard, Logic logic) {
@@ -70,48 +68,8 @@ public class ChessBoard extends Group {
 
         this.getChildren().add(Grid);
         updateBoard(gameBoard);
-
-        this.setOnMousePressed(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                Boolean highlighted = false;
-                Boolean squareContainsPiece = false;
-                int newX = getCoordinate(event.getX()), newY = getCoordinate(event.getY());
-                removeMoveHighlights();
-                for(Piece p: Pieces) {
-                    if(newX == p.posX && newY == p.posY && p.isSelected == true) {
-                        p.isSelected = false;
-                        break;
-                    }
-                    else if(newX == p.posX && newY == p.posY && p.isSelected == false) {
-                        p.isSelected = true;
-                        addMoveHighlights(p);
-                        break;
-                    }
-                }
-            }
-        });
     }
 
-
-    public void removeMoveHighlights() {
-        for(Circle c: highlightedSquares) {
-            this.getChildren().remove(c);
-        }
-        highlightedSquares.clear();
-    }
-
-    public void addMoveHighlights(Piece p) {
-        List<Move> possibleMoves = logic.getLegalMovesFromSquare(gameBoard, getSquare(p.posX, p.posY));
-        for(Move m: possibleMoves) {
-            String move = m.toString();
-            int nx = coordFromMoveX(move), ny = coordFromMoveY(move);
-            Circle c = new Circle(nx * length/8 + length/16, ny * length/ 8 + length/16, length/48);
-            c.setFill(new Color(0.5, 1, 0.5, 0.5));
-            highlightedSquares.add(c);
-            this.getChildren().add(c);
-        }
-    }
 
     public int getCoordinate(double X) {
         return (int) (X/(length/8));
@@ -131,15 +89,15 @@ public class ChessBoard extends Group {
             int x = i%9, y = i/9;
             if (boardString.charAt(i) != '.' && boardString.charAt(i) != '\n') {
                 Piece newPiece = new Piece(pieceMap.get(boardString.charAt(i)), length, x, y);
+                if(isBlack)
+                    newPiece.color = false;
                 Pieces.add(newPiece);
                 this.getChildren().add(newPiece);
                 if(isBlack && isLowerCase(boardString.charAt(i))) {
-                    newPiece.setOnMousePressed(event -> pressed(event, newPiece));
                     newPiece.setOnMouseDragged(event -> dragged(event, newPiece));
                     newPiece.setOnMouseReleased(event -> released(event, newPiece));
                 }
                 else if(!isBlack && isUpperCase(boardString.charAt(i))) {
-                    newPiece.setOnMousePressed(event -> pressed(event, newPiece));
                     newPiece.setOnMouseDragged(event -> dragged(event, newPiece));
                     newPiece.setOnMouseReleased(event -> released(event, newPiece));
                 }
@@ -150,36 +108,6 @@ public class ChessBoard extends Group {
     public void rotate() {
         isBlack = true;
         updateBoard(gameBoard);
-    }
-
-    public String getSquare(int x, int y) {
-        int nx = x, ny = y;
-
-        if(!isBlack)
-            ny = (8 - y - 1);
-        else
-            nx = (8 - x - 1);
-
-        char m1 = (char) (nx + 'a');
-        char m2 = (char) (ny + '1');
-
-        String square = "";
-        square += m1; square += m2;
-        return square;
-    }
-
-    public int coordFromMoveX(String move) {
-        int x = move.charAt(2) - 'a';
-        if(isBlack)
-            x = (8 - x - 1);
-        return x;
-    }
-
-    public int coordFromMoveY(String move) {
-        int y =  move.charAt(3) - '1';
-        if(!isBlack)
-            y = (8 - y - 1);
-        return y;
     }
 
     public String moveFromPos(int oldX, int oldY, int newX, int newY) {
@@ -202,19 +130,13 @@ public class ChessBoard extends Group {
         return move;
     }
 
-    public void pressed(MouseEvent event, Piece p) {
-        for(Circle c: highlightedSquares) {
-            this.getChildren().remove(c);
-            highlightedSquares.remove(c);
-        }
-    }
-
     public void dragged(MouseEvent event, Piece p) {
         p.setX(event.getX() - p.getFitWidth()/2);
         p.setY(event.getY() - p.getFitHeight()/2);
     }
 
     public void movePiece(Board gameBoard, String move, Piece p, int newX, int newY) {
+
         if(logic.isLegal(gameBoard, move)) {
             p.posX = newX; p.posY = newY;
             this.gameBoard.doMove(move);
