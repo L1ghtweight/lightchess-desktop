@@ -106,6 +106,18 @@ public class ProcessIncoming implements Runnable{
                         handleStartTournamentMatch((Data) data.clone());
                     }
 
+                    case login_success -> {
+                        client.isLoggedIn = true;
+                    }
+
+                    case login_failure,signup_failure -> {
+                        client.isLoggedIn = false;
+                    }
+
+                    case signup_success -> {
+
+                    }
+
                     default -> {
                         System.out.println("Invalid incoming command : " + data.cmd);
                     }

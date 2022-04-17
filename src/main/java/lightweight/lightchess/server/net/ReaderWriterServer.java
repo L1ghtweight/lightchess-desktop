@@ -25,17 +25,17 @@ public class ReaderWriterServer implements Runnable {
     HashMap<String, Information> clientList;
     HashMap<String, Information> loggedInList;
     Random rand = new Random();
-    JDBC jdbc = new JDBC();
+    JDBC jdbc;
     boolean isLoggedIn = false;
     Tournament tournament;
 
-    public ReaderWriterServer(String userID, NetworkConnection netConnection, HashMap<String, Information> cList, HashMap<String, Information> loggedInLIst, Tournament t) {
+    public ReaderWriterServer(String userID, NetworkConnection netConnection, HashMap<String, Information> cList, HashMap<String, Information> loggedInLIst, JDBC jdbc, Tournament t) {
         tournament = t;
         id = userID;
         nc = netConnection;
         clientList = cList;
         this.loggedInList = loggedInLIst;
-
+        this.jdbc = jdbc;
 
     }
 
@@ -120,20 +120,54 @@ public class ReaderWriterServer implements Runnable {
 
     }
 
+
+    public void sendSignupSuccess(){
+        Data d = new Data();
+        d.receiver = username;
+        d.cmd = CommandTypes.signup_success;
+        sendToClient(d);
+    }
+
+    public void sendSignupFailure(){
+        Data d = new Data();
+        d.receiver = username;
+        d.cmd = CommandTypes.signup_failure;
+        sendToClient(d);
+    }
+
+
     public void signupClient(Data dObj){
         if(isLoggedIn){
             msgFromServer("You are already logged in");
             return;
         }
+
         String msg;
         if(jdbc.createUser(dObj.content,dObj.content2)){
             msg = "Signup successfull";
             String username = dObj.content;
+            sendSignupSuccess();
         } else {
             msg = "Signup Error";
+            sendSignupFailure();
         }
         msgFromServer(msg);
     }
+
+    public void sendLoginSuccess(){
+        Data d = new Data();
+        d.receiver = username;
+        d.cmd = CommandTypes.login_success;
+        sendToClient(d);
+    }
+
+    public void sendLoginFailure(){
+        Data d = new Data();
+        d.receiver = username;
+        d.cmd = CommandTypes.login_failure;
+        sendToClient(d);
+    }
+
 
     public void loginClient(Data dObj){
         if(isLoggedIn){
@@ -153,8 +187,10 @@ public class ReaderWriterServer implements Runnable {
             msg = "Login successfull as " + username;
             loggedInList.put(username,new Information(username,nc));
             isLoggedIn = true;
+            sendLoginSuccess();
         } else {
             msg = "Login Error";
+            sendLoginFailure();
         }
         msgFromServer(msg);
     }

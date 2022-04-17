@@ -9,6 +9,7 @@ import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
 import lightweight.lightchess.net.NetworkConnection;
+import lightweight.lightchess.server.database.JDBC;
 import lightweight.lightchess.server.tournament.PairUp;
 import lightweight.lightchess.server.tournament.Tournament;
 
@@ -28,7 +29,9 @@ public class ServerNet {
         HashMap<String, Information> clientList = new HashMap<>();
         HashMap<String, Information> loggedInClientList = new HashMap<>();
 
-        ReaderWriterServer tournament_readerwriterserver = new ReaderWriterServer("1",null,clientList,loggedInClientList, null);
+        JDBC jdbc = new JDBC();
+
+        ReaderWriterServer tournament_readerwriterserver = new ReaderWriterServer("1",null,clientList,loggedInClientList, jdbc,null);
         Tournament tournament = new Tournament(loggedInClientList,tournament_readerwriterserver);
 
 // Init a default tournament
@@ -45,7 +48,7 @@ public class ServerNet {
             Socket socket = serverSocket.accept();
             NetworkConnection nc = new NetworkConnection(socket);
 
-            new Thread(new CreateConnection(clientList,loggedInClientList, nc, tournament)).start();
+            new Thread(new CreateConnection(clientList,loggedInClientList, nc, jdbc, tournament)).start();
 
         }
 

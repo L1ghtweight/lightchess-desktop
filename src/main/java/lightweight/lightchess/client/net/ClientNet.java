@@ -24,6 +24,7 @@ public class ClientNet {
     public boolean DEBUG_MODE=false;
     public boolean autologin = true;
     public boolean tournament_DEBUG_MODE = true;
+    public boolean isLoggedIn = false;
 
     Socket socket;
     NetworkConnection nc;
