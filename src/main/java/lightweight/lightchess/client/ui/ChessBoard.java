@@ -144,6 +144,11 @@ public class ChessBoard extends Group {
         moveList.add(move);
         updateBoard(board_new);
         System.out.println(move);
+
+        if(logic.isCheckmate(gameBoard)){
+            System.out.println("You Lose");
+            clientnet.sendTournamentMatchFinishedMsg("0");
+        }
     }
 
     public void movePiece(Board gameBoard, String move, Piece p, int newX, int newY) {
@@ -154,11 +159,11 @@ public class ChessBoard extends Group {
             p.posX = newX; p.posY = newY;
             this.gameBoard.doMove(move);
             updateBoard(this.gameBoard);
+            clientnet.sendGameBoard(this.gameBoard.getFen(), move);
             if(logic.isCheckmate(gameBoard)){
                 System.out.println("You win");
-                clientnet.sendMsg("You Lose");
+                clientnet.sendTournamentMatchFinishedMsg("2");
             }
-            clientnet.sendGameBoard(this.gameBoard.getFen(), move);
         }
         else {
             p.setX(p.posX * length/8);

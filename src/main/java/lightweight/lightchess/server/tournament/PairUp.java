@@ -20,8 +20,6 @@ public class PairUp implements Runnable{
 
     public void startMatch(String player1, String player2){
         System.out.println("Match starting between "+player1 + " and "+ player2);
-        tournament.readyList.remove(player1);
-        tournament.readyList.remove(player2);
 
         Data d1 = new Data();
         Data d2 = new Data();
@@ -33,6 +31,22 @@ public class PairUp implements Runnable{
         readerWriterServer.setColor(player1, player2);
         readerWriterServer.sendToClient(d1);
         readerWriterServer.sendToClient(d2);
+    }
+
+    public String extractBestPlayer(){
+        String bestPlayer = tournament.readyList.get(0);
+        int score = -1;
+
+        for(String player: tournament.readyList){
+            int s = tournament.registeredList.get(player).score;
+            if(s > score){
+                bestPlayer = player;
+                score = s;
+            }
+        }
+
+        tournament.readyList.remove(bestPlayer);
+        return bestPlayer;
     }
 
     @Override
@@ -49,10 +63,8 @@ public class PairUp implements Runnable{
                 continue;
             }
 
-            String player1 = tournament.readyList.get(0);
-            int ind = rand.nextInt(tournament.readyList.size());
-            if(ind==0) ind++;
-            String player2 = tournament.readyList.get(ind);
+            String player1 = extractBestPlayer();
+            String player2 = extractBestPlayer();
 
 
             startMatch(player1,player2);

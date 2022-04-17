@@ -66,6 +66,7 @@ public class ProcessIncoming implements Runnable{
 
     public void handleStartTournamentMatch(Data dObj){
         System.out.println("Starting tournament match with " + dObj.content);
+        client.startMatch(dObj.content);
     }
 
     public void handleLoginResponse(Data din) throws IOException {

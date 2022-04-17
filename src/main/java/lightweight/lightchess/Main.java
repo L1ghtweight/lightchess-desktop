@@ -38,6 +38,7 @@ public class Main extends Application {
         ChessBoard chessBoard = new ChessBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard, logic);
         clientNet = new ClientNet(chessBoard);
         clientNet.main = this;
+        chessBoard.clientnet = clientNet;
 
         new Thread(new Runnable() {
             @Override
