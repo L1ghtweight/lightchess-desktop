@@ -102,7 +102,6 @@ public class Main extends Application {
     }
 
     public void signUpResponse(boolean ok) throws IOException {
-        System.out.println("Response " + ok);
         if(ok)
             showLogin();
     }

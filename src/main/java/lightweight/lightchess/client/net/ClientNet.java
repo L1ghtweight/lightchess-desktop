@@ -6,6 +6,7 @@
 package lightweight.lightchess.client.net;
 
 import javafx.application.Platform;
+import javafx.util.Pair;
 import lightweight.lightchess.Main;
 import lightweight.lightchess.client.ui.ChessBoard;
 import lightweight.lightchess.net.CommandTypes;
@@ -15,10 +16,7 @@ import lightweight.lightchess.net.NetworkConnection;
 import java.io.IOException;
 import java.net.Socket;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import com.github.bhlangonijr.chesslib.Board;
 
@@ -27,6 +25,7 @@ public class ClientNet {
     public boolean autologin = true;
     public boolean tournament_DEBUG_MODE = true;
     public boolean isLoggedIn = false;
+    public boolean usersListFetched = false;
 
     Socket socket;
     NetworkConnection nc;
@@ -40,6 +39,7 @@ public class ClientNet {
     public ChessBoard chessBoard;
     public Main main;
     public HashMap<String, String> userInfo = new HashMap<>();
+    public ArrayList<Pair<String, String>> usersList; // username-time_format
 
     public void parseUserInfo(String inf){
         String[] slices = inf.split("\n",-1);
@@ -68,13 +68,16 @@ public class ClientNet {
 
 
     public void sendData(Data dOut){
-        if(QOut == null){
-            System.out.println("Qout is null");
-            return;
-        }
         QOut.add(dOut);
     }
 
+    public void fetchUsersList(){
+        usersListFetched = false;
+        Data d = new Data();
+        d.cmd = CommandTypes.users_list;
+        d.receiver = "Server";
+        sendData(d);
+    }
 
 
     public void sendGameBoard(String gameboard_fen, String move){

@@ -5,7 +5,6 @@
  */
 package lightweight.lightchess.server.net;
 
-import lightweight.lightchess.client.ui.Dashboard;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
@@ -57,12 +56,16 @@ public class ReaderWriterServer implements Runnable {
 
     public void sendLoggedInClientList(){
         System.out.println("List asked By " + username);
-        StringBuilder msgToSend = new StringBuilder("List of Logged In Clients...\n");
+        StringBuilder msgToSend = new StringBuilder();
         for (Map.Entry<String, Information> entry : loggedInList.entrySet()) {
             String key = entry.getKey();
-            msgToSend.append(key).append("\n");
+            msgToSend.append(key).append(":").append(jdbc.getPreferredTimeFormat(key)).append('\n');
         }
-        msgFromServer(msgToSend.toString());
+        Data d = new Data();
+        d.cmd = CommandTypes.users_list;
+        d.sender = "Server";
+        d.content = msgToSend.toString();
+        responseFromServer(d);
     }
 
     public void sendIp(){
@@ -168,7 +171,7 @@ public class ReaderWriterServer implements Runnable {
         d.cmd = CommandTypes.login_response;
         d.content = "success";
         d.content2 = jdbc.getUserDetails(username);
-        sendToClient(d);
+        responseFromServer(d);
     }
 
     public void sendLoginFailure(){
@@ -176,7 +179,7 @@ public class ReaderWriterServer implements Runnable {
         d.receiver = username;
         d.cmd = CommandTypes.login_response;
         d.content = "failure";
-        sendToClient(d);
+        responseFromServer(d);
     }
 
 
@@ -191,6 +194,7 @@ public class ReaderWriterServer implements Runnable {
 
         if(loggedInList.containsKey(username)){
             msgFromServer("You are already logged in some other device, logout first");
+            sendLoginFailure();
             return;
         }
 
@@ -244,7 +248,7 @@ public class ReaderWriterServer implements Runnable {
                     sendClientList();
                 }
 
-                case list_loggedInClients -> {
+                case users_list -> {
                     sendLoggedInClientList();
                 }
 

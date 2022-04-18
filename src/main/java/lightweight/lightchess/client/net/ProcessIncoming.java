@@ -1,11 +1,12 @@
 package lightweight.lightchess.client.net;
 
 import javafx.application.Platform;
-import lightweight.lightchess.Main;
+import javafx.util.Pair;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -89,12 +90,27 @@ public class ProcessIncoming implements Runnable{
         boolean ok = isOk.equals("success");
         Platform.runLater(()-> {
             try {
-                System.out.println("Ok here " + ok);
                 client.main.signUpResponse(ok);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
+    }
+
+    public void handleUsersList(Data din){
+        String[] userList = din.content.split("\n",-1);
+        ArrayList<Pair<String, String>> usersList = new ArrayList<>();
+        for(String str: userList){
+            if(str.length()<2) continue;
+            String[] slices = str.split(":",2);
+            String username = slices[0];
+            String time_format = slices[1];
+
+            usersList.add(new Pair<>(username,time_format));
+        }
+
+        client.usersList = usersList;
+        client.usersListFetched = true;
     }
 
     @Override
@@ -140,13 +156,16 @@ public class ProcessIncoming implements Runnable{
                     }
 
                     case login_response -> {
-                        handleLoginResponse(data);
+                        handleLoginResponse((Data) data.clone());
                     }
 
                     case signup_response -> {
-                        handleSignUpResponse(data);
+                        handleSignUpResponse((Data) data.clone());
                     }
 
+                    case users_list -> {
+                        handleUsersList((Data) data.clone());
+                    }
 
                     default -> {
                         System.out.println("Invalid incoming command : " + data.cmd);

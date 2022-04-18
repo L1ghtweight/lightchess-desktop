@@ -5,6 +5,7 @@
  */
 package lightweight.lightchess.client.net;
 
+import javafx.util.Pair;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.NetworkConnection;
@@ -55,8 +56,14 @@ public class EnqueueOutgoing implements Runnable{
             }
             else if(cmd.equals("list_connected")){
                 data.cmd = CommandTypes.list_clients;
+            } else if(cmd.equals("getlist")){
+                client.fetchUsersList();
             } else if(cmd.equals("list")){
-                data.cmd = CommandTypes.list_loggedInClients;
+                client.fetchUsersList();
+                while(!client.usersListFetched){}
+                for(Pair<String, String> P : client.usersList){
+                    System.out.println(P.getKey() + " --- " + P.getValue());
+                }
             }
             else if(cmd.equals("ip")){
                 data.cmd = CommandTypes.get_ip;
