@@ -167,6 +167,7 @@ public class ReaderWriterServer implements Runnable {
         d.receiver = username;
         d.cmd = CommandTypes.login_response;
         d.content = "success";
+        d.content2 = jdbc.getUserDetails(username);
         sendToClient(d);
     }
 

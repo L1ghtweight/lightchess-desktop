@@ -3,6 +3,7 @@ package lightweight.lightchess.server.database;
 import org.apache.commons.codec.digest.DigestUtils;
 
 import java.sql.*;
+import java.util.HashMap;
 import java.util.HashSet;
 
 public class JDBC {
@@ -31,6 +32,67 @@ public class JDBC {
             e.printStackTrace();
         }
         return null;
+    }
+
+    String incrementColumnValue(String username, String column){
+        return String.format("UPDATE USERS SET %s=%s+1 WHERE username='%s'", column, column, username);
+    }
+
+    public void updateFromMatchResult(String username, int won){
+        try {
+            Statement st = con.createStatement();
+            if(won==2){
+                st.executeUpdate(incrementColumnValue(username,"matchs_won"));
+            } else if(won==1){
+                st.executeUpdate(incrementColumnValue(username, "matchs_drawn"));
+            } else {
+                st.executeUpdate(incrementColumnValue(username, "matchs_lost"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public String getUserDetails(String username){
+        try {
+            StringBuilder info = new StringBuilder("");
+            Statement st = con.createStatement();
+            ResultSet res = st.executeQuery(String.format("SELECT * FROM USERS WHERE username='%s'",username));
+            while(res.next()){
+                int elo = res.getInt("elo");
+                int matchs_won = res.getInt("matchs_won");
+                int matchs_lost = res.getInt("matchs_lost");
+                int matchs_drawn = res.getInt("matchs_drawn");
+                int tournaments_won = res.getInt("tournaments_won");
+                String time_format = res.getString("time_format");
+
+                info.append("elo:"+elo).append('\n');
+                info.append("matches_won:"+matchs_won).append('\n');
+                info.append("matchs_lost:"+matchs_lost).append('\n');
+                info.append("matchs_drawn:"+matchs_drawn).append('\n');
+                info.append("tournaments_won:"+tournaments_won).append('\n');
+                info.append("time_format:"+time_format);
+            }
+            return info.toString();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public String getPreferredTimeFormat(String username){
+        try {
+            Statement st = con.createStatement();
+            ResultSet res = st.executeQuery(String.format("SELECT time_format FROM USERS WHERE username='%s'",username));
+            if(res.next()){
+                return res.getString("time_format");
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public Connection getConnection(){
@@ -110,15 +172,37 @@ public class JDBC {
 
     public static void main(String[] args) {
         JDBC jdbc = new JDBC();
-        for(String i:jdbc.userSet){
-            System.out.println(i + " " + jdbc.getUserPassword(i));
+//        System.out.println(jdbc.getPreferredTimeFormat("a"));
+        String details = jdbc.getUserDetails("a");
+        String[] slices = details.split("\n",-1);
+        HashMap<String, String> infos = new HashMap<>();
+
+        for(String str:slices){
+            String[] s = str.split(":",2);
+            String key = s[0];
+            String value = s[1];
+            infos.put(key,value);
+//            System.out.println(key + "-" + value);
+//            System.out.println(str + "this is it");
         }
+        System.out.println(infos.get("time_format"));
+
+        //        for(String i:jdbc.userSet){
+//            System.out.println(i + " " + jdbc.getUserPassword(i));
+//        }
     }
 }
 
 /*
 CREATE TABLE USERS(
     username varchar(20) PRIMARY KEY,
-    password char(64)
-)
+    password char(64),
+    elo INT DEFAULT 0,
+    matchs_won INT DEFAULT 0,
+    matchs_lost INT DEFAULT 0,
+    matchs_drawn INT DEFAULT 0,
+    tournaments_won INT DEFAULT 0
+    time_format varchar(10) DEFAULT '5+0'
+);
+
  */

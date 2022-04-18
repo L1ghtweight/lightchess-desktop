@@ -75,6 +75,9 @@ public class ProcessIncoming implements Runnable{
         Platform.runLater(()-> {
             try {
                 client.main.loginResponse(ok);
+                if(ok){
+                    client.parseUserInfo(din.content2);
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }

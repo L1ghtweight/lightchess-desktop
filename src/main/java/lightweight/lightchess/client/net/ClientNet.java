@@ -16,6 +16,7 @@ import java.io.IOException;
 import java.net.Socket;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -38,6 +39,18 @@ public class ClientNet {
     String color;
     public ChessBoard chessBoard;
     public Main main;
+    public HashMap<String, String> userInfo = new HashMap<>();
+
+    public void parseUserInfo(String inf){
+        String[] slices = inf.split("\n",-1);
+
+        for(String str:slices){
+            String[] s = str.split(":",2);
+            String key = s[0];
+            String value = s[1];
+            userInfo.put(key,value);
+        }
+    }
 
     public ClientNet(ChessBoard ub){
         hasUI = true;

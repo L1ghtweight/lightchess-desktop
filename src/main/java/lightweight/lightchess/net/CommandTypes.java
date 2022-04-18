@@ -11,4 +11,5 @@ public enum CommandTypes {
     get_score_board,
     login_response,
     signup_response,
+    get_user_info,
 }
