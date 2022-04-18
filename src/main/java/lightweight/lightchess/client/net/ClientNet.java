@@ -25,8 +25,9 @@ public class ClientNet {
     public boolean autologin = true;
     public boolean tournament_DEBUG_MODE = true;
     public boolean isLoggedIn = false;
-    public boolean usersListFetched = false;
-    public boolean userInfoFetched = false;
+    public boolean isUsersListFetched = false;
+    public boolean isUserInfoFetched = false;
+    public boolean isTournamentInfoFetched = false;
 
     Socket socket;
     NetworkConnection nc;
@@ -40,6 +41,7 @@ public class ClientNet {
     public ChessBoard chessBoard;
     public Main main;
     public HashMap<String, String> userInfo;
+    public HashMap<String, String> tournament_info;
     public HashMap<String, String> requested_userInfo;
     public ArrayList<Pair<String, String>> usersList; // username-time_format
 
@@ -90,7 +92,7 @@ public class ClientNet {
     }
 
     public void fetchUsersList(){
-        usersListFetched = false;
+        isUsersListFetched = false;
         Data d = new Data();
         d.cmd = CommandTypes.users_list;
         d.receiver = "Server";
@@ -98,7 +100,7 @@ public class ClientNet {
     }
 
     public void requestUserInfo(String username){
-        userInfoFetched = false;
+        isUserInfoFetched = false;
         Data d = new Data(CommandTypes.get_user_info);
         d.content = username;
         d.receiver = "Server";
@@ -190,7 +192,11 @@ public class ClientNet {
             chessBoard.updateBoard(gameboard);
         });
     }
-
+    public void fetchTournamentInfo(){
+        isTournamentInfoFetched = false;
+        Data d = new Data(CommandTypes.get_tournament_details);
+        sendData(d);
+    }
     public void sendTournamentMatchFinishedMsg(String points){
         Data d = new Data();
         d.cmd = CommandTypes.tournament_match_end;

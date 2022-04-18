@@ -238,6 +238,12 @@ public class ReaderWriterServer implements Runnable {
         jdbc.updateTimeFormat(username, newFormat);
     }
 
+    public void sendTournamentDetails(){
+        Data d = new Data(CommandTypes.get_tournament_details);
+        d.content = tournament.get_tournament_details();
+        responseFromServer(d);
+    }
+
 
     @Override
     public void run() {
@@ -297,7 +303,7 @@ public class ReaderWriterServer implements Runnable {
                 case login,signup -> {}
 
                 case get_tournament_details -> {
-                    msgFromServer(tournament.get_tournament_details());
+                    sendTournamentDetails();
                 }
 
                 case register_for_tournament -> {

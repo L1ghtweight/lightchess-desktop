@@ -5,7 +5,6 @@
  */
 package lightweight.lightchess.client.net;
 
-import javafx.util.Pair;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.NetworkConnection;
@@ -60,7 +59,7 @@ public class EnqueueOutgoing implements Runnable{
                 client.fetchUsersList();
             } else if(cmd.equals("list")){
                 client.fetchUsersList();
-                while(!client.usersListFetched){}
+                while(!client.isUsersListFetched){}
 
             }
             else if(cmd.equals("ip")){
@@ -104,7 +103,7 @@ public class EnqueueOutgoing implements Runnable{
             }
 
             else if(cmd.equals("check_ul")){{
-                System.out.println("User List Fetched --> " + client.usersListFetched);
+                System.out.println("User List Fetched --> " + client.isUsersListFetched);
             }}
 
 

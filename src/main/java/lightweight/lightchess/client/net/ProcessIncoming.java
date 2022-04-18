@@ -126,7 +126,7 @@ public class ProcessIncoming implements Runnable{
         }
 
         client.usersList = usersList;
-        client.usersListFetched = true;
+        client.isUsersListFetched = true;
         if(client.main.currentState.equals("casualplayers"))
             Platform.runLater(()->{
                 try {
@@ -140,7 +140,25 @@ public class ProcessIncoming implements Runnable{
     public void handleUserInfo(Data din){
         HashMap<String, String> requested_info  = client.parseUserInfo(din.content);
         client.requested_userInfo = requested_info;
-        client.userInfoFetched = true;
+        client.isUserInfoFetched = true;
+    }
+
+    public void handleTournamentDetails(Data din){
+        HashMap<String, String> t_info = new HashMap<>();
+
+        String slices[] = din.content.split("\n",-1);
+
+        for(String str: slices){
+            String[] tmp = str.split(":",2);
+            if(tmp.length < 2) continue;;
+            String key = tmp[0];
+            String val = tmp[1];
+
+            t_info.put(key,val);
+        }
+
+        client.tournament_info = t_info;
+        client.isTournamentInfoFetched = true;
     }
 
     @Override
@@ -200,7 +218,9 @@ public class ProcessIncoming implements Runnable{
                     case get_user_info -> {
                         handleUserInfo((Data) data.clone());
                     }
-
+                    case get_tournament_details -> {
+                        handleTournamentDetails((Data) data.clone());
+                    }
                     default -> {
                         System.out.println("Invalid incoming command : " + data.cmd);
                     }

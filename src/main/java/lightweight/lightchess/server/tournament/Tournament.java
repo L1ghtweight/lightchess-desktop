@@ -19,6 +19,7 @@ public class Tournament {
     public HashMap<String, Information>registeredList = new HashMap<>();
     public ArrayList<String> readyList = new ArrayList<>();
     public  ReaderWriterServer readerWriterServer;
+    public String time_format = "5+0";
     Thread pairUpThread;
 
     public int getMinutesRemaining(){
@@ -74,13 +75,12 @@ public class Tournament {
     }
 
     public String get_tournament_details() {
-        if (getMinutesRemaining() < 1) {
-            return "No tournament running right now";
-        }
-        if (is_tournament_started()) {
-            return "Tournament " + name + " will continue for " + getMinutesRemaining() + " more minutes";
-        }
-        return "Tournament " + name + " will start in " + timeToStart() + " minutes";
+        StringBuilder str = new StringBuilder();
+        str.append("name:").append(name).append('\n');
+        str.append("start_time:").append(startTime.toString()).append('\n');
+        str.append("end_time:").append(endTime.toString()).append('\n');
+        str.append("time_format:").append(time_format);
+        return  str.toString();
     }
 
     public void updateScore(String player, int score){
