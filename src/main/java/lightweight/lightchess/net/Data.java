@@ -20,6 +20,10 @@ public class Data implements Serializable,Cloneable{
         content = receiver = ""; cmd = CommandTypes.msg;
     }
 
+    public Data(CommandTypes cm){
+        cmd = cm;
+    }
+
     public Data(String rec, CommandTypes cm, String msg){
         receiver = rec;
         cmd = cm;

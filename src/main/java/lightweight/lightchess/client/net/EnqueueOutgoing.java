@@ -61,9 +61,7 @@ public class EnqueueOutgoing implements Runnable{
             } else if(cmd.equals("list")){
                 client.fetchUsersList();
                 while(!client.usersListFetched){}
-                for(Pair<String, String> P : client.usersList){
-                    System.out.println(P.getKey() + " --- " + P.getValue());
-                }
+
             }
             else if(cmd.equals("ip")){
                 data.cmd = CommandTypes.get_ip;
@@ -92,11 +90,16 @@ public class EnqueueOutgoing implements Runnable{
             }
 
             else if(cmd.equals("score")){
-                data.cmd = CommandTypes.get_score_board;
+                data.cmd = CommandTypes.score_board;
             }
 
             else if(cmd.equals("finish")){
                 data.cmd = CommandTypes.tournament_match_end;
+                data.content = message[1];
+            }
+
+            else if(cmd.equals("userinfo")){
+                data.cmd = CommandTypes.get_user_info;
                 data.content = message[1];
             }
 

@@ -51,7 +51,7 @@ public class PairUp implements Runnable{
 
     @Override
     public void run() {
-        while (true){
+        while (!tournament.is_tournament_ended()){
 
             if(tournament.readyList.size()<2){
                 try {

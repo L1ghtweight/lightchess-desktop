@@ -8,7 +8,7 @@ public enum CommandTypes {
     ready_to_play,
     start_tournament_match,
     tournament_match_end,
-    get_score_board,
+    score_board,
     login_response,
     signup_response,
     get_user_info,

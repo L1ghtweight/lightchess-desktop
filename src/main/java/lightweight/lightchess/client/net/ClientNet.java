@@ -26,6 +26,7 @@ public class ClientNet {
     public boolean tournament_DEBUG_MODE = true;
     public boolean isLoggedIn = false;
     public boolean usersListFetched = false;
+    public boolean userInfoFetched = false;
 
     Socket socket;
     NetworkConnection nc;
@@ -38,17 +39,27 @@ public class ClientNet {
     String color;
     public ChessBoard chessBoard;
     public Main main;
-    public HashMap<String, String> userInfo = new HashMap<>();
+    public HashMap<String, String> userInfo;
+    public HashMap<String, String> requested_userInfo;
     public ArrayList<Pair<String, String>> usersList; // username-time_format
 
-    public void parseUserInfo(String inf){
+    public HashMap<String, String> parseUserInfo(String inf){
         String[] slices = inf.split("\n",-1);
+        HashMap<String, String> userInfo = new HashMap<>();
 
         for(String str:slices){
             String[] s = str.split(":",2);
             String key = s[0];
             String value = s[1];
             userInfo.put(key,value);
+        }
+        return userInfo;
+    }
+    public void printUserInfo(boolean ownInfo){
+        HashMap<String , String> info = userInfo;
+        if(!ownInfo) info = requested_userInfo;
+        for(Map.Entry<String, String> P : info.entrySet()){
+            System.out.println(P.getKey() + " : " + P.getValue());
         }
     }
 
@@ -75,6 +86,14 @@ public class ClientNet {
         usersListFetched = false;
         Data d = new Data();
         d.cmd = CommandTypes.users_list;
+        d.receiver = "Server";
+        sendData(d);
+    }
+
+    public void requestUserInfo(String username){
+        userInfoFetched = false;
+        Data d = new Data(CommandTypes.get_user_info);
+        d.content = username;
         d.receiver = "Server";
         sendData(d);
     }

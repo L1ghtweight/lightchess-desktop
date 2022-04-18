@@ -7,6 +7,7 @@ import lightweight.lightchess.net.Data;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Scanner;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -77,7 +78,7 @@ public class ProcessIncoming implements Runnable{
             try {
                 client.main.loginResponse(ok);
                 if(ok){
-                    client.parseUserInfo(din.content2);
+                    client.userInfo = client.parseUserInfo(din.content2);
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -111,6 +112,12 @@ public class ProcessIncoming implements Runnable{
 
         client.usersList = usersList;
         client.usersListFetched = true;
+    }
+
+    public void handleUserInfo(Data din){
+        HashMap<String, String> requested_info  = client.parseUserInfo(din.content);
+        client.requested_userInfo = requested_info;
+        client.userInfoFetched = true;
     }
 
     @Override
@@ -165,6 +172,10 @@ public class ProcessIncoming implements Runnable{
 
                     case users_list -> {
                         handleUsersList((Data) data.clone());
+                    }
+
+                    case get_user_info -> {
+                        handleUserInfo((Data) data.clone());
                     }
 
                     default -> {

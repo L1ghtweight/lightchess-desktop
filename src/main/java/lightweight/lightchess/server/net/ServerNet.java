@@ -42,7 +42,7 @@ public class ServerNet {
         System.out.println(tournament.get_tournament_details());
 
         new Thread(new ProcessCommands(tournament)).start();
-        new Thread(new PairUp(tournament)).start();
+
 
         while (true) {
             Socket socket = serverSocket.accept();

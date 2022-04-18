@@ -83,6 +83,7 @@ public class ReaderWriterServer implements Runnable {
     }
 
     public void responseFromServer(Data data){
+        data.sender = "Server";
         nc.write(data);
     }
 
@@ -217,6 +218,21 @@ public class ReaderWriterServer implements Runnable {
         tournament.readyList.remove(username);
     }
 
+    public void sendScoreBoard(){
+        Data d = new Data();
+        d.cmd = CommandTypes.score_board;
+        d.content = tournament.scoreBoard();
+        responseFromServer(d);
+    }
+
+    public void sendUserInfo(Data din){
+        String requested_user = din.content;
+        System.out.println(requested_user + " info asked by " + din.sender);
+        Data d = new Data(CommandTypes.get_user_info);
+        d.content = jdbc.getUserDetails(requested_user);
+        responseFromServer(d);
+    }
+
 
     @Override
     public void run() {
@@ -287,8 +303,12 @@ public class ReaderWriterServer implements Runnable {
                     tournament.updateScore(username, Integer.parseInt(dataObj.content));
                 }
 
-                case get_score_board -> {
-                    msgFromServer(tournament.scoreBoard());
+                case score_board -> {
+                    sendScoreBoard();
+                }
+
+                case get_user_info -> {
+                    sendUserInfo(dataObj);
                 }
 
                 default -> {
