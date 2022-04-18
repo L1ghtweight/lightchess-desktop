@@ -44,6 +44,7 @@
                </font>
             </Button>
             <Line endX="-38.0" layoutX="281.0" layoutY="454.0" startX="-100.0" stroke="#3b97f2" strokeWidth="4.0" />
+            <Label fx:id="message" alignment="CENTER" layoutX="211.0" layoutY="469.0" prefHeight="29.0" prefWidth="121.0" textAlignment="CENTER" textFill="RED" />
          </children>
       </AnchorPane>
    </center>

@@ -13,4 +13,5 @@ public enum CommandTypes {
     signup_response,
     get_user_info,
     users_list,
+    update_time_format,
 }

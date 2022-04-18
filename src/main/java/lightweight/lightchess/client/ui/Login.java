@@ -3,6 +3,7 @@ package lightweight.lightchess.client.ui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import lightweight.lightchess.Main;
@@ -16,6 +17,8 @@ public class Login {
     Main m;
     @FXML
     private Button button;
+    @FXML
+    private Label message;
     @FXML
     private TextField username;
     @FXML
@@ -38,5 +41,9 @@ public class Login {
         String usernameStr = username.getText();
         String passwordStr = password.getText();
         clientNet.sendLoginRequest(usernameStr, passwordStr);
+    }
+
+    public void setMessage(String s) {
+        message.setText(s);
     }
 }

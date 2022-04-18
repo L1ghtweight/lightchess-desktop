@@ -3,6 +3,8 @@ package lightweight.lightchess.client.ui;
 import lightweight.lightchess.Main;
 import lightweight.lightchess.client.net.ClientNet;
 
+import java.io.IOException;
+
 public class Dashboard {
     Main m;
     ClientNet clientNet;
@@ -12,5 +14,11 @@ public class Dashboard {
     }
     public void setClientNet(ClientNet clientNet) {
         this.clientNet = clientNet;
+    }
+    public void goToCasualPlayerList() throws IOException {
+        m.showCasualPlayerList();
+    }
+    public void goToTournamentsList() throws IOException {
+        m.showTournamentsList();
     }
 }

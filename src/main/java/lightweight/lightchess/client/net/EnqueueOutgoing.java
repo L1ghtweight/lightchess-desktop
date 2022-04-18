@@ -103,6 +103,10 @@ public class EnqueueOutgoing implements Runnable{
                 data.content = message[1];
             }
 
+            else if(cmd.equals("check_ul")){{
+                System.out.println("User List Fetched --> " + client.usersListFetched);
+            }}
+
 
             Q.add(data);
         }

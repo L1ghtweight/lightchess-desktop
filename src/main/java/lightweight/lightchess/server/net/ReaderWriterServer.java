@@ -233,6 +233,11 @@ public class ReaderWriterServer implements Runnable {
         responseFromServer(d);
     }
 
+    public void updateTimeFormat(Data din){
+        String newFormat = din.content;
+        jdbc.updateTimeFormat(username, newFormat);
+    }
+
 
     @Override
     public void run() {
@@ -262,6 +267,10 @@ public class ReaderWriterServer implements Runnable {
             switch (dataObj.cmd) {
                 case list_clients  -> {
                     sendClientList();
+                }
+
+                case update_time_format -> {
+                    updateTimeFormat(dataObj);
                 }
 
                 case users_list -> {

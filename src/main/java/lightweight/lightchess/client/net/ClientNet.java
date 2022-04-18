@@ -44,6 +44,7 @@ public class ClientNet {
     public ArrayList<Pair<String, String>> usersList; // username-time_format
 
     public HashMap<String, String> parseUserInfo(String inf){
+        if(inf==null || inf.length()<1) return  null;
         String[] slices = inf.split("\n",-1);
         HashMap<String, String> userInfo = new HashMap<>();
 
@@ -75,6 +76,12 @@ public class ClientNet {
         isInMatch = true;
         this.opponentUsername =  opponentUsername;
         System.out.println("Match started with " + opponentUsername);
+    }
+
+    public void updateTimeFormat(String newFormat){
+        Data d = new Data(CommandTypes.update_time_format);
+        d.content = newFormat;
+        sendData(d);
     }
 
 

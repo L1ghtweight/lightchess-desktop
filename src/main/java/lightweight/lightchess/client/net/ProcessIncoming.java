@@ -82,6 +82,8 @@ public class ProcessIncoming implements Runnable{
                 }
             } catch (IOException e) {
                 e.printStackTrace();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
             }
         });
     }
@@ -98,7 +100,7 @@ public class ProcessIncoming implements Runnable{
         });
     }
 
-    public void handleUsersList(Data din){
+    public void handleUsersList(Data din)  {
         String[] userList = din.content.split("\n",-1);
         ArrayList<Pair<String, String>> usersList = new ArrayList<>();
         for(String str: userList){
@@ -112,6 +114,14 @@ public class ProcessIncoming implements Runnable{
 
         client.usersList = usersList;
         client.usersListFetched = true;
+        if(client.main.currentState.equals("casualplayers"))
+            Platform.runLater(()->{
+                try {
+                    client.main.showCasualPlayerList();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
     }
 
     public void handleUserInfo(Data din){

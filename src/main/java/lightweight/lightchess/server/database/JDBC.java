@@ -38,6 +38,17 @@ public class JDBC {
         return String.format("UPDATE USERS SET %s=%s+1 WHERE username='%s'", column, column, username);
     }
 
+    public boolean updateTimeFormat(String username, String time_format){
+        try {
+            Statement st = con.createStatement();
+            st.executeUpdate(String.format("UPDATE USERS SET time_format='%s' WHERE username='%s'", time_format, username));
+            return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
     public void updateFromMatchResult(String username, int won){
         try {
             Statement st = con.createStatement();
@@ -201,7 +212,7 @@ CREATE TABLE USERS(
     matchs_won INT DEFAULT 0,
     matchs_lost INT DEFAULT 0,
     matchs_drawn INT DEFAULT 0,
-    tournaments_won INT DEFAULT 0
+    tournaments_won INT DEFAULT 0,
     time_format varchar(10) DEFAULT '5+0'
 );
 
