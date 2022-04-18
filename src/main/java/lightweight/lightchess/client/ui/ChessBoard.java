@@ -31,7 +31,7 @@ import static java.lang.Math.round;
 
 public class ChessBoard extends Group {
     public ClientNet clientnet;
-    private int length;
+    public int length;
     private Color color1, color2;
     public Board gameBoard;
     private Logic logic;

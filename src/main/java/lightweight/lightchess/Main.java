@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
@@ -51,20 +52,12 @@ public class Main extends Application {
             }
         }).start();
 
-        primaryStage.centerOnScreen();
         this.primaryStage.setTitle("LightChess");
 
-
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("login.fxml"));
-        Scene scene = new Scene(loader.load(), 500, 800);
-
-        Login controller = loader.getController();
-        controller.setMain(this);
-        controller.setClientNet(clientNet);
-
-        this.primaryStage.setScene(scene);
-        this.primaryStage.show();
-        currentState = "login";
+        primaryStage.centerOnScreen();
+        showLogin();
+        //showChessBoard();
+        primaryStage.show();
     }
 
     public void showSignUp() throws IOException {
@@ -111,17 +104,16 @@ public class Main extends Application {
     }
 
     public void showChessBoard() throws IOException {
-        HBox rootH = new HBox();
-
-        Group G = new Group();
-        G.getChildren().add(clientNet.chessBoard);
-        clientNet.chessBoard.setLayoutX(150);
-        clientNet.chessBoard.setLayoutY(50);
-
-        Scene scene = new Scene(G, 800, 600);
-
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+        rootLayout = loader.load();
+        Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
-        primaryStage.show();
+        Game controller = loader.getController();
+        controller.setMain(this);
+        controller.setClientNet(clientNet);
+        controller.anchorPane.getChildren().add(clientNet.chessBoard);
+        clientNet.chessBoard.setLayoutX((1000 - clientNet.chessBoard.length)/2);
+        clientNet.chessBoard.setLayoutY((800 - clientNet.chessBoard.length)/2);
     }
 
     public void showCasualPlayerList() throws IOException {
@@ -169,6 +161,7 @@ public class Main extends Application {
         Scene scene = new Scene(rootLayout);
         Stage newStage = new Stage();
         controller.setStage(newStage);
+        newStage.setAlwaysOnTop(true);
         newStage.setScene(scene);
         newStage.show();
     }

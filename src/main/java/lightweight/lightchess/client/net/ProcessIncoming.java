@@ -126,15 +126,6 @@ public class ProcessIncoming implements Runnable{
         }
 
         client.usersList = usersList;
-        client.isUsersListFetched = true;
-        if(client.main.currentState.equals("casualplayers"))
-            Platform.runLater(()->{
-                try {
-                    client.main.showCasualPlayerList();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            });
     }
 
     public void handleUserInfo(Data din){
