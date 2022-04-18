@@ -55,8 +55,8 @@ public class Main extends Application {
         this.primaryStage.setTitle("LightChess");
 
         primaryStage.centerOnScreen();
-        showLogin();
-        //showChessBoard();
+        //showLogin();
+        showChessBoard();
         primaryStage.show();
     }
 
@@ -104,7 +104,7 @@ public class Main extends Application {
     }
 
     public void showChessBoard() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+    /*    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
         rootLayout = loader.load();
         Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
@@ -114,6 +114,12 @@ public class Main extends Application {
         controller.anchorPane.getChildren().add(clientNet.chessBoard);
         clientNet.chessBoard.setLayoutX((1000 - clientNet.chessBoard.length)/2);
         clientNet.chessBoard.setLayoutY((800 - clientNet.chessBoard.length)/2);
+    */
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("ChessClock.fxml"));
+        rootLayout = loader.load();
+        Scene scene = new Scene(rootLayout);
+        primaryStage.setScene(scene);
+        ChessClock controller = loader.getController();
     }
 
     public void showCasualPlayerList() throws IOException {
