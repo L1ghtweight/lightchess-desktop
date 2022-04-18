@@ -145,7 +145,8 @@ public class Main extends Application {
     }
 
     public void showTournamentsList() throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("TournamentsList.fxml"));
+        gameRequest("Yeet");
+/*        FXMLLoader loader = new FXMLLoader(getClass().getResource("TournamentsList.fxml"));
         rootLayout = loader.load();
         Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
@@ -153,17 +154,21 @@ public class Main extends Application {
         controller.init();
         controller.setMain(this);
         controller.setClientNet(clientNet);
-/*        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+*//*        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
-        primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);*/
+        primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);*//*
         primaryStage.show();
         currentState = "tournaments";
-    }
+    */}
 
-    public void gameRequest(String opponent) {
-        Dialog<String> dialog = new Dialog<String>();
-        dialog.setTitle("User " + opponent + " has invited you to a " + clientNet.userInfo.get("time_format") + " game");
-
+    public void gameRequest(String opponent) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialog_box.fxml"));
+        System.out.println(loader);
+        rootLayout = loader.load();
+        Scene scene = new Scene(rootLayout);
+        Stage newStage = new Stage();
+        newStage.setScene(scene);
+        newStage.show();
     }
 
     public void loginResponse(boolean ok) throws IOException, InterruptedException {

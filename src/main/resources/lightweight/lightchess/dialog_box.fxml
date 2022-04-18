@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.AnchorPane?>
+
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller = "lightweight.lightchess.client.ui.DialogBox">
+   <center>
+       <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="183.0" prefWidth="321.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
+           <children>
+               <Button fx:id="yesBtn" alignment="CENTER" layoutX="102.0" layoutY="118.0" mnemonicParsing="false" onAction="#yesBtnClicked" text="Yes"/>
+               <Button fx:id="noBtn" alignment="CENTER" layoutX="176.0" layoutY="118.0" mnemonicParsing="false" onAction="#noBtnClicked" text="No" />
+               <Label layoutX="137.0" layoutY="73.0" text="Accept?" />
+               <Label fx:id="prompt" alignment="CENTER" layoutX="4.0" layoutY="39.0" prefHeight="21.0" prefWidth="314.0" textAlignment="CENTER" />
+           </children>
+       </AnchorPane>
+   </center>
+</BorderPane>
