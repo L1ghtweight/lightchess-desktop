@@ -1,5 +1,7 @@
 package lightweight.lightchess.client.ui;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -54,7 +56,19 @@ public class CasualPlayerList implements Initializable {
         for(int i=0;i < clientNet.usersList.size(); i++) {
             Pair<String, String> userInfo = clientNet.usersList.get(i);
 
+            if(userInfo.getKey().equals(clientNet.username)) {
+                continue;
+            }
+
+
             Button playerButton = new Button(userInfo.getKey());
+
+            playerButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override public void handle(ActionEvent e) {
+                    clientNet.sendPlayRequest(userInfo.getKey());
+                }
+            });
+
             playerButton.setPrefWidth(510/2);
             activePlayers.add(playerButton, 0, i, 1, 1);
             Label timeFormat = new Label(userInfo.getValue());

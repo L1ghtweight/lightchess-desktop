@@ -32,7 +32,13 @@ public class ProcessIncoming implements Runnable{
     public void handlePlayRequest(Data din){
         System.out.println("Do you want to play with "+ din.sender + " ? if yes type accept:"+ din.sender);
         client.opponentUsername = din.sender;
-
+        Platform.runLater(()->{
+            try {
+                client.main.gameRequest(din.sender);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
         if(client.DEBUG_MODE){
             client.sendPlayRequestAccepted();
         }
@@ -49,6 +55,13 @@ public class ProcessIncoming implements Runnable{
 
     public void handlePlayRequestAccepted(Data din){
         client.startMatch(din.sender);
+        Platform.runLater(()->{
+            try {
+                client.main.showChessBoard();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     public void handleSetColor(Data data){

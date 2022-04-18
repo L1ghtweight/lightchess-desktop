@@ -8,6 +8,7 @@ import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Dialog;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -110,21 +111,17 @@ public class Main extends Application {
     }
 
     public void showChessBoard() throws IOException {
-        Board gameBoard = new Board();
-        Logic logic = new Logic();
-        ChessBoard newC = new ChessBoard(200, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard, logic);
-        newC.setLayoutX(750);
-        newC.setLayoutY(750);
+        HBox rootH = new HBox();
 
         Group G = new Group();
-        G.getChildren().add(newC);
         G.getChildren().add(clientNet.chessBoard);
+        clientNet.chessBoard.setLayoutX(150);
+        clientNet.chessBoard.setLayoutY(50);
 
-        Scene scene = new Scene(G, 1000, 1000);
+        Scene scene = new Scene(G, 800, 600);
+
         primaryStage.setScene(scene);
-        primaryStage.centerOnScreen();
         primaryStage.show();
-        currentState = "game";
     }
 
     public void showCasualPlayerList() throws IOException {
@@ -145,8 +142,7 @@ public class Main extends Application {
     }
 
     public void showTournamentsList() throws IOException {
-        gameRequest("Yeet");
-/*        FXMLLoader loader = new FXMLLoader(getClass().getResource("TournamentsList.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("TournamentsList.fxml"));
         rootLayout = loader.load();
         Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
@@ -154,19 +150,25 @@ public class Main extends Application {
         controller.init();
         controller.setMain(this);
         controller.setClientNet(clientNet);
-*//*        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
+/*        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
         primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);*//*
         primaryStage.show();
         currentState = "tournaments";
-    */}
+    */
+    }
 
     public void gameRequest(String opponent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("dialog_box.fxml"));
         System.out.println(loader);
         rootLayout = loader.load();
+        DialogBox controller = loader.getController();
+        controller.setMain(this);
+        controller.setClientNet(clientNet);
+        controller.init(opponent, clientNet.userInfo.get("time_format"));
         Scene scene = new Scene(rootLayout);
         Stage newStage = new Stage();
+        controller.setStage(newStage);
         newStage.setScene(scene);
         newStage.show();
     }

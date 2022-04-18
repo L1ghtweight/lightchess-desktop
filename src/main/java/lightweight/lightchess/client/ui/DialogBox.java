@@ -4,8 +4,19 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import lightweight.lightchess.Main;
+import lightweight.lightchess.client.net.ClientNet;
+import org.mariadb.jdbc.client.Client;
+
+import java.io.IOException;
 
 public class DialogBox {
+
+    Stage newStage;
+    Main m;
+    ClientNet clientNet;
+
     @FXML
     private Button noBtn;
 
@@ -15,14 +26,36 @@ public class DialogBox {
     @FXML
     private Button yesBtn;
 
+    public void setMain(Main m) {
+        this.m = m;
+    }
+
+    public void setClientNet(ClientNet clientNet) {
+        this.clientNet = clientNet;
+    }
+
     @FXML
     public void yesBtnClicked(ActionEvent e) {
-        prompt.setText(username + " have invited you to play.");
+        clientNet.sendPlayRequestAccepted();
+        try {
+            newStage.close();
+            m.showChessBoard();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
     public void noBtnClicked(ActionEvent e) {
-        prompt.setText("haha "+" have invited you to play.");
+        newStage.close();
+    }
+
+    public void setStage(Stage newStage) {
+        this.newStage = newStage;
+    }
+
+    public void init(String opponent, String gameFormat) {
+        prompt.setText(opponent + " has challenged you to a " + gameFormat + " game");
     }
 
 }
