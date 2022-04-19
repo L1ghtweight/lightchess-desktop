@@ -53,7 +53,6 @@ public class TournamentsList implements Initializable {
         button.setOnAction(new EventHandler<ActionEvent>() {
             @Override public void handle(ActionEvent e) {
                 clientNet.sendRegisterRequest();
-                clientNet.sendReadyToPlayConfirmation();
                 try {
                     m.showChessBoard();
                 } catch (IOException ex) {

@@ -84,6 +84,14 @@ public class ProcessIncoming implements Runnable{
     public void handleStartTournamentMatch(Data dObj){
         System.out.println("Starting tournament match with " + dObj.content);
         client.startMatch(dObj.content);
+            Platform.runLater(()->{
+                try {
+                    client.main.changeTournamentGameStatus("In Game");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
+
         client.isInTournamentMatch = true;
         client.match_time_format = client.tournament_info.get("time_format");
     }
@@ -160,6 +168,12 @@ public class ProcessIncoming implements Runnable{
         client.isTournamentInfoFetched = true;
     }
 
+    public void handleOpponentsResignation(){
+        Platform.runLater(()->{
+            client.chessBoard.gameWon();
+        });
+    }
+
     @Override
     public void run() {
         Data data;
@@ -196,6 +210,10 @@ public class ProcessIncoming implements Runnable{
                     }
                     case play_black, play_white -> {
                         handleSetColor((Data)data.clone());
+                    }
+
+                    case resign_from_match -> {
+                        handleOpponentsResignation();
                     }
 
                     case update_gameboard -> {

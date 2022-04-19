@@ -2,8 +2,8 @@ package lightweight.lightchess.client.ui;
 
 import java.util.concurrent.TimeUnit;
 
-public class Clock implements Runnable{
-    boolean tick = true;
+public class Clock{
+    boolean isMyMove = true;
     int totalMinutes, increment;
     int timeLeft = -1;
     public boolean isGameRunning = true;
@@ -17,18 +17,18 @@ public class Clock implements Runnable{
     }
 
     public void resume() {
-        tick = true;
+        isMyMove = true;
     }
     public void pause() {
-        tick = false;
+        isMyMove = false;
         timeLeft += increment;
     }
     public void tick() {
-        if(tick)
+        if(isMyMove)
             timeLeft--;
     }
 
-    @Override
+/*    @Override
     public void run() {
         while(isGameRunning){
             try {
@@ -42,7 +42,7 @@ public class Clock implements Runnable{
 
             System.out.println(getTimeString());
         }
-    }
+    }*/
 
     public String getTimeString() {
         int totalSecondsLeft = timeLeft;
@@ -57,10 +57,4 @@ public class Clock implements Runnable{
 
         return minutes + ":" + seconds;
     }
-
-    public static void main(String[] args) {
-        Thread clockThread = new Thread(new Clock("1+0"));
-        clockThread.start();
-    }
-
 }

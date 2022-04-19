@@ -50,6 +50,7 @@
                   <Font name="Open Sauce Sans Medium" size="20.0" />
                </font>
             </Button>
+            <Button layoutX="709.0" layoutY="547.0" mnemonicParsing="false" onAction="#logout" text="Log out" />
          </children>
       </AnchorPane>
    </center>

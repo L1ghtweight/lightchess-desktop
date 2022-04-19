@@ -1,6 +1,7 @@
 package lightweight.lightchess.client.ui;
 
 import com.github.bhlangonijr.chesslib.Board;
+import com.github.bhlangonijr.chesslib.Side;
 import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
@@ -10,6 +11,7 @@ import javafx.scene.shape.Rectangle;
 import lightweight.lightchess.client.net.ClientNet;
 import lightweight.lightchess.logic.Logic;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,6 +32,7 @@ public class ChessBoard extends Group {
     HashMap<Character, Image> pieceMap = new HashMap<>();
     public boolean isBlack = false;
     public Clock playerClock, opponentClock;
+    public boolean inTournament = false;
 
     public ChessBoard(int length, Color color1, Color color2, Board gameBoard, Logic logic) {
         super();
@@ -58,6 +61,21 @@ public class ChessBoard extends Group {
 
         this.getChildren().add(Grid);
         updateBoard(gameBoard);
+    }
+
+    public void updateClocks() throws IOException {
+        if( (gameBoard.getSideToMove() == Side.BLACK && isBlack) || (gameBoard.getSideToMove() == Side.WHITE && !isBlack))
+        {
+            playerClock.isMyMove = true;
+            opponentClock.isMyMove = false;
+            playerClock.tick();
+        }
+        else
+        {
+            playerClock.isMyMove = false;
+            opponentClock.isMyMove = true;
+            opponentClock.tick();
+        }
     }
 
     public void setClocks(String timeString) {
@@ -133,6 +151,13 @@ public class ChessBoard extends Group {
 
     public void gameLost()
     {
+        if(inTournament) {
+            try {
+                clientnet.main.changeTournamentGameStatus("Not Ready");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         System.out.println("You Lose");
         clientnet.main.showDialog("You Lose");
         clientnet.endMatch("0");
@@ -140,6 +165,13 @@ public class ChessBoard extends Group {
 
     public void gameWon()
     {
+        if(inTournament) {
+            try {
+                clientnet.main.changeTournamentGameStatus("Not Ready");
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         System.out.println("You win");
         clientnet.main.showDialog("You Win");
         clientnet.endMatch("2");

@@ -107,7 +107,11 @@ public class ClientNet {
 
     public void startMatch(String opponentUsername){
         isInMatch = true;
-//        this.opponentUsername =  opponentUsername;
+        chessBoard.gameBoard = new Board();
+        Platform.runLater(()->{
+            chessBoard.updateBoard(chessBoard.gameBoard);
+        });
+        this.opponentUsername =  opponentUsername;
         System.out.println("Match started with " + opponentUsername + " with time_format="+match_time_format);
     }
 
@@ -164,6 +168,18 @@ public class ClientNet {
         d.content = username;
         d.content2 = password;
 
+        sendData(d);
+    }
+
+    public void logOutClient(){
+        Data d = new Data(CommandTypes.logout);
+        sendData(d);
+        isLoggedIn = false;
+    }
+
+    public void sendResignConfirmation(){
+        Data d = new Data(CommandTypes.resign_from_match);
+        d.receiver = opponentUsername;
         sendData(d);
     }
 

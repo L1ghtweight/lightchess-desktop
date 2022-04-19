@@ -23,10 +23,9 @@
                         <Image url="@lightchess_logo_grey.png" />
                     </image>
                 </ImageView>
-            <TextField fx:id="name" layoutX="183.0" layoutY="377.0" promptText="Name" />
-            <TextField fx:id="time_format" layoutX="354.0" layoutY="377.0" promptText="Time Format (eg. 5+0)" />
-            <TextField fx:id="starts_in" layoutX="525.0" layoutY="377.0" promptText="Starts In (minutes)" />
-            <TextField fx:id="duration" layoutX="696.0" layoutY="377.0" promptText="Duration (minutes)" />
+            <TextField fx:id="name" layoutX="268.0" layoutY="377.0" promptText="Name" />
+            <TextField fx:id="starts_in" layoutX="439.0" layoutY="377.0" promptText="Starts In (minutes)" />
+            <TextField fx:id="duration" layoutX="610.0" layoutY="377.0" promptText="Duration (minutes)" />
             <Button layoutX="464.0" layoutY="463.0" mnemonicParsing="false" onAction="#host" prefHeight="39.0" prefWidth="121.0" text="Host" />
             </children>
         </AnchorPane>

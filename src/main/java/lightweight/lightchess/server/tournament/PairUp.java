@@ -52,7 +52,6 @@ public class PairUp implements Runnable{
     @Override
     public void run() {
         while (!tournament.is_tournament_ended()){
-
             if(tournament.readyList.size()<2){
                 try {
                     Thread.sleep(sleep_time);
@@ -65,7 +64,6 @@ public class PairUp implements Runnable{
 
             String player1 = extractBestPlayer();
             String player2 = extractBestPlayer();
-
 
             startMatch(player1,player2);
 

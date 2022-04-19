@@ -1,7 +1,9 @@
 package lightweight.lightchess;
 
 import com.github.bhlangonijr.chesslib.Board;
+import com.github.bhlangonijr.chesslib.Side;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
@@ -22,6 +24,8 @@ public class Main extends Application {
     private BorderPane rootLayout;
     public ClientNet clientNet;
     public String currentState = "";
+    public ChessBoard chessBoard;
+
 
     @Override
     public void start(Stage primaryStage) throws IOException {
@@ -36,7 +40,7 @@ public class Main extends Application {
         final Parameters params = getParameters();
         final List<String> args = params.getRaw();
 
-        ChessBoard chessBoard = new ChessBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard, logic);
+        chessBoard = new ChessBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard, logic);
         clientNet = new ClientNet(chessBoard);
         clientNet.main = this;
         chessBoard.clientnet = clientNet;
@@ -101,6 +105,36 @@ public class Main extends Application {
         currentState = "dashboard";
     }
 
+    public void changeTournamentGameStatus(String msg) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+        clientNet.fetchTournamentInfo();
+
+        rootLayout = loader.load();
+        Scene scene = new Scene(rootLayout);
+        primaryStage.setScene(scene);
+        Game controller = loader.getController();
+        controller.setMain(this);
+        controller.setClientNet(clientNet);
+        controller.anchorPane.getChildren().add(clientNet.chessBoard);
+        controller.anchorPane.getChildren().add(new AnchorPane());
+        clientNet.chessBoard.setLayoutX((1000 - clientNet.chessBoard.length) / 2);
+        clientNet.chessBoard.setLayoutY((800 - clientNet.chessBoard.length) / 2);
+
+
+        controller.status.setText(msg);
+
+        FXMLLoader clockLoader = new FXMLLoader(getClass().getResource("ChessClock.fxml"));
+
+        AnchorPane clockAnchorPane = clockLoader.load();
+        ChessClock clockController = clockLoader.getController();
+        clientNet.chessBoard.setClocks(clientNet.match_time_format);
+
+        controller.anchorPane.getChildren().add(clockAnchorPane);
+        clockAnchorPane.setLayoutX(750);
+        clockAnchorPane.setLayoutY(50 + clientNet.chessBoard.length / 2);
+        clockController.init(clientNet.username, chessBoard.playerClock.getTimeString(), clientNet.opponentUsername, chessBoard.opponentClock.getTimeString());
+    }
+
     public void showChessBoard() throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
         clientNet.fetchTournamentInfo();
@@ -113,23 +147,32 @@ public class Main extends Application {
         controller.setClientNet(clientNet);
         controller.anchorPane.getChildren().add(clientNet.chessBoard);
         controller.anchorPane.getChildren().add(new AnchorPane());
-        clientNet.chessBoard.setLayoutX((1000 - clientNet.chessBoard.length)/2);
-        clientNet.chessBoard.setLayoutY((800 - clientNet.chessBoard.length)/2);
+        clientNet.chessBoard.setLayoutX((1000 - clientNet.chessBoard.length) / 2);
+        clientNet.chessBoard.setLayoutY((800 - clientNet.chessBoard.length) / 2);
+
+        if(chessBoard.inTournament == false) {
+            System.out.println("Not in tournament match");
+            controller.hideStatus();
+        }
+
+        else {
+            controller.status.setText("Not Ready");
+        }
 
         FXMLLoader clockLoader = new FXMLLoader(getClass().getResource("ChessClock.fxml"));
 
         AnchorPane clockAnchorPane = clockLoader.load();
         ChessClock clockController = clockLoader.getController();
-
         clientNet.chessBoard.setClocks(clientNet.match_time_format);
-        clockController.init(clientNet.username, clientNet.chessBoard.playerClock.getTimeString(), clientNet.opponentUsername, clientNet.chessBoard.opponentClock.getTimeString());
 
         controller.anchorPane.getChildren().add(clockAnchorPane);
         clockAnchorPane.setLayoutX(750);
-        clockAnchorPane.setLayoutY(50 + clientNet.chessBoard.length/2);
+        clockAnchorPane.setLayoutY(50 + clientNet.chessBoard.length / 2);
+        clockController.init(clientNet.username, chessBoard.playerClock.getTimeString(), clientNet.opponentUsername, chessBoard.opponentClock.getTimeString());
     }
 
     public void showCasualPlayerList() throws IOException {
+        chessBoard.inTournament = false;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("CasualPlayerList.fxml"));
         rootLayout = loader.load();
         Scene scene = new Scene(rootLayout);
@@ -147,6 +190,7 @@ public class Main extends Application {
     }
 
     public void showTournamentsList() throws IOException {
+        chessBoard.inTournament = true;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("TournamentsList.fxml"));
         rootLayout = loader.load();
         Scene scene = new Scene(rootLayout);

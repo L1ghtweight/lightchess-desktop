@@ -298,7 +298,7 @@ public class ReaderWriterServer implements Runnable {
                     sendUpdatedUserInfo();
                 }
 
-                case msg, request_to_play,move, update_gameboard ->{
+                case msg, request_to_play,move, update_gameboard,resign_from_match ->{
                     sendToClient(dataObj);
                 }
 

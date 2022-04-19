@@ -40,7 +40,6 @@ public class userStatistics {
     }
 
     public void init(String _username, String _gamesLost, String _elo, String _gamesDrawn, String _gamesWon, String _tournamentsWon) {
-        System.out.println("Games won: " + _gamesWon);
         username.setText(_username);
         gamesWon.setText(_gamesWon);
         gamesDrawn.setText(_gamesDrawn);

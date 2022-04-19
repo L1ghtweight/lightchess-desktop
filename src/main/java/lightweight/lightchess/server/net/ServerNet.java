@@ -13,44 +13,70 @@ import lightweight.lightchess.server.database.JDBC;
 import lightweight.lightchess.server.tournament.PairUp;
 import lightweight.lightchess.server.tournament.Tournament;
 
+import javax.sql.StatementEvent;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 
-public class ServerNet {
+public class ServerNet implements Runnable{
+    HashMap<String, Information> clientList = new HashMap<>();
+    HashMap<String, Information> loggedInClientList = new HashMap<>();
+    ServerSocket serverSocket;
+    JDBC jdbc = new JDBC();
 
-    public static void main(String[] args) throws IOException {
-        ServerSocket serverSocket = new ServerSocket(12345);
+    ReaderWriterServer tournament_readerwriterserver =  new ReaderWriterServer("1",null,clientList,loggedInClientList, jdbc,null);
+
+    Tournament tournament = new Tournament(loggedInClientList,tournament_readerwriterserver);;
+
+    public void initSocket() throws IOException {
+        serverSocket = new ServerSocket(12345);
         System.out.println("Server Started...");
         System.out.println(InetAddress.getLocalHost());
-        HashMap<String, Information> clientList = new HashMap<>();
-        HashMap<String, Information> loggedInClientList = new HashMap<>();
 
-        JDBC jdbc = new JDBC();
 
-        ReaderWriterServer tournament_readerwriterserver = new ReaderWriterServer("1",null,clientList,loggedInClientList, jdbc,null);
-        Tournament tournament = new Tournament(loggedInClientList,tournament_readerwriterserver);
 
 // Init a default tournament
         tournament.name = "NICE";
         tournament.startTime = LocalDateTime.now().plusMinutes(0);
         tournament.endTime = tournament.startTime.plusMinutes(10);
 
-        System.out.println(tournament.get_tournament_details());
+        tournament.startPairing();
 
-        new Thread(new ProcessCommands(tournament)).start();
+        System.out.println(tournament.name + " starts in " + Duration.between(LocalDateTime.now(), tournament.startTime).toMinutes() + "minutes and continues for " + Duration.between(tournament.startTime, tournament.endTime).toMinutes() + " minutes");
+//        System.out.println(tournament.get_tournament_details());
+//        new Thread(new ProcessCommands(tournament)).start();
+    }
 
 
+    @Override
+    public void run() {
         while (true) {
-            Socket socket = serverSocket.accept();
-            NetworkConnection nc = new NetworkConnection(socket);
+            Socket socket = null;
+            try {
+                socket = serverSocket.accept();
+                NetworkConnection nc = new NetworkConnection(socket);
+                new Thread(new CreateConnection(clientList,loggedInClientList, nc, jdbc, tournament)).start();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
-            new Thread(new CreateConnection(clientList,loggedInClientList, nc, jdbc, tournament)).start();
 
         }
-
     }
+
+    public void startServer() throws IOException {
+        Thread serverThread = new Thread(this);
+        initSocket();
+        serverThread.start();
+    }
+
+    public static void main(String[] args) throws IOException {
+        ServerNet serverNet = new ServerNet();
+        serverNet.startServer();
+    }
+
 }

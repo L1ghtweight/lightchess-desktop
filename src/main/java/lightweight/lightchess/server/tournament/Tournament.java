@@ -34,6 +34,12 @@ public class Tournament {
         pairUpThread.start();
     }
 
+    public void startPairing(){
+        if(pairUpThread.isAlive()) return;
+        pairUpThread = new Thread(new PairUp(this));
+        pairUpThread.start();
+    }
+
     public void sendMsg(String username, String msg){
         Data d = new Data();
         d.sender = "Server";

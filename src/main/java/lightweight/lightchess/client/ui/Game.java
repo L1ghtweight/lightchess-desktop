@@ -3,6 +3,8 @@ package lightweight.lightchess.client.ui;
 import com.github.bhlangonijr.chesslib.Board;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import lightweight.lightchess.Main;
@@ -19,6 +21,15 @@ public class Game {
     ClientNet clientNet;
     Main m;
 
+    @FXML
+    public Button readyBtn;
+
+    @FXML
+    public Label status;
+
+    @FXML
+    private Label statusName;
+
     public void setMain(Main m) {
         this.m = m;
     }
@@ -34,6 +45,21 @@ public class Game {
         m.showDashboard();
     }
     public void resign() {
+        clientNet.sendResignConfirmation();
+        clientNet.chessBoard.gameLost();
+    }
 
+    public void hideStatus()
+    {
+        statusName.setVisible(false);
+        status.setVisible(false);
+        readyBtn.setVisible(false);
+    }
+
+    public void ready()
+    {
+        clientNet.chessBoard.gameBoard = new Board();
+        clientNet.sendReadyToPlayConfirmation();
+        status.setText("Waiting to be paired up");
     }
 }

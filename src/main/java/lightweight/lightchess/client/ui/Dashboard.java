@@ -24,4 +24,9 @@ public class Dashboard {
     public void showUserStatistics() throws IOException {
         m.showUserStatistics();
     }
+
+    public void logout() throws IOException {
+        clientNet.logOutClient();
+        m.showLogin();
+    }
 }
