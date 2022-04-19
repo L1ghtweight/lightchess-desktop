@@ -38,7 +38,6 @@ public class DialogBox {
     public void yesBtnClicked(ActionEvent e) throws IOException {
         clientNet.sendPlayRequestAccepted();
         newStage.close();
-        m.clientNet.chessBoard.setClocks(clientNet.userInfo.get("time_format"));
         m.startGame();
     }
 

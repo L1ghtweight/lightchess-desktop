@@ -34,6 +34,8 @@ public class ClientNet {
 
     public boolean isInTournamentMatch = false;
 
+    public String match_time_format="5+0";
+
     Socket socket;
     NetworkConnection nc;
     Scanner scan = new Scanner(System.in);
@@ -71,6 +73,15 @@ public class ClientNet {
         }
     }
 
+    public String get_time_format(String username){
+        for(Pair<String, String>P : usersList){
+            if(P.getKey().equals(username)){
+                return P.getValue();
+            }
+        }
+        return match_time_format;
+    }
+
     public ClientNet(ChessBoard ub){
         hasUI = true;
         chessBoard = ub;
@@ -96,8 +107,8 @@ public class ClientNet {
 
     public void startMatch(String opponentUsername){
         isInMatch = true;
-        this.opponentUsername =  opponentUsername;
-        System.out.println("Match started with " + opponentUsername);
+//        this.opponentUsername =  opponentUsername;
+        System.out.println("Match started with " + opponentUsername + " with time_format="+match_time_format);
     }
 
     public void updateTimeFormat(String newFormat){
@@ -174,17 +185,22 @@ public class ClientNet {
         d.sender = username;
         d.receiver = opponentUsername;
 
+        this.opponentUsername = opponentUsername;
+
+        match_time_format = get_time_format(opponentUsername);
+
         QOut.add(d);
     }
 
 
 
     public void sendPlayRequestAccepted(){
-        System.out.println("Accepting match with + "+ opponentUsername);
         Data data = new Data();
         data.cmd = CommandTypes.playrequest_accepted;
         data.sender = username;
         data.receiver = opponentUsername;
+        match_time_format = get_time_format(username);
+
         startMatch(opponentUsername);
 
         QOut.add(data);

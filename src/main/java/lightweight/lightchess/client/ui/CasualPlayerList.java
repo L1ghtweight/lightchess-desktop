@@ -62,10 +62,7 @@ public class CasualPlayerList implements Initializable {
 
             playerButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
-                    System.out.println("Sending play request");
                     clientNet.sendPlayRequest(opponentUsername);
-                    m.clientNet.chessBoard.setClocks(timeString);
-                    m.clientNet.chessBoard.opponentUsername = opponentUsername;
                 }
             });
 

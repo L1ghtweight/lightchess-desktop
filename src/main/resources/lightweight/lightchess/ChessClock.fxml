@@ -20,12 +20,7 @@
          <Font size="12.0" />
      </font>
  </Label>
- <Label fx:id="playerUsername" alignment="CENTER" layoutX="83.0" layoutY="7.0" text="NOTsslabib" textFill="WHITE">
-     <font>
-         <Font name="Open Sauce Sans Light" size="15.0" />
-     </font>
- </Label>
- <Label fx:id="opponentName" alignment="CENTER" layoutX="76.0" layoutY="220.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" text="ssshanto" textFill="WHITE">
+ <Label fx:id="playerUsername" alignment="CENTER" layoutX="76.0" layoutY="220.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" text="player" textFill="WHITE">
      <font>
          <Font name="Open Sauce Sans Light" size="15.0" />
      </font>
@@ -36,4 +31,9 @@
             </GridPane>
      </content>
  </ScrollPane>
+   <Label fx:id="opponentName" alignment="CENTER" layoutX="75.0" layoutY="1.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" text="opponent" textAlignment="CENTER" textFill="WHITE">
+      <font>
+         <Font name="Open Sauce Sans Light" size="15.0" />
+      </font>
+   </Label>
 </AnchorPane>

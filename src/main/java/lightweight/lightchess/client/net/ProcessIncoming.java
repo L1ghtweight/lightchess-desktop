@@ -54,7 +54,9 @@ public class ProcessIncoming implements Runnable{
     }
 
     public void handlePlayRequestAccepted(Data din){
-        client.startMatch(din.sender);
+        String opponent = din.sender;
+        client.startMatch(opponent);
+
         Platform.runLater(()->{
             try {
                 client.main.startGame();
@@ -83,6 +85,7 @@ public class ProcessIncoming implements Runnable{
         System.out.println("Starting tournament match with " + dObj.content);
         client.startMatch(dObj.content);
         client.isInTournamentMatch = true;
+        client.match_time_format = client.tournament_info.get("time_format");
     }
 
     public void handleLoginResponse(Data din) throws IOException {

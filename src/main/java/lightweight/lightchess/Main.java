@@ -38,7 +38,6 @@ public class Main extends Application {
 
         ChessBoard chessBoard = new ChessBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard, logic);
         clientNet = new ClientNet(chessBoard);
-        chessBoard.playerUsername = clientNet.username;
         clientNet.main = this;
         chessBoard.clientnet = clientNet;
 
@@ -122,7 +121,7 @@ public class Main extends Application {
         AnchorPane clockAnchorPane = clockLoader.load();
         ChessClock clockController = clockLoader.getController();
 
-        clockController.init(clientNet.chessBoard.playerUsername, clientNet.chessBoard.playerClock.getTimeString(), clientNet.chessBoard.opponentUsername, clientNet.chessBoard.opponentClock.getTimeString());
+        clockController.init(clientNet.username, clientNet.match_time_format, clientNet.opponentUsername, clientNet.match_time_format);
         controller.anchorPane.getChildren().add(clockAnchorPane);
         clockAnchorPane.setLayoutX(750);
         clockAnchorPane.setLayoutY(50 + clientNet.chessBoard.length/2);
@@ -175,8 +174,6 @@ public class Main extends Application {
         newStage.setAlwaysOnTop(true);
         newStage.setScene(scene);
         newStage.show();
-        clientNet.chessBoard.opponentUsername = opponent;
-        System.out.println("Opponent username set: " + clientNet.chessBoard.opponentUsername);
     }
 
     public void loginResponse(boolean ok) throws IOException, InterruptedException {

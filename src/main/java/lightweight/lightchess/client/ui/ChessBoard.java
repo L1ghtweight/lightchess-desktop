@@ -30,7 +30,6 @@ public class ChessBoard extends Group {
     HashMap<Character, Image> pieceMap = new HashMap<>();
     public boolean isBlack = false;
     public Clock playerClock, opponentClock;
-    public String playerUsername, opponentUsername;
 
     public ChessBoard(int length, Color color1, Color color2, Board gameBoard, Logic logic) {
         super();
