@@ -44,6 +44,7 @@ public class ClientNet {
     public HashMap<String, String> tournament_info;
     public HashMap<String, String> requested_userInfo;
     public ArrayList<Pair<String, String>> usersList; // username-time_format
+    public String serverIp = "localhost";
 
     public HashMap<String, String> parseUserInfo(String inf){
         if(inf==null || inf.length()<1) return  null;
@@ -104,6 +105,11 @@ public class ClientNet {
         Data d = new Data(CommandTypes.get_user_info);
         d.content = username;
         d.receiver = "Server";
+        sendData(d);
+    }
+
+    public void fetchUpdatedUserInfo(){
+        Data d = new Data(CommandTypes.update_user_info);
         sendData(d);
     }
 
@@ -207,7 +213,7 @@ public class ClientNet {
     public void start(List<String> args) {
         Socket socket = null;
         try {
-            socket = new Socket("localhost", 12345);
+            socket = new Socket(serverIp, 12345);
             System.out.println("Client Started--- ");
             nc = new NetworkConnection(socket);
         } catch (IOException e) {

@@ -208,7 +208,7 @@ public class JDBC {
 CREATE TABLE USERS(
     username varchar(20) PRIMARY KEY,
     password char(64),
-    elo INT DEFAULT 0,
+    elo INT DEFAULT 1200,
     matchs_won INT DEFAULT 0,
     matchs_lost INT DEFAULT 0,
     matchs_drawn INT DEFAULT 0,

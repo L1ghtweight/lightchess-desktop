@@ -2,16 +2,11 @@ package lightweight.lightchess;
 
 import com.github.bhlangonijr.chesslib.Board;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
-import javafx.scene.control.Dialog;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
@@ -20,7 +15,6 @@ import lightweight.lightchess.client.ui.*;
 import lightweight.lightchess.logic.Logic;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Main extends Application {
@@ -90,6 +84,7 @@ public class Main extends Application {
     }
 
     public void showDashboard() throws IOException, InterruptedException {
+        clientNet.fetchUpdatedUserInfo();
         clientNet.fetchUsersList();
         clientNet.fetchTournamentInfo();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("dashboard.fxml"));

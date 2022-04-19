@@ -101,6 +101,10 @@ public class ProcessIncoming implements Runnable{
         });
     }
 
+    public void handleUpdatedUserInfo(Data din){
+        client.userInfo = client.parseUserInfo(din.content);
+    }
+
     public void handleSignUpResponse(Data din) throws IOException {
         String isOk = din.content;
         boolean ok = isOk.equals("success");
@@ -172,6 +176,10 @@ public class ProcessIncoming implements Runnable{
                     case msg -> {
                         handleMessage((Data) data.clone());
                         break;
+                    }
+
+                    case update_user_info -> {
+                        handleUpdatedUserInfo((Data) data.clone());
                     }
 
                     case request_to_play -> {

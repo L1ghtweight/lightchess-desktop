@@ -82,6 +82,12 @@ public class ReaderWriterServer implements Runnable {
         inf.netConnection.write(data);
     }
 
+    public void sendUpdatedUserInfo(){
+        Data d = new Data(CommandTypes.update_user_info);
+        d.content = jdbc.getUserDetails(username);
+        responseFromServer(d);
+    }
+
     public void responseFromServer(Data data){
         data.sender = "Server";
         nc.write(data);
@@ -286,6 +292,10 @@ public class ReaderWriterServer implements Runnable {
 
                 case get_ip -> {
                     sendIp();
+                }
+
+                case update_user_info -> {
+                    sendUpdatedUserInfo();
                 }
 
                 case msg, request_to_play,move, update_gameboard ->{
