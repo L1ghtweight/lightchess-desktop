@@ -5,6 +5,7 @@ import javafx.util.Pair;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 
+import javax.naming.ldap.PagedResultsControl;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -133,8 +134,8 @@ public class ProcessIncoming implements Runnable{
         String[] userList = din.content.split("\n",-1);
         ArrayList<Pair<String, String>> usersList = new ArrayList<>();
         for(String str: userList){
-            if(str.length()<2) continue;
             String[] slices = str.split(":",2);
+            if(slices.length < 2) continue;
             String username = slices[0];
             String time_format = slices[1];
 
@@ -172,6 +173,20 @@ public class ProcessIncoming implements Runnable{
         Platform.runLater(()->{
             client.chessBoard.gameWon();
         });
+    }
+
+    public void handleScoreBoard(Data din){
+        String[] score_list = din.content.split("\n",-1);
+
+        ArrayList<Pair<String, String>> score_board = new ArrayList<>();
+
+        for(String str : score_list){
+            String[] slices = str.split(":",2);
+            if(slices.length < 2 ) continue;
+            score_board.add(new Pair<>(slices[0], slices[1]));
+        }
+
+        client.score_board = score_board;
     }
 
     @Override
@@ -244,7 +259,7 @@ public class ProcessIncoming implements Runnable{
                     }
 
                     case score_board -> {
-                        System.out.println(data.content);
+                        handleScoreBoard((Data) data.clone());
                     }
 
                     default -> {

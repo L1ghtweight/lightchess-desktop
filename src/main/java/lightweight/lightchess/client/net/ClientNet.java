@@ -49,7 +49,7 @@ public class ClientNet {
     public HashMap<String, String> userInfo;
     public HashMap<String, String> tournament_info;
     public HashMap<String, String> requested_userInfo;
-    public ArrayList<Pair<String, String>> usersList; // username-time_format
+    public ArrayList<Pair<String, String>> usersList, score_board; // username-time_format
     public String serverIp = "localhost";
 
     public HashMap<String, String> parseUserInfo(String inf){
@@ -132,6 +132,19 @@ public class ClientNet {
         d.cmd = CommandTypes.users_list;
         d.receiver = "Server";
         sendData(d);
+    }
+
+    public void fetchScoreBoard(){
+        Data d = new Data();
+        d.cmd = CommandTypes.score_board;
+        d.receiver = "Server";
+        sendData(d);
+    }
+
+    public void printScoreBoard(){
+        for(Pair<String, String>P : score_board){
+            System.out.println(P.getKey() + ":" + P.getValue());
+        }
     }
 
     public void fetchUserInfo(String username){
