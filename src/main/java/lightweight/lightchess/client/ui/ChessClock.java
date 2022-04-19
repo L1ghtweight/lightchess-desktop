@@ -30,11 +30,13 @@ public class ChessClock {
     @FXML
     private Label playerUsername;
 
-    void init(String playerUsername, String playerTime, String opponentName, String opponentTime) {
-        this.opponentName.setText(opponentName);
-        this.opponentTime.setText(opponentTime);
+    public void init(String playerUsername, String playerTime, String opponentName, String opponentTime) {
+
         this.playerUsername.setText(playerUsername);
         this.playerTime.setText(playerTime);
+
+        this.opponentName.setText(opponentName);
+        this.opponentTime.setText(opponentTime);
     }
 
     void updateTime(String playerTime, String opponentTime) {

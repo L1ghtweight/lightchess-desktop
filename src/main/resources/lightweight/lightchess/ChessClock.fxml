@@ -1,49 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.GridPane?>
-<?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Rectangle?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.BorderPane?>
-<?import javafx.scene.layout.AnchorPane?>
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="507.0" prefWidth="502.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lightweight.lightchess.client.ui.ChessClock">
-    <center>
-        <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="507.0" prefWidth="502.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-        <VBox alignment="CENTER" prefHeight="507.0" prefWidth="502.0" spacing="20.0" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1">
-            <padding>
-                <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
-            </padding>
-            <Label fx:id="opponentName" alignment="TOP_CENTER" text="ssshanto">
-                <font>
-                    <Font size="18.0" />
-                </font>
-            </Label>
-            <Label fx:id="opponentTime" alignment="CENTER" prefHeight="37.0" prefWidth="211.0" text="10:11" textAlignment="CENTER">
-                <font>
-                    <Font size="32.0" />
-                </font>
-            </Label>
-            <ScrollPane fx:id="movesList" prefHeight="200.0" prefWidth="200.0">
-                <content>
-                    <GridPane fx:id="moves" prefHeight="66.0" prefWidth="240.0">
-                    </GridPane>
-                </content>
-            </ScrollPane>
-            <Label fx:id="playerTime" alignment="CENTER" prefHeight="37.0" prefWidth="211.0" text="10:11" textAlignment="CENTER">
-                <font>
-                    <Font size="32.0" />
-                </font>
-            </Label>
-            <Label fx:id="playerUsername" alignment="BOTTOM_CENTER" text="NOTsslabib">
-                <font>
-                    <Font size="18.0" />
-                </font>
-            </Label>
-        </VBox>
-        </AnchorPane>
-    </center>
-</BorderPane>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="250.0" prefWidth="250.0" style="-fx-background-color: transparent;" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lightweight.lightchess.client.ui.ChessClock">
+   <Rectangle arcHeight="5.0" arcWidth="5.0" height="55.0" layoutY="-4.0" opacity="0.8" stroke="BLACK" strokeType="INSIDE" width="250.0" />
+   <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b97f2" height="55.0" layoutY="199.0" opacity="0.8" stroke="BLACK" strokeType="INSIDE" width="250.0" />
+ <Label fx:id="opponentTime" alignment="CENTER" layoutX="20.0" layoutY="21.0" prefHeight="37.0" prefWidth="211.0" text="10:11" textAlignment="CENTER" textFill="WHITE">
+     <font>
+         <Font name="Open Sauce Sans SemiBold" size="12.0" />
+     </font>
+ </Label>
+ <Label fx:id="playerTime" alignment="CENTER" layoutX="20.0" layoutY="194.0" prefHeight="37.0" prefWidth="211.0" text="10:11" textAlignment="CENTER" textFill="WHITE">
+     <font>
+         <Font size="12.0" />
+     </font>
+ </Label>
+ <Label fx:id="playerUsername" alignment="CENTER" layoutX="83.0" layoutY="7.0" text="NOTsslabib" textFill="WHITE">
+     <font>
+         <Font name="Open Sauce Sans Light" size="15.0" />
+     </font>
+ </Label>
+ <Label fx:id="opponentName" alignment="CENTER" layoutX="76.0" layoutY="220.0" minHeight="-Infinity" minWidth="-Infinity" prefHeight="30.0" prefWidth="100.0" text="ssshanto" textFill="WHITE">
+     <font>
+         <Font name="Open Sauce Sans Light" size="15.0" />
+     </font>
+ </Label>
+ <ScrollPane fx:id="movesList" layoutY="52.0" prefHeight="146.0" prefWidth="250.0" style="-fx-background-color: ash;">
+     <content>
+         <GridPane fx:id="moves" prefHeight="143.0" prefWidth="249.0" style="-fx-background-color: ash;">
+            </GridPane>
+     </content>
+ </ScrollPane>
+</AnchorPane>

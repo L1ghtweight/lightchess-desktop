@@ -1,31 +1,19 @@
 package lightweight.lightchess.client.ui;
 
 import com.github.bhlangonijr.chesslib.Board;
-import com.github.bhlangonijr.chesslib.move.Move;
-import javafx.event.EventHandler;
 import javafx.scene.Group;
-import javafx.scene.Scene;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import lightweight.lightchess.client.net.ClientNet;
 import lightweight.lightchess.logic.Logic;
-import lightweight.lightchess.net.CommandTypes;
-import lightweight.lightchess.net.Data;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.sql.SQLOutput;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 
 import static java.lang.Character.*;
-import static java.lang.Math.log;
 import static java.lang.Math.round;
 
 
@@ -41,6 +29,8 @@ public class ChessBoard extends Group {
     ArrayList<String> moveList = new ArrayList<>();
     HashMap<Character, Image> pieceMap = new HashMap<>();
     public boolean isBlack = false;
+    public Clock playerClock, opponentClock;
+    public String playerUsername, opponentUsername;
 
     public ChessBoard(int length, Color color1, Color color2, Board gameBoard, Logic logic) {
         super();
@@ -71,6 +61,11 @@ public class ChessBoard extends Group {
         updateBoard(gameBoard);
     }
 
+    public void setClocks(String timeString) {
+        System.out.println("Time String: " + timeString);
+        this.playerClock = new Clock(timeString);
+        this.opponentClock = new Clock(timeString);
+    }
 
     public int getCoordinate(double X) {
         return (int) (X/(length/8));
@@ -147,6 +142,7 @@ public class ChessBoard extends Group {
 
         if(logic.isCheckmate(gameBoard)){
             System.out.println("You Lose");
+            clientnet.main.showDialog("You Lose");
             clientnet.sendTournamentMatchFinishedMsg("0");
         }
     }
@@ -162,6 +158,7 @@ public class ChessBoard extends Group {
             clientnet.sendGameBoard(this.gameBoard.getFen(), move);
             if(logic.isCheckmate(gameBoard)){
                 System.out.println("You win");
+                clientnet.main.showDialog("You Win");
                 clientnet.sendTournamentMatchFinishedMsg("2");
             }
         }

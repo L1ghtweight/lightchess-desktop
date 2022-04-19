@@ -172,6 +172,7 @@ public class ReaderWriterServer implements Runnable {
         d.cmd = CommandTypes.login_response;
         d.content = "success";
         d.content2 = jdbc.getUserDetails(username);
+        System.out.println(d.content2);
         responseFromServer(d);
     }
 

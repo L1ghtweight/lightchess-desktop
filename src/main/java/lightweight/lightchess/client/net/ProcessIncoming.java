@@ -57,7 +57,7 @@ public class ProcessIncoming implements Runnable{
         client.startMatch(din.sender);
         Platform.runLater(()->{
             try {
-                client.main.showChessBoard();
+                client.main.startGame();
             } catch (IOException e) {
                 e.printStackTrace();
             }

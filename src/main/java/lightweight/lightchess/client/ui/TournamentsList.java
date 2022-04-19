@@ -37,15 +37,6 @@ public class TournamentsList implements Initializable {
 
     public void init() {
         //this.Players = Players;
-        for(int i=0;i<4;i++) {
-            Button tournamentButton = new Button("Tournament 1");
-            tournamentButton.setPrefWidth(510/2);
-            activeTournaments.add(tournamentButton, 0, i, 1, 1);
-            Label timeFormat = new Label("5+0");
-            timeFormat.setStyle("-fx-border-color: #0f0f0f; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-background-radius: 15px");
-            timeFormat.setPrefWidth(510/2);
-            timeFormat.setAlignment(Pos.CENTER);
-            activeTournaments.add(timeFormat, 1, i, 1, 1);
         }
     }
 

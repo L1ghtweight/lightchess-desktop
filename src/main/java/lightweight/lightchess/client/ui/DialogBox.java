@@ -35,14 +35,11 @@ public class DialogBox {
     }
 
     @FXML
-    public void yesBtnClicked(ActionEvent e) {
+    public void yesBtnClicked(ActionEvent e) throws IOException {
         clientNet.sendPlayRequestAccepted();
-        try {
-            newStage.close();
-            m.showChessBoard();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
+        newStage.close();
+        m.clientNet.chessBoard.setClocks(clientNet.userInfo.get("time_format"));
+        m.startGame();
     }
 
     @FXML

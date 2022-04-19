@@ -12,6 +12,14 @@
    <center>
       <AnchorPane prefHeight="800.0" prefWidth="500.0" BorderPane.alignment="CENTER">
          <children>
+            <Button layoutX="8.0" layoutY="28.0" mnemonicParsing="false" onAction="#showUserStatistics" prefHeight="55.0" prefWidth="55.0" style="-fx-background-color: transparent;">
+               <graphic>
+                  <ImageView fitHeight="46.0" fitWidth="60.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@menu.png" />
+                     </image>
+                  </ImageView>
+               </graphic></Button>
             <ImageView blendMode="SCREEN" fitHeight="502.0" fitWidth="502.0" layoutX="150.0" layoutY="14.0" opacity="0.1" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@lightchess_logo_grey.png" />
@@ -42,12 +50,6 @@
                   <Font name="Open Sauce Sans Medium" size="20.0" />
                </font>
             </Button>
-            <Button layoutX="25.0" layoutY="31.0" mnemonicParsing="false" style="-fx-background-color: transparent;" />
-            <ImageView fitHeight="46.0" fitWidth="60.0" layoutX="21.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
-               <image>
-                  <Image url="@menu.png" />
-               </image>
-            </ImageView>
          </children>
       </AnchorPane>
    </center>

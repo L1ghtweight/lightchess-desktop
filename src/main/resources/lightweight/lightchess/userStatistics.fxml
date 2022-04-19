@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to top, #292d3e, #000000);" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lightweight.lightchess.client.ui.userStatistics">
+    <center>
+        <AnchorPane fx:id="anchorPane" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <children>
+                <Label layoutX="220.0" layoutY="68.0" prefHeight="79.0" prefWidth="388.0" text="U S E R  S T A T I S T I C S" textFill="WHITE">
+                    <font>
+                        <Font name="Lato Hairline" size="32.0" />
+                    </font>
+                </Label>
+                <ImageView blendMode="SCREEN" fitHeight="502.0" fitWidth="533.0" layoutX="150.0" layoutY="14.0" opacity="0.1" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@lightchess_logo_grey.png" />
+                    </image>
+                </ImageView>
+                <Button fx:id="back" layoutX="703.0" layoutY="14.0" mnemonicParsing="false" onAction="#goBack" prefHeight="61.0" prefWidth="69.0" style="-fx-background-color: transparent;">
+               <graphic>
+                      <ImageView fitHeight="46.0" fitWidth="40.0" pickOnBounds="true" preserveRatio="true">
+                          <image>
+                              <Image url="@back.png" />
+                          </image>
+                      </ImageView>
+               </graphic></Button>
+            <Label layoutX="183.0" layoutY="218.0" text="Username" textFill="WHITE">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="201.0" layoutY="265.0" text="ELO" textFill="WHITE">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="173.0" layoutY="315.0" text="Games Won" textFill="WHITE">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="172.0" layoutY="363.0" text="Games Lost" textFill="WHITE">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="162.0" layoutY="409.0" text="Games Drawn" textFill="WHITE">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="20.0" />
+               </font>
+            </Label>
+            <Label layoutX="145.0" layoutY="462.0" text="Tournaments Won" textFill="WHITE">
+               <font>
+                  <Font name="Open Sauce Sans Light" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="username" layoutX="387.0" layoutY="218.0" textFill="#a4a4a4">
+               <font>
+                  <Font name="Open Sauce Sans ExtraBold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="elo" layoutX="387.0" layoutY="265.0" textFill="#a4a4a4">
+               <font>
+                  <Font name="Open Sauce Sans ExtraBold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="gamesWon" layoutX="387.0" layoutY="315.0" textFill="#a4a4a4">
+               <font>
+                  <Font name="Open Sauce Sans ExtraBold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="gamesLost" layoutX="387.0" layoutY="363.0" textFill="#a4a4a4">
+               <font>
+                  <Font name="Open Sauce Sans ExtraBold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="gamesDrawn" layoutX="387.0" layoutY="409.0" textFill="#a4a4a4">
+               <font>
+                  <Font name="Open Sauce Sans ExtraBold" size="20.0" />
+               </font>
+            </Label>
+            <Label fx:id="tournamentsWon" layoutX="387.0" layoutY="462.0" prefHeight="28.0" prefWidth="0.0" textFill="#a4a4a4">
+               <font>
+                  <Font name="Open Sauce Sans ExtraBold" size="20.0" />
+               </font>
+            </Label>
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

@@ -78,7 +78,7 @@ public class JDBC {
                 String time_format = res.getString("time_format");
 
                 info.append("elo:"+elo).append('\n');
-                info.append("matches_won:"+matchs_won).append('\n');
+                info.append("matchs_won:"+matchs_won).append('\n');
                 info.append("matchs_lost:"+matchs_lost).append('\n');
                 info.append("matchs_drawn:"+matchs_drawn).append('\n');
                 info.append("tournaments_won:"+tournaments_won).append('\n');

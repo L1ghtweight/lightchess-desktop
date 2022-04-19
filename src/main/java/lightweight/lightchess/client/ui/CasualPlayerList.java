@@ -55,23 +55,26 @@ public class CasualPlayerList implements Initializable {
         activePlayers.getChildren().clear();
         for(int i=0;i < clientNet.usersList.size(); i++) {
             Pair<String, String> userInfo = clientNet.usersList.get(i);
-
             if(userInfo.getKey().equals(clientNet.username)) {
                 continue;
             }
 
-
+            String opponentUsername = userInfo.getKey();
+            String timeString = userInfo.getValue();
             Button playerButton = new Button(userInfo.getKey());
 
             playerButton.setOnAction(new EventHandler<ActionEvent>() {
                 @Override public void handle(ActionEvent e) {
-                    clientNet.sendPlayRequest(userInfo.getKey());
+                    System.out.println("Sending play request");
+                    clientNet.sendPlayRequest(opponentUsername);
+                    m.clientNet.chessBoard.setClocks(timeString);
+                    m.clientNet.chessBoard.opponentUsername = opponentUsername;
                 }
             });
 
             playerButton.setPrefWidth(510/2);
             activePlayers.add(playerButton, 0, i, 1, 1);
-            Label timeFormat = new Label(userInfo.getValue());
+            Label timeFormat = new Label(timeString);
             timeFormat.setStyle("-fx-border-color: #0f0f0f; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-background-radius: 15px");
             timeFormat.setPrefWidth(510/2);
             timeFormat.setAlignment(Pos.CENTER);

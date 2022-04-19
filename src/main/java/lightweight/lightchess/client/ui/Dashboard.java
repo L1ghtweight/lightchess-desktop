@@ -21,4 +21,7 @@ public class Dashboard {
     public void goToTournamentsList() throws IOException {
         m.showTournamentsList();
     }
+    public void showUserStatistics() throws IOException {
+        m.showUserStatistics();
+    }
 }

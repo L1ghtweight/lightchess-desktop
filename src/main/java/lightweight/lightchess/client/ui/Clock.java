@@ -51,11 +51,12 @@ public class Clock implements Runnable{
         int leftSeconds = totalSecondsLeft - leftMinutes * 60;
 
         String seconds = String.valueOf(leftSeconds);
+        String minutes = String.valueOf(leftMinutes);
+
+        if(leftMinutes < 10) minutes = "0" + minutes;
         if(leftSeconds < 10) seconds = "0" + seconds;
 
-        return String.valueOf(leftMinutes) + ":" + seconds;
-
-
+        return minutes + ":" + seconds;
     }
 
     public static void main(String[] args) {

@@ -2,12 +2,14 @@ package lightweight.lightchess;
 
 import com.github.bhlangonijr.chesslib.Board;
 import javafx.application.Application;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.Dialog;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
@@ -24,7 +26,7 @@ import java.util.List;
 public class Main extends Application {
     private Stage primaryStage;
     private BorderPane rootLayout;
-    ClientNet clientNet;
+    public ClientNet clientNet;
     public String currentState = "";
 
     @Override
@@ -42,6 +44,7 @@ public class Main extends Application {
 
         ChessBoard chessBoard = new ChessBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard, logic);
         clientNet = new ClientNet(chessBoard);
+        chessBoard.playerUsername = clientNet.username;
         clientNet.main = this;
         chessBoard.clientnet = clientNet;
 
@@ -55,8 +58,8 @@ public class Main extends Application {
         this.primaryStage.setTitle("LightChess");
 
         primaryStage.centerOnScreen();
-        //showLogin();
-        showChessBoard();
+        showLogin();
+        //showChessBoard();
         primaryStage.show();
     }
 
@@ -104,7 +107,9 @@ public class Main extends Application {
     }
 
     public void showChessBoard() throws IOException {
-    /*    FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("game.fxml"));
+        clientNet.fetchTournamentInfo();
+
         rootLayout = loader.load();
         Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
@@ -112,14 +117,19 @@ public class Main extends Application {
         controller.setMain(this);
         controller.setClientNet(clientNet);
         controller.anchorPane.getChildren().add(clientNet.chessBoard);
+        controller.anchorPane.getChildren().add(new AnchorPane());
         clientNet.chessBoard.setLayoutX((1000 - clientNet.chessBoard.length)/2);
         clientNet.chessBoard.setLayoutY((800 - clientNet.chessBoard.length)/2);
-    */
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("ChessClock.fxml"));
-        rootLayout = loader.load();
-        Scene scene = new Scene(rootLayout);
-        primaryStage.setScene(scene);
-        ChessClock controller = loader.getController();
+
+        FXMLLoader clockLoader = new FXMLLoader(getClass().getResource("ChessClock.fxml"));
+
+        AnchorPane clockAnchorPane = clockLoader.load();
+        ChessClock clockController = clockLoader.getController();
+
+        clockController.init(clientNet.chessBoard.playerUsername, clientNet.chessBoard.playerClock.getTimeString(), clientNet.chessBoard.opponentUsername, clientNet.chessBoard.opponentClock.getTimeString());
+        controller.anchorPane.getChildren().add(clockAnchorPane);
+        clockAnchorPane.setLayoutX(750);
+        clockAnchorPane.setLayoutY(50 + clientNet.chessBoard.length/2);
     }
 
     public void showCasualPlayerList() throws IOException {
@@ -158,7 +168,6 @@ public class Main extends Application {
 
     public void gameRequest(String opponent) throws IOException {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("dialog_box.fxml"));
-        System.out.println(loader);
         rootLayout = loader.load();
         DialogBox controller = loader.getController();
         controller.setMain(this);
@@ -170,6 +179,8 @@ public class Main extends Application {
         newStage.setAlwaysOnTop(true);
         newStage.setScene(scene);
         newStage.show();
+        clientNet.chessBoard.opponentUsername = opponent;
+        System.out.println("Opponent username set: " + clientNet.chessBoard.opponentUsername);
     }
 
     public void loginResponse(boolean ok) throws IOException, InterruptedException {
@@ -206,4 +217,35 @@ public class Main extends Application {
         }
     }
 
+    public void showDialog(String msg) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("dialog.fxml"));
+        try {
+            rootLayout = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        Scene scene = new Scene(rootLayout);
+        customDialog controller = loader.getController();
+        Stage newStage = new Stage();
+        controller.setPrompt(msg);
+        newStage.setAlwaysOnTop(true);
+        newStage.setScene(scene);
+        newStage.show();
+    }
+
+    public void showUserStatistics() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("userStatistics.fxml"));
+        rootLayout = loader.load();
+        Scene scene = new Scene(rootLayout);
+        primaryStage.setScene(scene);
+        userStatistics controller = loader.getController();
+        controller.setMain(this);
+        controller.setClientNet(clientNet);
+        controller.init(clientNet.username, clientNet.userInfo.get("matchs_lost"), clientNet.userInfo.get("elo"), clientNet.userInfo.get("matchs_drawn"), clientNet.userInfo.get("matchs_won"), clientNet.userInfo.get("tournaments_won"));
+    }
+
+    public void startGame() throws IOException {
+        showChessBoard();
+    }
 }
