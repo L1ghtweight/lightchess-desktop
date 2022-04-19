@@ -31,7 +31,6 @@ public class Clock implements Runnable{
     @Override
     public void run() {
         while(isGameRunning){
-
             try {
                 Thread.sleep(1000);
             } catch (InterruptedException e) {

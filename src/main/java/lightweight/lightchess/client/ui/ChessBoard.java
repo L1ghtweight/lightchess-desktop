@@ -131,6 +131,20 @@ public class ChessBoard extends Group {
         p.setY(event.getY() - p.getFitHeight()/2);
     }
 
+    public void gameLost()
+    {
+        System.out.println("You Lose");
+        clientnet.main.showDialog("You Lose");
+        clientnet.endMatch("0");
+    }
+
+    public void gameWon()
+    {
+        System.out.println("You win");
+        clientnet.main.showDialog("You Win");
+        clientnet.endMatch("2");
+    }
+
 
     public void handleOpponnentsMove(String gameboard_fen, String move){
         Board board_new = new Board();
@@ -140,9 +154,7 @@ public class ChessBoard extends Group {
         System.out.println(move);
 
         if(logic.isCheckmate(gameBoard)){
-            System.out.println("You Lose");
-            clientnet.main.showDialog("You Lose");
-            clientnet.endMatch("0");
+            gameLost();
         }
     }
 
@@ -156,9 +168,7 @@ public class ChessBoard extends Group {
             updateBoard(this.gameBoard);
             clientnet.sendGameBoard(this.gameBoard.getFen(), move);
             if(logic.isCheckmate(gameBoard)){
-                System.out.println("You win");
-                clientnet.main.showDialog("You Win");
-                clientnet.endMatch("2");
+                gameWon();
             }
         }
         else {

@@ -121,7 +121,9 @@ public class Main extends Application {
         AnchorPane clockAnchorPane = clockLoader.load();
         ChessClock clockController = clockLoader.getController();
 
-        clockController.init(clientNet.username, clientNet.match_time_format, clientNet.opponentUsername, clientNet.match_time_format);
+        clientNet.chessBoard.setClocks(clientNet.match_time_format);
+        clockController.init(clientNet.username, clientNet.chessBoard.playerClock.getTimeString(), clientNet.opponentUsername, clientNet.chessBoard.opponentClock.getTimeString());
+
         controller.anchorPane.getChildren().add(clockAnchorPane);
         clockAnchorPane.setLayoutX(750);
         clockAnchorPane.setLayoutY(50 + clientNet.chessBoard.length/2);

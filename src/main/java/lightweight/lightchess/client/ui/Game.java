@@ -33,4 +33,7 @@ public class Game {
         chessBoard.clientnet = clientNet;
         m.showDashboard();
     }
+    public void resign() {
+
+    }
 }

@@ -23,6 +23,7 @@
                           </image>
                       </ImageView>
                </graphic></Button>
+            <Button layoutX="940.0" layoutY="563.0" mnemonicParsing="false" onAction="#resign" text="Resign" />
             </children>
         </AnchorPane>
     </center>
