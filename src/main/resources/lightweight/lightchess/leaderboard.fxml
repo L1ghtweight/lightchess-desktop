@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.shape.Rectangle?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: linear-gradient(to top, #292d3e, #000000);" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lightweight.lightchess.client.ui.Leaderboard">
+    <center>
+        <AnchorPane prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView blendMode="SCREEN" fitHeight="502.0" fitWidth="502.0" layoutX="150.0" layoutY="14.0" opacity="0.1" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@lightchess_logo_grey.png" />
+                    </image>
+                </ImageView>
+                <ScrollPane layoutX="140.0" layoutY="210.0" prefHeight="254.0" prefWidth="523.0" style="fx-background-color: rgba(215, 211, 204);">
+                    <content>
+                        <GridPane fx:id="leaderboard" prefHeight="251.0" prefWidth="521.0" style="-fx-background-color: rgba(215, 211, 204);">
+                        </GridPane>
+                    </content>
+                </ScrollPane>
+                <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b97f2" height="50.0" layoutX="138.0" layoutY="158.0" opacity="0.6" stroke="BLACK" strokeType="INSIDE" width="526.0" />
+                <Label layoutX="197.0" layoutY="169.0" prefHeight="28.0" prefWidth="57.0" text="Ranking" textFill="WHITE">
+                    <font>
+                        <Font name="Open Sauce Sans Medium" size="13.0" />
+                    </font>
+                </Label>
+                <Label layoutX="360.0" layoutY="169.0" prefHeight="28.0" prefWidth="85.0" text="Username" textFill="WHITE">
+                    <font>
+                        <Font name="Open Sauce Sans Medium" size="13.0" />
+                    </font>
+                </Label>
+                <Label alignment="CENTER" layoutX="152.0" layoutY="70.0" prefHeight="79.0" prefWidth="500.0" text="L E A D E R B O A R D S" textFill="WHITE">
+                    <font>
+                        <Font name="Lato Hairline" size="32.0" />
+                    </font>
+                </Label>
+                <Label layoutX="545.0" layoutY="169.0" prefHeight="28.0" prefWidth="85.0" text="Points" textFill="WHITE">
+                    <font>
+                        <Font name="Open Sauce Sans Medium" size="13.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

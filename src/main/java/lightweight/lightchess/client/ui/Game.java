@@ -62,4 +62,9 @@ public class Game {
         clientNet.sendReadyToPlayConfirmation();
         status.setText("Waiting to be paired up");
     }
+
+    public void goToLeaderboards()
+    {
+        m.showLeaderboards();
+    }
 }

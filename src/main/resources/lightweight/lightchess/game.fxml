@@ -37,6 +37,7 @@
                   <Font name="Open Sauce Sans Light" size="15.0" />
                </font>
             </Label>
+            <Button layoutX="787.0" layoutY="710.0" mnemonicParsing="false" onAction="#goToLeaderboards" text="Show Leaderboards" />
             </children>
         </AnchorPane>
     </center>

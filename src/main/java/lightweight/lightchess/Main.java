@@ -156,6 +156,7 @@ public class Main extends Application {
         }
 
         else {
+            clientNet.fetchScoreBoard();
             controller.status.setText("Not Ready");
         }
 
@@ -205,6 +206,24 @@ public class Main extends Application {
         primaryStage.show();
         currentState = "tournaments";
     */
+    }
+
+    public void showLeaderboards() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("leaderboard.fxml"));
+        try {
+            rootLayout = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Scene scene = new Scene(rootLayout);
+        Stage newStage = new Stage();
+        newStage.setScene(scene);
+        Leaderboard controller = loader.getController();
+        controller.setMain(this);
+        controller.setClientNet(clientNet);
+        controller.init();
+        newStage.show();
+        newStage.setAlwaysOnTop(true);
     }
 
     public void gameRequest(String opponent) throws IOException {

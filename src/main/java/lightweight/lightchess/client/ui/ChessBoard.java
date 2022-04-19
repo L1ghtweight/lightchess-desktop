@@ -151,6 +151,7 @@ public class ChessBoard extends Group {
 
     public void gameLost()
     {
+        clientnet.fetchScoreBoard();
         if(inTournament) {
             try {
                 clientnet.main.changeTournamentGameStatus("Not Ready");
@@ -165,6 +166,7 @@ public class ChessBoard extends Group {
 
     public void gameWon()
     {
+        clientnet.fetchScoreBoard();
         if(inTournament) {
             try {
                 clientnet.main.changeTournamentGameStatus("Not Ready");
