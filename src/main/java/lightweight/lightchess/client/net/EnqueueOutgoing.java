@@ -88,10 +88,14 @@ public class EnqueueOutgoing implements Runnable{
                 data.cmd = CommandTypes.ready_to_play;
             }
 
-            else if(cmd.equals("score")){
-                data.cmd = CommandTypes.score_board;
+            else if(cmd.equals("getscore")){
+                client.fetchScoreBoard();
+                continue;
             }
-
+            else if(cmd.equals("printscore")){
+                client.printScoreBoard();
+                continue;
+            }
             else if(cmd.equals("finish")){
                 data.cmd = CommandTypes.tournament_match_end;
                 data.content = message[1];
@@ -110,7 +114,10 @@ public class EnqueueOutgoing implements Runnable{
             }
             else if(cmd.equals("check_ul")){{
                 System.out.println("User List Fetched --> " + client.isUsersListFetched);
-            }}
+            }
+
+
+            }
 
 
             Q.add(data);

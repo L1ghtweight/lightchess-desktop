@@ -259,7 +259,7 @@ public class ProcessIncoming implements Runnable{
                     }
 
                     case score_board -> {
-                        System.out.println(data.content);
+                        handleScoreBoard((Data) data.clone());
                     }
 
                     default -> {

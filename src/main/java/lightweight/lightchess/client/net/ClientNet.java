@@ -141,6 +141,13 @@ public class ClientNet {
         sendData(d);
     }
 
+
+    public void printScoreBoard(){
+        for(Pair<String, String>P : score_board){
+            System.out.println(P.getKey() + ":" + P.getValue());
+        }
+    }
+
     public void fetchUserInfo(String username){
         isUserInfoFetched = false;
         Data d = new Data(CommandTypes.get_user_info);
