@@ -26,6 +26,7 @@ public class ServerUI extends Application {
         primaryStage.setScene(scene);
         HostTournament controller = loader.getController();
         serverNet.startServer();
+
         primaryStage.show();
     }
 }

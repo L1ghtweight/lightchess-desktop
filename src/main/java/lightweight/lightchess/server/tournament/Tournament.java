@@ -22,6 +22,7 @@ public class Tournament {
     public String time_format = "5+0";
     Thread pairUpThread;
 
+
     public int getMinutesRemaining(){
         return (int) Duration.between(LocalDateTime.now(),endTime).toMinutes();
     }
@@ -32,6 +33,24 @@ public class Tournament {
         readerWriterServer = rs;
         pairUpThread = new Thread(new PairUp(this));
         pairUpThread.start();
+    }
+
+    public boolean is_tournament_running(){
+        return is_tournament_started() && !is_tournament_ended();
+    }
+
+    public boolean setValues(String name, String starts_in, String duration, String time_format){
+        if(is_tournament_running()){
+            return false;
+        }
+        this.name = name;
+        this.startTime = LocalDateTime.now().plusSeconds(Integer.parseInt(starts_in));
+        this.endTime = startTime.plusSeconds(Integer.parseInt(duration));
+        this.time_format = time_format;
+
+        startPairing();
+
+        return true;
     }
 
     public void startPairing(){

@@ -30,7 +30,7 @@ public class ServerNet implements Runnable{
 
     ReaderWriterServer tournament_readerwriterserver =  new ReaderWriterServer("1",null,clientList,loggedInClientList, jdbc,null);
 
-    Tournament tournament = new Tournament(loggedInClientList,tournament_readerwriterserver);;
+    public Tournament tournament = new Tournament(loggedInClientList,tournament_readerwriterserver);;
 
     public void initSocket() throws IOException {
         serverSocket = new ServerSocket(12345);
