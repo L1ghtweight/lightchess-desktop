@@ -85,6 +85,9 @@ public class Tournament {
 
     public void updateScore(String player, int score){
         Information inf = registeredList.get(player);
+        if(inf == null) {
+            System.out.println("Got null inf in updateScore for " + player);
+        }
         inf.score += score;
     }
 
@@ -93,7 +96,7 @@ public class Tournament {
         for (Map.Entry<String, Information> entry : registeredList.entrySet()) {
             String key = entry.getKey();
             int point = entry.getValue().score;
-            msgToSend.append(key).append(" : " + point + "\n");
+            msgToSend.append(key).append(":" + point + "\n");
         }
         return  msgToSend.toString();
     }

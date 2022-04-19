@@ -325,8 +325,13 @@ public class ReaderWriterServer implements Runnable {
                     tournament.addToreadyList(username);
                 }
 
+                case casual_match_end -> {
+                    jdbc.updateFromMatchResult(username, Integer.parseInt(dataObj.content));
+                }
+
                 case tournament_match_end -> {
                     tournament.updateScore(username, Integer.parseInt(dataObj.content));
+                    jdbc.updateFromMatchResult(username, Integer.parseInt(dataObj.content));
                 }
 
                 case score_board -> {

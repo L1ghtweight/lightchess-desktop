@@ -82,6 +82,7 @@ public class ProcessIncoming implements Runnable{
     public void handleStartTournamentMatch(Data dObj){
         System.out.println("Starting tournament match with " + dObj.content);
         client.startMatch(dObj.content);
+        client.isInTournamentMatch = true;
     }
 
     public void handleLoginResponse(Data din) throws IOException {
@@ -220,6 +221,11 @@ public class ProcessIncoming implements Runnable{
                     case get_tournament_details -> {
                         handleTournamentDetails((Data) data.clone());
                     }
+
+                    case score_board -> {
+                        System.out.println(data.content);
+                    }
+
                     default -> {
                         System.out.println("Invalid incoming command : " + data.cmd);
                     }

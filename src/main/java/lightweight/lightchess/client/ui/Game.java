@@ -30,6 +30,7 @@ public class Game {
         Logic logic = new Logic();
         ChessBoard chessBoard = new ChessBoard(500, Color.web("#f0d9b5"), Color.web("#b58863"), gameBoard, logic);
         clientNet.chessBoard = chessBoard;
+        chessBoard.clientnet = clientNet;
         m.showDashboard();
     }
 }

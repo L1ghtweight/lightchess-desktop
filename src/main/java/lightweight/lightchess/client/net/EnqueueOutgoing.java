@@ -101,7 +101,13 @@ public class EnqueueOutgoing implements Runnable{
                 data.cmd = CommandTypes.get_user_info;
                 data.content = message[1];
             }
-
+            else if(cmd.equals("getinfo")){
+                client.fetchUpdatedUserInfo();
+            }
+            else if(cmd.equals("prntinfo")){
+                client.printUserInfo(true);
+                continue;
+            }
             else if(cmd.equals("check_ul")){{
                 System.out.println("User List Fetched --> " + client.isUsersListFetched);
             }}

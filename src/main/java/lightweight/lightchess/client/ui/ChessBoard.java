@@ -143,7 +143,7 @@ public class ChessBoard extends Group {
         if(logic.isCheckmate(gameBoard)){
             System.out.println("You Lose");
             clientnet.main.showDialog("You Lose");
-            clientnet.sendTournamentMatchFinishedMsg("0");
+            clientnet.endMatch("0");
         }
     }
 
@@ -159,7 +159,7 @@ public class ChessBoard extends Group {
             if(logic.isCheckmate(gameBoard)){
                 System.out.println("You win");
                 clientnet.main.showDialog("You Win");
-                clientnet.sendTournamentMatchFinishedMsg("2");
+                clientnet.endMatch("2");
             }
         }
         else {

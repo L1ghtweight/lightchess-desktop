@@ -23,11 +23,16 @@ import com.github.bhlangonijr.chesslib.Board;
 public class ClientNet {
     public boolean DEBUG_MODE=false;
     public boolean autologin = true;
-    public boolean tournament_DEBUG_MODE = true;
+    public boolean tournament_DEBUG_MODE = false;
+
     public boolean isLoggedIn = false;
     public boolean isUsersListFetched = false;
     public boolean isUserInfoFetched = false;
+
     public boolean isTournamentInfoFetched = false;
+    public boolean isInMatch = false;
+
+    public boolean isInTournamentMatch = false;
 
     Socket socket;
     NetworkConnection nc;
@@ -35,7 +40,6 @@ public class ClientNet {
     public  LinkedBlockingQueue<Data> QOut, QIn;
     Thread enqueueIn,processOut,enqueueOut,processInThread, matchThread;
     public String username,opponentUsername;
-    boolean isInMatch = false;
     boolean hasUI = false;
     String color;
     public ChessBoard chessBoard;
@@ -75,6 +79,21 @@ public class ClientNet {
 
     }
 
+    public void sendCasualMatchFinishedMsg(String points){
+        Data d = new Data(CommandTypes.casual_match_end);
+        d.content = points;
+        sendData(d);
+    }
+
+    public void endMatch(String points){
+        if(isInTournamentMatch){
+            sendTournamentMatchFinishedMsg(points);
+        } else {
+            sendCasualMatchFinishedMsg(points);
+        }
+        isInMatch = isInTournamentMatch = false;
+    }
+
     public void startMatch(String opponentUsername){
         isInMatch = true;
         this.opponentUsername =  opponentUsername;
@@ -100,7 +119,7 @@ public class ClientNet {
         sendData(d);
     }
 
-    public void requestUserInfo(String username){
+    public void fetchUserInfo(String username){
         isUserInfoFetched = false;
         Data d = new Data(CommandTypes.get_user_info);
         d.content = username;
