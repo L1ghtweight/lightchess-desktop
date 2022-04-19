@@ -7,6 +7,8 @@ import javafx.scene.layout.AnchorPane;
 
 public class HostTournament {
 
+    q
+
     @FXML
     private AnchorPane anchorPane;
 
@@ -29,6 +31,7 @@ public class HostTournament {
         String _time_format = time_format.getText();
         String _duration = duration.getText();
         System.out.println("Starting Tournament " + _name + " " + _starts_in + " " + _time_format + " " + _duration);
+
     }
 
 }

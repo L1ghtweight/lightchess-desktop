@@ -22,7 +22,9 @@ import lightweight.lightchess.client.net.ClientNet;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Array;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.ResourceBundle;
 
 public class CasualPlayerList implements Initializable {
@@ -50,6 +52,16 @@ public class CasualPlayerList implements Initializable {
         if(this.clientNet.usersList == null)
             return;
         activePlayers.getChildren().clear();
+
+        ArrayList<Pair<Integer, String>> users = new ArrayList<Pair<Integer, String>>();
+
+        for(int i=0;i < clientNet.usersList.size(); i++) {
+            Pair<String, String> userInfo = clientNet.usersList.get(i);
+            users.add(new Pair<Integer, String>(Integer.valueOf(userInfo.getValue()), userInfo.getKey()));
+        }
+
+        //Collections.sort(users);
+
         for(int i=0;i < clientNet.usersList.size(); i++) {
             Pair<String, String> userInfo = clientNet.usersList.get(i);
             if(userInfo.getKey().equals(clientNet.username)) {

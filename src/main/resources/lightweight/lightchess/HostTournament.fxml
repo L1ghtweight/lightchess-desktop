@@ -13,20 +13,21 @@
     <center>
         <AnchorPane fx:id="anchorPane" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
             <children>
-                    <Label alignment="CENTER" layoutX="306.0" layoutY="68.0" prefHeight="79.0" prefWidth="437.0" text="H O S T  T O U R N A M E N T" textFill="WHITE">
-                    <font>
-                        <Font name="Lato Hairline" size="32.0" />
-                    </font>
-                </Label>
                 <ImageView blendMode="SCREEN" fitHeight="695.0" fitWidth="695.0" layoutX="153.0" layoutY="53.0" opacity="0.1" pickOnBounds="true" preserveRatio="true">
                     <image>
                         <Image url="@lightchess_logo_grey.png" />
                     </image>
                 </ImageView>
-            <TextField fx:id="name" layoutX="268.0" layoutY="377.0" promptText="Name" />
-            <TextField fx:id="starts_in" layoutX="439.0" layoutY="377.0" promptText="Starts In (minutes)" />
-            <TextField fx:id="duration" layoutX="610.0" layoutY="377.0" promptText="Duration (minutes)" />
+            <TextField fx:id="name" layoutX="183.0" layoutY="377.0" promptText="Name" />
+                    <Label alignment="CENTER" layoutX="306.0" layoutY="68.0" prefHeight="79.0" prefWidth="437.0" text="H O S T  T O U R N A M E N T" textFill="WHITE">
+                    <font>
+                        <Font name="Lato Hairline" size="32.0" />
+                    </font>
+                </Label>
+            <TextField fx:id="starts_in" layoutX="354.0" layoutY="377.0" promptText="Starts In (minutes)" />
+            <TextField fx:id="duration" layoutX="525.0" layoutY="377.0" promptText="Duration (minutes)" />
             <Button layoutX="464.0" layoutY="463.0" mnemonicParsing="false" onAction="#host" prefHeight="39.0" prefWidth="121.0" text="Host" />
+            <TextField fx:id="time_format" layoutX="696.0" layoutY="377.0" promptText="Time Format (eg. 5+0)" />
             </children>
         </AnchorPane>
     </center>
