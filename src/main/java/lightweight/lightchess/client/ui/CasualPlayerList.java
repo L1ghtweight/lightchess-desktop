@@ -47,9 +47,6 @@ public class CasualPlayerList implements Initializable {
     public void setClientNet(ClientNet clientNet) {this.clientNet = clientNet;}
 
     public void init() {
-        if(this.clientNet.usersList != null)
-            System.out.println(clientNet.usersList.size());
-
         if(this.clientNet.usersList == null)
             return;
         activePlayers.getChildren().clear();

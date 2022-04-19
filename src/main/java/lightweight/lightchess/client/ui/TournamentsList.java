@@ -1,5 +1,7 @@
 package lightweight.lightchess.client.ui;
 
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
@@ -36,8 +38,47 @@ public class TournamentsList implements Initializable {
     public void setClientNet(ClientNet clientNet) {this.clientNet = clientNet;}
 
     public void init() {
-        //this.Players = Players;
-        }
+        if(clientNet.tournament_info == null)
+            return;
+
+        String tournamentName = clientNet.tournament_info.get("name");
+        String startTime = clientNet.tournament_info.get("start_time");
+        String endTime = clientNet.tournament_info.get("end_time");
+        String timeFormat = clientNet.tournament_info.get("time_format");
+
+        Button button = new Button(tournamentName);
+        button.setPrefWidth(510/4);
+        activeTournaments.add(button, 0, 0, 1, 1);
+
+        button.setOnAction(new EventHandler<ActionEvent>() {
+            @Override public void handle(ActionEvent e) {
+                clientNet.sendRegisterRequest();
+                clientNet.sendReadyToPlayConfirmation();
+                try {
+                    m.showChessBoard();
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
+
+        Label time = new Label(timeFormat);
+        time.setStyle("-fx-border-color: #0f0f0f; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-background-radius: 15px");
+        time.setPrefWidth(510/4);
+        time.setAlignment(Pos.CENTER);
+        activeTournaments.add(time, 1, 0, 1, 1);
+
+        Label start = new Label(startTime);
+        start.setStyle("-fx-border-color: #0f0f0f; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-background-radius: 15px");
+        start.setPrefWidth(510/4);
+        start.setAlignment(Pos.CENTER);
+        activeTournaments.add(start, 2, 0, 1, 1);
+
+        Label end = new Label(endTime);
+        end.setStyle("-fx-border-color: #0f0f0f; -fx-border-radius: 15px; -fx-background-color: #ffffff; -fx-background-radius: 15px");
+        end.setPrefWidth(510/4);
+        end.setAlignment(Pos.CENTER);
+        activeTournaments.add(end, 3, 0, 1, 1);
     }
 
     @Override

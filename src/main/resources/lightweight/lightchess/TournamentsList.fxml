@@ -27,12 +27,12 @@
                </content>
             </ScrollPane>
             <Rectangle arcHeight="5.0" arcWidth="5.0" fill="#3b97f2" height="50.0" layoutX="138.0" layoutY="158.0" opacity="0.6" stroke="BLACK" strokeType="INSIDE" width="526.0" />
-            <Label layoutX="227.0" layoutY="170.0" prefHeight="28.0" prefWidth="127.0" text="Tournament Name" textFill="WHITE">
+            <Label layoutX="152.0" layoutY="169.0" prefHeight="28.0" prefWidth="127.0" text="Tournament Name" textFill="WHITE">
                <font>
                   <Font name="Open Sauce Sans Medium" size="13.0" />
                </font>
             </Label>
-            <Label layoutX="481.0" layoutY="170.0" prefHeight="28.0" prefWidth="85.0" text="Time Format" textFill="WHITE">
+            <Label layoutX="297.0" layoutY="169.0" prefHeight="28.0" prefWidth="85.0" text="Time Format" textFill="WHITE">
                <font>
                   <Font name="Open Sauce Sans Medium" size="13.0" />
                </font>
@@ -48,6 +48,16 @@
                </image>
             </ImageView>
             <Button fx:id="back" layoutX="719.0" layoutY="17.0" mnemonicParsing="false" onAction="#goBack" prefHeight="61.0" prefWidth="69.0" style="-fx-background-color: transparent;" />
+            <Label layoutX="422.0" layoutY="169.0" prefHeight="28.0" prefWidth="74.0" text="Start Time" textFill="WHITE">
+               <font>
+                  <Font name="Open Sauce Sans Medium" size="13.0" />
+               </font>
+            </Label>
+            <Label layoutX="548.0" layoutY="169.0" prefHeight="28.0" prefWidth="85.0" text="End Time" textFill="WHITE">
+               <font>
+                  <Font name="Open Sauce Sans Medium" size="13.0" />
+               </font>
+            </Label>
          </children>
       </AnchorPane>
    </center>

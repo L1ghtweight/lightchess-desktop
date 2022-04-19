@@ -91,6 +91,7 @@ public class Main extends Application {
 
     public void showDashboard() throws IOException, InterruptedException {
         clientNet.fetchUsersList();
+        clientNet.fetchTournamentInfo();
         FXMLLoader loader = new FXMLLoader(getClass().getResource("dashboard.fxml"));
         rootLayout = loader.load();
         Scene scene = new Scene(rootLayout);
@@ -155,9 +156,9 @@ public class Main extends Application {
         Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
         TournamentsList controller = loader.getController();
-        controller.init();
         controller.setMain(this);
         controller.setClientNet(clientNet);
+        controller.init();
 /*        Rectangle2D primScreenBounds = Screen.getPrimary().getVisualBounds();
         primaryStage.setX((primScreenBounds.getWidth() - primaryStage.getWidth()) / 2);
         primaryStage.setY((primScreenBounds.getHeight() - primaryStage.getHeight()) / 2);*//*
