@@ -40,11 +40,11 @@ public class ServerNet implements Runnable{
 
 
 // Init a default tournament
-        tournament.name = "NICE";
-        tournament.startTime = LocalDateTime.now().plusMinutes(0);
-        tournament.endTime = tournament.startTime.plusMinutes(10);
-
-        tournament.startPairing();
+//        tournament.name = "NICE";
+//        tournament.startTime = LocalDateTime.now().plusMinutes(0);
+//        tournament.endTime = tournament.startTime.plusMinutes(10);
+//
+//        tournament.startPairing();
 
         System.out.println(tournament.name + " starts in " + Duration.between(LocalDateTime.now(), tournament.startTime).toMinutes() + "minutes and continues for " + Duration.between(tournament.startTime, tournament.endTime).toMinutes() + " minutes");
 //        System.out.println(tournament.get_tournament_details());
@@ -77,6 +77,9 @@ public class ServerNet implements Runnable{
     public static void main(String[] args) throws IOException {
         ServerNet serverNet = new ServerNet();
         serverNet.startServer();
+//        serverNet.tournament.setValues("New Named", "122", "600", "5+1");
+//        System.out.println(serverNet.tournament.name + " starts in " + Duration.between(LocalDateTime.now(), serverNet.tournament.startTime).toMinutes() + "minutes and continues for " + Duration.between(serverNet.tournament.startTime, serverNet.tournament.endTime).toMinutes() + " minutes");
+
     }
 
 }

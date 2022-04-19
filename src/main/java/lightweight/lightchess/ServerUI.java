@@ -9,7 +9,10 @@ import lightweight.lightchess.Main;
 import lightweight.lightchess.client.net.ClientNet;
 import lightweight.lightchess.client.ui.Dashboard;
 import lightweight.lightchess.client.ui.HostTournament;
+import lightweight.lightchess.client.ui.HostedTournamentInfo;
 import lightweight.lightchess.server.net.ServerNet;
+
+import java.io.IOException;
 
 public class ServerUI extends Application {
 
@@ -20,13 +23,28 @@ public class ServerUI extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+
+        this.primaryStage = primaryStage;
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("HostTournament.fxml"));
         rootLayout = loader.load();
         Scene scene = new Scene(rootLayout);
         primaryStage.setScene(scene);
         HostTournament controller = loader.getController();
+        controller.serverNet = serverNet;
         serverNet.startServer();
+        controller.serverUI = this;
+        primaryStage.show();
+    }
 
+    public void showHostedTournamentInfo() throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("HostedTournamentInfo.fxml"));
+        rootLayout = loader.load();
+        Scene scene = new Scene(rootLayout);
+        primaryStage.setScene(scene);
+        HostedTournamentInfo controller = loader.getController();
+        controller.serverNet = serverNet;
+        controller.serverUI = this;
         primaryStage.show();
     }
 }

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1000.0" style="-fx-background-color: linear-gradient(to top, #292d3e, #000000);" xmlns="http://javafx.com/javafx/18" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lightweight.lightchess.client.ui.HostedTournamentInfo">
+    <center>
+        <AnchorPane fx:id="anchorPane" prefHeight="600.0" prefWidth="800.0" BorderPane.alignment="CENTER">
+            <children>
+                <ImageView blendMode="SCREEN" fitHeight="695.0" fitWidth="695.0" layoutX="153.0" layoutY="53.0" opacity="0.1" pickOnBounds="true" preserveRatio="true">
+                    <image>
+                        <Image url="@lightchess_logo_grey.png" />
+                    </image>
+                </ImageView>
+                <Label alignment="CENTER" layoutX="201.0" layoutY="68.0" prefHeight="79.0" prefWidth="600.0" text="T O U R N A M E N T  I N F O" textAlignment="CENTER" textFill="WHITE">
+                    <font>
+                        <Font name="Lato Hairline" size="32.0" />
+                    </font>
+                </Label>
+            </children>
+        </AnchorPane>
+    </center>
+</BorderPane>

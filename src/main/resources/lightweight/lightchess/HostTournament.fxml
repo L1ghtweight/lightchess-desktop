@@ -23,11 +23,12 @@
                     <font>
                         <Font name="Lato Hairline" size="32.0" />
                     </font>
-                </Label>
+                    </Label>
             <TextField fx:id="starts_in" layoutX="354.0" layoutY="377.0" promptText="Starts In (minutes)" />
             <TextField fx:id="duration" layoutX="525.0" layoutY="377.0" promptText="Duration (minutes)" />
-            <Button layoutX="464.0" layoutY="463.0" mnemonicParsing="false" onAction="#host" prefHeight="39.0" prefWidth="121.0" text="Host" />
             <TextField fx:id="time_format" layoutX="696.0" layoutY="377.0" promptText="Time Format (eg. 5+0)" />
+            <Button layoutX="464.0" layoutY="463.0" mnemonicParsing="false" onAction="#host" prefHeight="39.0" prefWidth="121.0" text="Host" />
+            <Label fx:id="status" alignment="CENTER" layoutX="262.0" layoutY="436.0" prefHeight="16.0" prefWidth="525.0" textAlignment="CENTER" textFill="RED" />
             </children>
         </AnchorPane>
     </center>

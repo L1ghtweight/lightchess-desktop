@@ -29,7 +29,8 @@ public class Tournament {
 
     public Tournament(HashMap<String, Information> loggedInClientList, ReaderWriterServer rs){
         loggedInList = loggedInClientList;
-        startTime = endTime = LocalDateTime.now();
+        startTime = LocalDateTime.now().plusYears(69);
+        endTime = startTime.plusYears(96);
         readerWriterServer = rs;
         pairUpThread = new Thread(new PairUp(this));
         pairUpThread.start();
@@ -39,6 +40,9 @@ public class Tournament {
         return is_tournament_started() && !is_tournament_ended();
     }
 
+    public void printTournamentDetails(){
+        System.out.println(name + " starts in " + Duration.between(LocalDateTime.now(), startTime).toMinutes() + "minutes and continues for " + Duration.between(startTime, endTime).toMinutes() + " minutes");
+    }
     public boolean setValues(String name, String starts_in, String duration, String time_format){
         if(is_tournament_running()){
             return false;
