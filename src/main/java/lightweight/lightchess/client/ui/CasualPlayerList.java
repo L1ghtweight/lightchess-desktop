@@ -55,10 +55,10 @@ public class CasualPlayerList implements Initializable {
 
         ArrayList<Pair<Integer, String>> users = new ArrayList<Pair<Integer, String>>();
 
-        for(int i=0;i < clientNet.usersList.size(); i++) {
+/*        for(int i=0;i < clientNet.usersList.size(); i++) {
             Pair<String, String> userInfo = clientNet.usersList.get(i);
             users.add(new Pair<Integer, String>(Integer.valueOf(userInfo.getValue()), userInfo.getKey()));
-        }
+        }*/
 
         //Collections.sort(users);
 

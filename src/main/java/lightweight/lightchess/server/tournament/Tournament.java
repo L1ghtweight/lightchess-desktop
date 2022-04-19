@@ -20,6 +20,8 @@ public class Tournament {
     public ArrayList<String> readyList = new ArrayList<>();
     public  ReaderWriterServer readerWriterServer;
     public String time_format = "5+0";
+    public ArrayList<String> playersInMatch = new ArrayList<>();
+    public HashMap<String, String> matchPairs = new HashMap<>();
     Thread pairUpThread;
 
 
@@ -34,6 +36,24 @@ public class Tournament {
         readerWriterServer = rs;
         pairUpThread = new Thread(new PairUp(this));
         pairUpThread.start();
+    }
+
+    public boolean removePlayerFromInMatchList(String username){
+        playersInMatch.remove(username);
+
+        HashMap<String, String> tmp = (HashMap<String, String>) matchPairs.clone();
+
+        for(Map.Entry<String, String> M : tmp.entrySet()){
+            if(M.getKey().equals(username) || M.getValue().equals(username)){
+                matchPairs.remove(M.getKey());
+                if(!M.getKey().equals(username)){
+                    playersInMatch.remove(M.getKey());
+                }
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public boolean is_tournament_running(){

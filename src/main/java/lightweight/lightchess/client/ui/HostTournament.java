@@ -9,6 +9,7 @@ import lightweight.lightchess.ServerUI;
 import lightweight.lightchess.server.net.ServerNet;
 
 import java.io.IOException;
+import java.util.Map;
 
 public class HostTournament {
 

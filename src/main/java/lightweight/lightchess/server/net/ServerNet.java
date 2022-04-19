@@ -46,7 +46,7 @@ public class ServerNet implements Runnable{
 //
 //        tournament.startPairing();
 
-        System.out.println(tournament.name + " starts in " + Duration.between(LocalDateTime.now(), tournament.startTime).toMinutes() + "minutes and continues for " + Duration.between(tournament.startTime, tournament.endTime).toMinutes() + " minutes");
+//        System.out.println(tournament.name + " starts in " + Duration.between(LocalDateTime.now(), tournament.startTime).toMinutes() + "minutes and continues for " + Duration.between(tournament.startTime, tournament.endTime).toMinutes() + " minutes");
 //        System.out.println(tournament.get_tournament_details());
 //        new Thread(new ProcessCommands(tournament)).start();
     }

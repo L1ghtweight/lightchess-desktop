@@ -19,6 +19,11 @@ public class PairUp implements Runnable{
     }
 
     public void startMatch(String player1, String player2){
+        tournament.playersInMatch.add(player1);
+        tournament.playersInMatch.add(player2);
+
+        tournament.matchPairs.put(player1, player2);
+
         System.out.println("Match starting between "+player1 + " and "+ player2);
 
         Data d1 = new Data();

@@ -30,6 +30,9 @@ public class Game {
     @FXML
     private Label statusName;
 
+    @FXML
+    private Button leaderboardBtn;
+
     public void setMain(Main m) {
         this.m = m;
     }
@@ -54,6 +57,7 @@ public class Game {
         statusName.setVisible(false);
         status.setVisible(false);
         readyBtn.setVisible(false);
+        leaderboardBtn.setVisible(false);
     }
 
     public void ready()
