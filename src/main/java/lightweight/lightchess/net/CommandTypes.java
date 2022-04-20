@@ -17,4 +17,5 @@ public enum CommandTypes {
     users_list,
     update_time_format,
     update_user_info,
+    update_elo,
 }

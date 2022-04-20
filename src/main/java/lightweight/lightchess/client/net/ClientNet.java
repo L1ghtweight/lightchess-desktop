@@ -112,7 +112,14 @@ public class ClientNet {
             chessBoard.updateBoard(chessBoard.gameBoard);
         });
         this.opponentUsername =  opponentUsername;
+        fetchUserInfo(opponentUsername);
         System.out.println("Match started with " + opponentUsername + " with time_format="+match_time_format);
+    }
+
+    public void updateELO(int newELO){
+        Data d = new Data(CommandTypes.update_elo);
+        d.content = Integer.toString(newELO);
+        sendData(d);
     }
 
     public void updateTimeFormat(String newFormat){

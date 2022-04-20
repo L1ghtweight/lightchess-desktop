@@ -91,6 +91,15 @@ public class JDBC {
         }
     }
 
+    public void updateELO(String username, int newELO){
+        try {
+            Statement st = con.createStatement();
+            st.executeUpdate(String.format("UPDATE USERS elo=%d WHERE username='%s'", newELO, username));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     public String getPreferredTimeFormat(String username){
         try {
             Statement st = con.createStatement();

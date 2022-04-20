@@ -343,6 +343,10 @@ public class ReaderWriterServer implements Runnable {
                     sendUserInfo(dataObj);
                 }
 
+                case update_elo -> {
+                    jdbc.updateELO(username, Integer.parseInt(dataObj.content));
+                }
+
                 default -> {
                     msgFromServer("Invalid Command : "+ dataObj.cmd);
                 }
