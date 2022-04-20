@@ -149,6 +149,14 @@ public class ChessBoard extends Group {
         p.setY(event.getY() - p.getFitHeight()/2);
     }
 
+    public int getEloChange(int factor, Double ra, Double rb) {
+        Double diff = (ra - rb);
+        Double pwr  = 1 + Math.pow(10, diff / 400);
+        Double exp_sc = 1 / (1 + pwr);
+        Double newElo = Double.parseDouble(clientnet.userInfo.get("elo")) + 40 * (factor - exp_sc);
+        return (int) round(newElo);
+    }
+
     public void gameLost()
     {
         clientnet.fetchScoreBoard();
@@ -161,6 +169,7 @@ public class ChessBoard extends Group {
         }
         System.out.println("You Lose");
         clientnet.main.showDialog("You Lose");
+        clientnet.updateELO(getEloChange(-1, Double.parseDouble(clientnet.userInfo.get("elo")), Double.parseDouble(clientnet.requested_userInfo.get("elo"))));
         clientnet.endMatch("0");
     }
 
@@ -176,6 +185,8 @@ public class ChessBoard extends Group {
         }
         System.out.println("You win");
         clientnet.main.showDialog("You Win");
+        System.out.println("New elo: " + getEloChange(+1, Double.parseDouble(clientnet.userInfo.get("elo")), Double.parseDouble(clientnet.requested_userInfo.get("elo"))));
+        clientnet.updateELO(getEloChange(+1, Double.parseDouble(clientnet.userInfo.get("elo")), Double.parseDouble(clientnet.requested_userInfo.get("elo"))));
         clientnet.endMatch("2");
     }
 

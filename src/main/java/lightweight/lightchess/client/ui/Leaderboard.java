@@ -44,8 +44,6 @@ public class Leaderboard {
             String username = userInfo.getKey();
             String points = userInfo.getValue();
 
-
-
             Label ranking = new Label(Integer.toString(i+1));
             Label userLabel = new Label(username);
             Label pointsLabel = new Label(points);

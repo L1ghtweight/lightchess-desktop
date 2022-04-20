@@ -19,6 +19,9 @@ import lightweight.lightchess.client.net.ClientNet;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
@@ -44,6 +47,13 @@ public class TournamentsList implements Initializable {
         String tournamentName = clientNet.tournament_info.get("name");
         String startTime = clientNet.tournament_info.get("start_time");
         String endTime = clientNet.tournament_info.get("end_time");
+
+        int starts_in = Math.max(0, -1 * (int) Duration.between(LocalDateTime.parse(startTime), LocalDateTime.now()).toMinutes());
+        int ends_in = Math.max(0, -1 * (int) Duration.between(LocalDateTime.parse(endTime), LocalDateTime.now()).toMinutes());
+
+        startTime = "in " + Integer.toString(starts_in) + " mins";
+        endTime = "in " + Integer.toString(ends_in) + " mins";
+
         String timeFormat = clientNet.tournament_info.get("time_format");
 
         Button button = new Button(tournamentName);

@@ -50,7 +50,7 @@
                   <Font name="Open Sauce Sans Medium" size="20.0" />
                </font>
             </Button>
-            <Button layoutX="709.0" layoutY="547.0" mnemonicParsing="false" onAction="#logout" style = "-fx-background-color: linear-gradient(to top left, #3b97f2, #8ec7ff); fx-background-radius: 15px; -fx-border-radius: 15px;" text="Log out" />
+            <Button alignment="CENTER" layoutX="709.0" layoutY="534.0" mnemonicParsing="false" onAction="#logout" prefHeight="37.0" prefWidth="67.0" style="-fx-background-color: linear-gradient(to top left, #3b97f2, #8ec7ff); fx-background-radius: 15px; -fx-border-radius: 15px;" text="Log out" textAlignment="CENTER" textFill="WHITE" />
          </children>
       </AnchorPane>
    </center>

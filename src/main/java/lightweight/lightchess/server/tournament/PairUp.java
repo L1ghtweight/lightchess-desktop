@@ -57,7 +57,7 @@ public class PairUp implements Runnable{
     @Override
     public void run() {
         while (!tournament.is_tournament_ended()){
-            if(tournament.readyList.size()<2){
+            if(tournament.readyList.size()<2 || !tournament.is_tournament_started()){
                 try {
                     Thread.sleep(sleep_time);
                 } catch (InterruptedException e) {
