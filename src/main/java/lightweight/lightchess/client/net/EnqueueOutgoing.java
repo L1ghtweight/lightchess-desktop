@@ -112,14 +112,23 @@ public class EnqueueOutgoing implements Runnable{
                 client.printUserInfo(true);
                 continue;
             }
-            else if(cmd.equals("check_ul")){{
+            else if(cmd.equals("get_op_inf")){
+                client.fetchUserInfo(client.opponentUsername);
+                continue;
+            }
+
+            else if(cmd.equals("print_op_inf")){
+                client.printUserInfo(false);
+                continue;
+            }
+
+            else if(cmd.equals("check_ul")){
+                {
                 System.out.println("User List Fetched --> " + client.isUsersListFetched);
             }
 
 
             }
-
-
             Q.add(data);
         }
     }
