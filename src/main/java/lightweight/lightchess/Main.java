@@ -7,6 +7,7 @@ import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -25,10 +26,13 @@ public class Main extends Application {
     public ClientNet clientNet;
     public String currentState = "";
     public ChessBoard chessBoard;
+    Image icon = new Image(getClass().getResourceAsStream("/lightweight/lightchess/lightchess_logo_sttrooke.png"));
 
 
     @Override
     public void start(Stage primaryStage) throws IOException {
+        primaryStage.getIcons().add(icon);
+
         this.primaryStage = primaryStage;
         this.primaryStage.setResizable(false);
 
@@ -217,6 +221,7 @@ public class Main extends Application {
         }
         Scene scene = new Scene(rootLayout);
         Stage newStage = new Stage();
+        newStage.getIcons().add(icon);
         newStage.setScene(scene);
         Leaderboard controller = loader.getController();
         controller.setMain(this);
@@ -235,6 +240,7 @@ public class Main extends Application {
         controller.init(opponent, clientNet.userInfo.get("time_format"));
         Scene scene = new Scene(rootLayout);
         Stage newStage = new Stage();
+        newStage.getIcons().add(icon);
         controller.setStage(newStage);
         newStage.setAlwaysOnTop(true);
         newStage.setScene(scene);
@@ -286,6 +292,7 @@ public class Main extends Application {
         Scene scene = new Scene(rootLayout);
         customDialog controller = loader.getController();
         Stage newStage = new Stage();
+        newStage.getIcons().add(icon);
         controller.setPrompt(msg);
         newStage.setAlwaysOnTop(true);
         newStage.setScene(scene);

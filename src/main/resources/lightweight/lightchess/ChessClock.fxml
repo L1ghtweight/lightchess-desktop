@@ -25,9 +25,9 @@
          <Font name="Open Sauce Sans Light" size="15.0" />
      </font>
  </Label>
- <ScrollPane fx:id="movesList" layoutY="52.0" prefHeight="146.0" prefWidth="250.0" style="-fx-background-color: ash;">
+ <ScrollPane fx:id="movesList" layoutY="52.0" prefHeight="146.0" prefWidth="250.0" style="-fx-background-color: #efefed;">
      <content>
-         <GridPane fx:id="moves" prefHeight="143.0" prefWidth="249.0" style="-fx-background-color: ash;">
+         <GridPane fx:id="moves" prefHeight="143.0" prefWidth="249.0" style="-fx-background-color: #efefed;">
             </GridPane>
      </content>
  </ScrollPane>

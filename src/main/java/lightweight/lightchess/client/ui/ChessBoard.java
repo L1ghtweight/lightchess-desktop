@@ -168,7 +168,7 @@ public class ChessBoard extends Group {
             }
         }
         System.out.println("You Lose");
-        clientnet.main.showDialog("You Lose");
+        clientnet.main.showDialog("Defeat");
         clientnet.updateELO(getEloChange(-1, Double.parseDouble(clientnet.userInfo.get("elo")), Double.parseDouble(clientnet.requested_userInfo.get("elo"))));
         clientnet.endMatch("0");
     }
@@ -184,7 +184,7 @@ public class ChessBoard extends Group {
             }
         }
         System.out.println("You win");
-        clientnet.main.showDialog("You Win");
+        clientnet.main.showDialog("Victory");
         System.out.println("New elo: " + getEloChange(+1, Double.parseDouble(clientnet.userInfo.get("elo")), Double.parseDouble(clientnet.requested_userInfo.get("elo"))));
         clientnet.updateELO(getEloChange(+1, Double.parseDouble(clientnet.userInfo.get("elo")), Double.parseDouble(clientnet.requested_userInfo.get("elo"))));
         clientnet.endMatch("2");

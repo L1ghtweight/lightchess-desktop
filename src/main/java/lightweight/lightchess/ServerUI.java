@@ -3,6 +3,7 @@ package lightweight.lightchess;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import lightweight.lightchess.Main;
@@ -20,11 +21,12 @@ public class ServerUI extends Application {
     private BorderPane rootLayout;
     public ClientNet clientNet;
     public ServerNet serverNet;
+    Image icon = new Image(getClass().getResourceAsStream("/lightweight/lightchess/lightchess_logo_grey.png"));
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        primaryStage.getIcons().add(icon);
         serverNet = new ServerNet();
-
         this.primaryStage = primaryStage;
         FXMLLoader loader = new FXMLLoader(getClass().getResource("HostTournament.fxml"));
         rootLayout = loader.load();
