@@ -36,6 +36,7 @@ public class DialogBox {
 
     @FXML
     public void yesBtnClicked(ActionEvent e) throws IOException {
+        clientNet.chessBoard.inTournament = false;
         clientNet.sendPlayRequestAccepted();
         newStage.close();
         m.startGame();
