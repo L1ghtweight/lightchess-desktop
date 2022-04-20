@@ -12,6 +12,8 @@ import javafx.util.Pair;
 import lightweight.lightchess.Main;
 import lightweight.lightchess.client.net.ClientNet;
 
+import java.util.Comparator;
+
 public class Leaderboard {
 
     Main m;
@@ -30,13 +32,17 @@ public class Leaderboard {
     public void init() {
         clientNet.fetchScoreBoard();
 
-
-
         if(this.clientNet.score_board == null)
             return;
 
-        System.out.println("Score_board size: " + clientNet.score_board.size());
         leaderboard.getChildren().clear();
+
+        clientNet.score_board.sort((t1, t2) -> {
+            int ret = -1;
+            if((Integer.parseInt(t2.getValue()) > Integer.parseInt(t1.getValue())))
+                ret = +1;
+            return ret;
+        });
 
         for(int i=0;i < clientNet.score_board.size(); i++) {
 

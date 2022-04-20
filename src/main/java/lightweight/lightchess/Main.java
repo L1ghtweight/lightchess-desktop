@@ -184,6 +184,8 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         CasualPlayerList controller = loader.getController();
 
+        chessBoard.inTournament = false;
+
         controller.setMain(this);
         controller.setClientNet(clientNet);
         controller.init();

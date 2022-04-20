@@ -51,6 +51,7 @@ public class ClientNet {
     public HashMap<String, String> requested_userInfo;
     public ArrayList<Pair<String, String>> usersList, score_board; // username-time_format
     public String serverIp = "localhost";
+    //public String serverIp = "192.168.0.170";
 
     public HashMap<String, String> parseUserInfo(String inf){
         if(inf==null || inf.length()<1) return  null;
