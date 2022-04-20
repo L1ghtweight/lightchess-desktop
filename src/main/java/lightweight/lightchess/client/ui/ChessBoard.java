@@ -176,6 +176,7 @@ public class ChessBoard extends Group {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        clientnet.fetchScoreBoard();
     }
 
     public void gameWon()
@@ -198,6 +199,7 @@ public class ChessBoard extends Group {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        clientnet.fetchScoreBoard();
     }
 
 
