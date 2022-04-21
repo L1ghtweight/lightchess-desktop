@@ -183,6 +183,16 @@ public class ProcessIncoming implements Runnable{
         client.score_board = score_board;
     }
 
+    public void handleTournamentEnd(){
+        Platform.runLater(()->{
+            try {
+                client.main.changeTournamentGameStatus("Tournament Ended");
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        });
+    }
+
     @Override
     public void run() {
         Data data;
@@ -254,6 +264,10 @@ public class ProcessIncoming implements Runnable{
 
                     case score_board -> {
                         handleScoreBoard((Data) data.clone());
+                    }
+
+                    case tournament_ended -> {
+                        handleTournamentEnd();
                     }
 
                     default -> {

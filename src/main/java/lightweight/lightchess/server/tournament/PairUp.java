@@ -3,6 +3,7 @@ package lightweight.lightchess.server.tournament;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
+import lightweight.lightchess.server.database.JDBC;
 import lightweight.lightchess.server.net.ReaderWriterServer;
 
 import java.util.HashMap;
@@ -14,10 +15,11 @@ public class PairUp implements Runnable{
     Random rand = new Random();
     int sleep_time = 2000;
     ReaderWriterServer readerWriterServer;
-
-    public PairUp(Tournament t){
+    JDBC jdbc;
+    public PairUp(Tournament t, JDBC jdbc){
         tournament = t;
         readerWriterServer = t.readerWriterServer;
+        this.jdbc = jdbc;
     }
 
     public void startMatch(String player1, String player2){
@@ -73,6 +75,18 @@ public class PairUp implements Runnable{
         return bestPlayer;
     }
 
+    public void sendTournamentEndedMsg(){
+        if(tournament.registeredList==null || tournament.registeredList.size()<1)
+            return;
+
+        Data d = new Data(CommandTypes.tournament_ended);
+
+        for(Map.Entry<String, Information>P :tournament.registeredList.entrySet()){
+            d.receiver = P.getKey();
+            tournament.readerWriterServer.sendToClient(d);
+        }
+    }
+
     @Override
     public void run() {
         while (!tournament.is_tournament_ended()){
@@ -93,11 +107,14 @@ public class PairUp implements Runnable{
             startMatch(player1,player2);
         }
 
+
         String winner = highestScoringPlayer();
 
         if(winner != null){
-            tournament.updateScore(winner, 3);
+            System.out.println(tournament.name + " won by " + winner);
+            jdbc.updateFromMatchResult(winner, 3);
         }
-        
+
+        sendTournamentEndedMsg();
     }
 }

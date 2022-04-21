@@ -3,6 +3,7 @@ package lightweight.lightchess.server.tournament;
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
 import lightweight.lightchess.net.Information;
+import lightweight.lightchess.server.database.JDBC;
 import lightweight.lightchess.server.net.ReaderWriterServer;
 
 import java.time.Duration;
@@ -23,18 +24,19 @@ public class Tournament {
     public ArrayList<String> playersInMatch = new ArrayList<>();
     public HashMap<String, String> matchPairs = new HashMap<>();
     Thread pairUpThread;
-
+    JDBC jdbc;
 
     public int getMinutesRemaining(){
         return (int) Duration.between(LocalDateTime.now(),endTime).toMinutes();
     }
 
-    public Tournament(HashMap<String, Information> loggedInClientList, ReaderWriterServer rs){
+    public Tournament(HashMap<String, Information> loggedInClientList, ReaderWriterServer rs, JDBC jdbc){
         loggedInList = loggedInClientList;
         startTime = LocalDateTime.now().plusYears(69);
-        endTime = startTime.plusYears(96);
+        endTime = startTime.minusYears(96);
         readerWriterServer = rs;
-        pairUpThread = new Thread(new PairUp(this));
+        this.jdbc = jdbc;
+        pairUpThread = new Thread(new PairUp(this, jdbc));
         pairUpThread.start();
     }
 
@@ -79,7 +81,7 @@ public class Tournament {
 
     public void startPairing(){
         if(pairUpThread.isAlive()) return;
-        pairUpThread = new Thread(new PairUp(this));
+        pairUpThread = new Thread(new PairUp(this, jdbc));
         pairUpThread.start();
     }
 

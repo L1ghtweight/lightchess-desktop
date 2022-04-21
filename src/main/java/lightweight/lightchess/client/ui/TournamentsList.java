@@ -52,6 +52,10 @@ public class TournamentsList implements Initializable {
         String startTime = clientNet.tournament_info.get("start_time");
         String endTime = clientNet.tournament_info.get("end_time");
 
+        if(LocalDateTime.now().isAfter(LocalDateTime.parse(endTime))){
+            return;
+        }
+
         int starts_in = Math.max(0, -1 * (int) Duration.between(LocalDateTime.parse(startTime), LocalDateTime.now()).toMinutes());
         int ends_in = Math.max(0, -1 * (int) Duration.between(LocalDateTime.parse(endTime), LocalDateTime.now()).toMinutes());
 
