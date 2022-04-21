@@ -2,9 +2,11 @@ package lightweight.lightchess.server.tournament;
 
 import lightweight.lightchess.net.CommandTypes;
 import lightweight.lightchess.net.Data;
+import lightweight.lightchess.net.Information;
 import lightweight.lightchess.server.net.ReaderWriterServer;
 
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
 public class PairUp implements Runnable{
@@ -54,6 +56,23 @@ public class PairUp implements Runnable{
         return bestPlayer;
     }
 
+    public String highestScoringPlayer(){
+        if(tournament.registeredList==null || tournament.registeredList.size()<1)
+            return null;
+
+        int score = -1;
+        String bestPlayer = null;
+
+        for(Map.Entry<String, Information>P :tournament.registeredList.entrySet()){
+            Information inf = P.getValue();
+            if(inf.score > score){
+                bestPlayer = P.getKey();
+                score = inf.score;
+            }
+        }
+        return bestPlayer;
+    }
+
     @Override
     public void run() {
         while (!tournament.is_tournament_ended()){
@@ -72,9 +91,13 @@ public class PairUp implements Runnable{
             if(player1.equals(player2)) continue;
 
             startMatch(player1,player2);
-
-
-
         }
+
+        String winner = highestScoringPlayer();
+
+        if(winner != null){
+            tournament.updateScore(winner, 3);
+        }
+        
     }
 }

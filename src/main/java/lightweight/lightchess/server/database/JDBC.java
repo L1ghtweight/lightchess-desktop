@@ -56,8 +56,10 @@ public class JDBC {
                 st.executeUpdate(incrementColumnValue(username,"matchs_won"));
             } else if(won==1){
                 st.executeUpdate(incrementColumnValue(username, "matchs_drawn"));
-            } else {
+            } else if(won==0){
                 st.executeUpdate(incrementColumnValue(username, "matchs_lost"));
+            } else if(won==3){
+                st.executeUpdate(incrementColumnValue(username, "tournaments_won"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
