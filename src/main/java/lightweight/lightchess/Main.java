@@ -52,7 +52,7 @@ public class Main extends Application {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                clientNet.start(null);
+                clientNet.start(args);
             }
         }).start();
 

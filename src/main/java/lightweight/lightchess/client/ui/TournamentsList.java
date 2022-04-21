@@ -45,6 +45,10 @@ public class TournamentsList implements Initializable {
             return;
 
         String tournamentName = clientNet.tournament_info.get("name");
+
+        if(tournamentName.equals("NULL"))
+            return;
+
         String startTime = clientNet.tournament_info.get("start_time");
         String endTime = clientNet.tournament_info.get("end_time");
 

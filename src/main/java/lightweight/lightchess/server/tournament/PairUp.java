@@ -69,6 +69,7 @@ public class PairUp implements Runnable{
 
             String player1 = extractBestPlayer();
             String player2 = extractBestPlayer();
+            if(player1.equals(player2)) continue;
 
             startMatch(player1,player2);
 

@@ -21,10 +21,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 import com.github.bhlangonijr.chesslib.Board;
 
 public class ClientNet {
-    public boolean DEBUG_MODE=false;
-    public boolean autologin = true;
-    public boolean tournament_DEBUG_MODE = false;
-
     public boolean isLoggedIn = false;
     public boolean isUsersListFetched = false;
     public boolean isUserInfoFetched = false;
@@ -284,6 +280,10 @@ public class ClientNet {
     }
 
     public void start(List<String> args) {
+        if(args != null){
+            serverIp = args.get(0);
+        }
+
         Socket socket = null;
         try {
             socket = new Socket(serverIp, 12345);
@@ -314,40 +314,12 @@ public class ClientNet {
         enqueueOut.start();
         processInThread.start();
 
-        if(autologin && args!=null){
-            String uname = args.get(0);
-            String pass = args.get(1);
-            sendLoginRequest(uname,pass);
 
-
-            if(tournament_DEBUG_MODE){
-                sendRegisterRequest();
-                sendReadyToPlayConfirmation();
-            }
-        }
-
-
-        if(DEBUG_MODE && args != null){
-            String uname = args.get(0);
-            String pass = args.get(1);
-            sendLoginRequest(uname,pass);
-
-            if(args.size() > 2){
-                try {
-                    Thread.sleep(3000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                System.out.println("Requesting "+ args.get(2));
-                sendPlayRequest(args.get(2));
-            }
-        }
-
-        try {
-            enqueueIn.join();
-        } catch (Exception e) {
-            System.out.println("Thread exited");
-        }
+//        try {
+//            enqueueIn.join();
+//        } catch (Exception e) {
+//            System.out.println("Thread exited");
+//        }
     }
 
 

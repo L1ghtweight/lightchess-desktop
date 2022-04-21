@@ -40,7 +40,7 @@ public class ServerNet implements Runnable{
 
 
 // Init a default tournament
-//        tournament.name = "NICE";
+        tournament.name = "NULL";
 //        tournament.startTime = LocalDateTime.now().plusMinutes(0);
 //        tournament.endTime = tournament.startTime.plusMinutes(10);
 //
